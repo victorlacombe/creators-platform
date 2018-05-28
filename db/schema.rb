@@ -10,10 +10,41 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_28_141221) do
+ActiveRecord::Schema.define(version: 2018_05_28_143539) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
+
+  create_table "comments", force: :cascade do |t|
+    t.string "content"
+    t.datetime "published_at"
+    t.boolean "is_pinned"
+    t.string "top_level_comment_id_youtube"
+    t.bigint "video_id"
+    t.bigint "fan_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["fan_id"], name: "index_comments_on_fan_id"
+    t.index ["video_id"], name: "index_comments_on_video_id"
+  end
+
+  create_table "fans", force: :cascade do |t|
+    t.string "username"
+    t.string "channel_id_youtube"
+    t.string "profile_picture_url"
+    t.bigint "memo_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["memo_id"], name: "index_fans_on_memo_id"
+  end
+
+  create_table "memos", force: :cascade do |t|
+    t.string "content"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_memos_on_user_id"
+  end
 
   create_table "users", force: :cascade do |t|
     t.string "email", default: "", null: false
@@ -32,4 +63,21 @@ ActiveRecord::Schema.define(version: 2018_05_28_141221) do
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
 
+  create_table "videos", force: :cascade do |t|
+    t.string "video_id_youtube"
+    t.string "title"
+    t.string "thumbnail"
+    t.integer "likes"
+    t.integer "dislikes"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_videos_on_user_id"
+  end
+
+  add_foreign_key "comments", "fans"
+  add_foreign_key "comments", "videos"
+  add_foreign_key "fans", "memos"
+  add_foreign_key "memos", "users"
+  add_foreign_key "videos", "users"
 end
