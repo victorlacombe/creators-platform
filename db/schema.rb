@@ -29,7 +29,7 @@ ActiveRecord::Schema.define(version: 2018_05_28_143539) do
   end
 
   create_table "fans", force: :cascade do |t|
-    t.string "username"
+    t.string "youtube_username"
     t.string "channel_id_youtube"
     t.string "profile_picture_url"
     t.bigint "memo_id"
