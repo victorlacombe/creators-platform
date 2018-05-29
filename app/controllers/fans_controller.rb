@@ -1,6 +1,6 @@
 class FansController < ApplicationController
   def index
-    @fans = scope_policy(Fan)
+    @fans = policy_scope(Fan)
   end
 
   def show
