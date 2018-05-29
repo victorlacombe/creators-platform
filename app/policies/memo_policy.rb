@@ -5,6 +5,7 @@ class MemoPolicy < ApplicationPolicy
     end
   end
 
+
   def create?
     record.user == user
   end
