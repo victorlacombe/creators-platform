@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
-  devise_for :users
+  # the callback routes are defined for omniauth
+  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   root to: 'pages#home'
   get 'confidentiality', to: 'pages#confidentiality', as: :confidentiality
 
@@ -14,7 +15,4 @@ Rails.application.routes.draw do
 
   # COMMENTS : no need for a comments view, will be displayed in the fans view.
   resources :comments, only: [:create, :update]
-
-  # the callback routes are defined for omniauth
-  devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
 end
