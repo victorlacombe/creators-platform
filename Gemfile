@@ -20,6 +20,7 @@ gem 'simple_form'
 gem 'uglifier'
 gem 'webpacker'
 gem 'omniauth-google-oauth2'
+gem 'rest-client', '~> 1.8'
 
 
 group :development do
