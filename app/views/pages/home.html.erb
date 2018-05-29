@@ -1,2 +1,10 @@
-<h1>Pages#home</h1>
-<p>Find me in app/views/pages/home.html.erb</p>
+<!-- app/views/pages/home.html.erb -->
+<%= content_for(:navbar_class, "navbar-home") %>
+
+<div class="banner">
+  <div class="banner-content text-center">
+    <h1>Built a one-to-one relationship with your fans!</h1>
+    <p>Take care about your fans : Augment your social media experience</p>
+    <%= link_to "Show my fans", new_user_session_path, class: "btn btn-lg btn-danger"  %>
+  </div>
+</div>
