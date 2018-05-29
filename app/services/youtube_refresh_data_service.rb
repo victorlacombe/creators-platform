@@ -1,9 +1,9 @@
 # YoutubeRefreshDataService.new("UCcIZ5L8w-VXDim5r7sINIww")
 
 class YoutubeRefreshDataService
-  def initialize(channel_id_youtube)
-    @yt_channel = Yt::Channel.new(id: channel_id_youtube)
-    @user = current_user
+  def initialize(user)
+    @user = user
+    @yt_channel = Yt::Channel.new(id: @user.channel_id_youtube)
   end
 
   def update_channel_data
