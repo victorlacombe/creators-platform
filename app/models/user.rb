@@ -6,6 +6,7 @@ class User < ApplicationRecord
          :omniauthable, omniauth_providers: [:google_oauth2]
   has_many :videos
   has_many :memos
+  after_create :get_channel_id_youtube
 
   def self.from_omniauth(access_token)
       data = access_token.info
@@ -16,10 +17,23 @@ class User < ApplicationRecord
           user = User.create(first_name: data['first_name'],
             last_name: data['last_name'],
             email: data['email'],
-            password: Devise.friendly_token[0,20]
+            password: Devise.friendly_token[0,20],
+            provider: access_token['provider'],
+            uid: access_token['uid'],
+            token: access_token.credentials['token'],
+            token_expiry: Time.at(access_token.credentials['expires_at'])
           )
       end
       user
   end
-end
 
+  private
+
+  def get_channel_id_youtube
+    url = "https://www.googleapis.com/youtube/v3/channels?part=id&mine=true&access_token=#{self.token}"
+    data_serialized = RestClient.get(url)
+    data = JSON.parse(data_serialized)
+    self.channel_id_youtube = data["items"].first["id"]
+    self.save
+  end
+end
