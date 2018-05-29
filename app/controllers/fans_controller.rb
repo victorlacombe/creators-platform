@@ -1,9 +1,10 @@
 class FansController < ApplicationController
   def index
-    @fans = Fan.all
+    @fans = scope_policy(Fan)
   end
 
   def show
-    @fan = #define @fan as a specific element of
+    @fan = #define @fan as a specific element of the youtubeAPI
+    authorize @fan
   end
 end
