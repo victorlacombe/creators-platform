@@ -1,4 +1,6 @@
 # refresher = YoutubeRefreshDataService.new(User.first)
+require 'rest-client'
+require 'json'
 
 class YoutubeRefreshDataService
   def initialize(user)
@@ -6,68 +8,52 @@ class YoutubeRefreshDataService
     @yt_channel = Yt::Channel.new(id: @user.channel_id_youtube)
   end
 
+  def refresh_all
+    refresh_channel_data
+    refresh_all_videos
+    refresh_all_comments
+  end
+
   def refresh_channel_data
     @user.channel_name = @yt_channel.title # yt makes an API Request. 'channel' is then populated with data.
     @user.channel_thumbnail = @yt_channel.thumbnail_url # Does yt make a request again? Data is a bit different
     # @user.channel_comment_count = channel.comment_count # Doesn't seem to work.. Always return 0
     @user.save
+    return # to avoid returning anything
   end
 
   # db_video : is persisted in the database, yt_video comes fromthe gem Yt.
   def refresh_all_videos
     # Get all videos from Youtube
     @yt_channel.videos.each do |yt_video|
-      # Check if video exists in db
-      if @user.videos.find_by(video_id_youtube: yt_video.id).nil?
-        # video is not existing, we create a new one
-        db_video = Video.new
-      else
-        # video exists, we update the existing one
-        db_video = @user.videos.find_by(video_id_youtube: yt_video.id)
-      end
+      db_video = @user.videos.find_by(video_id_youtube: yt_video.id)
+      # Check if video exists in db else we create it
+      db_video = Video.new if db_video.nil?
       db_video = set_video_data(db_video, yt_video)
       db_video.save
     end
+    return # to avoid returning anything
   end
 
+  # To try out/create youtube API requests : https://developers.google.com/apis-explorer/#p/youtube/v3/youtube.commentThreads.list?part=snippet%252Creplies&allThreadsRelatedToChannelId=UCcIZ5L8w-VXDim5r7sINIww&_h=1&
+  # NOT USING YT GEM - replies param does not exist in the gem
   def refresh_all_comments
-    @yt_channel.videos.each do |yt_video|
-      # Check if video exists in db
-      if @user.videos.find_by(video_id_youtube: yt_video.id).nil?
-        # Video does not exist in db. We do nothing.
-      else
-        # video exists, we update the comments
-        #db_video = @user.videos.find_by(video_id_youtube: yt_video.id)
-        #p yt_video
-        #binding.pry
-        #if comment_count_changed?(yt_video, db_video)
-        #  ===> use snippet, replies either on channel_id or video_id
-        #  ==> https://developers.google.com/youtube/v3/code_samples/code_snippets
-        #  https://developers.google.com/youtube/v3/code_samples/ruby#search_by_keyword
+    url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&allThreadsRelatedToChannelId=UCcIZ5L8w-VXDim5r7sINIww&key=#{ENV['YOUTUBE_API_V3']}"
+    response = RestClient.get(url)
+    h_response = JSON.parse(response)
 
-        #  require 'rest-client'
-        #  require 'json'
-
-        #  url = 'https://api.spotify.com/v1/search?type=artist&q=tycho'
-        #  response = RestClient.get(url)
-        #  JSON.parse(response)
-
-        #  use this code to make your ruby request instead of json
-
-          # @user.videos.comments
-          # comments = yt_video.comment_threads # Get all parent comments of a video
-          # comments.each do |comment|
-          #   comment.text_display # content
-          #   comment_thread.author_display_name # author
-          #   comment_thread.updated_at # published_at
-          #   comment_thread.top_level_comment # top_level_comment_id_youtube
-          # db_video.comment_count = yt_video.comment_count
-          # end
-        else
-          # we do nothing. However we may miss a comment "edit" or if there is a add + delete of comments.
-        end
+    # Going throught the comment threads
+    h_response["items"].each do |comment_thread|
+      yt_video_id = comment_thread["snippet"]["videoId"]
+      db_video = @user.videos.find_by(video_id_youtube: yt_video_id)
+      if !db_video.nil? # if the video exists in our db
+        # we update or create a new parent comment in our db
+        create_update_parent_comment(comment_thread, db_video)
+        # we update or create replies/children comments in our db
+        create_update_replies_comment(comment_thread, db_video)
       end
     end
+    return # to avoid returning anything
   end
 
   private
@@ -78,25 +64,71 @@ class YoutubeRefreshDataService
     db_video.thumbnail = yt_video.thumbnail_url
     db_video.likes = yt_video.like_count
     db_video.dislikes = yt_video.dislike_count
+    db_video.comment_count = yt_video.comment_count # we don't need it actually?
     db_video.user = @user
     return db_video
   end
 
-  def comment_count_changed?(yt_video, db_video)
-    # check if numbers of comments has changed
-    yt_comment_count = yt_video.comment_count
-    db_comment_count = db_video.comment_count
-    p "------------------"
-    p yt_comment_count
-    p db_comment_count
-    p "-----------------"
-    yt_comment_count != db_comment_count ? true : false
+  def create_update_parent_comment(comment_thread, db_video)
+    parent = comment_thread["snippet"]["topLevelComment"] # shortcut to look in JSON
+    yt_parent_comment_id = parent["id"] # find the comment id
+    db_comment = db_video.comments.find_by(comment_id_youtube: yt_parent_comment_id) # find the id in db (nil if doesn't exist)
+    db_comment = Comment.new if db_comment.nil? #If nil we create a new one
+
+    # set the ids
+    db_comment.comment_id_youtube = parent["id"] # ex. Ugzf8yYkr0lnr5neKmF4AaABAg
+    db_comment.top_level_comment_id_youtube = db_comment.comment_id_youtube
+    # set all other params
+    db_comment = set_comment_data(db_comment, parent, db_video)
+    db_comment.save
   end
 
-  def set_comment_data()
+  def create_update_replies_comment(comment_thread, db_video)
+    if !comment_thread["replies"].nil? # A comment thread may have no replies
+      replies = comment_thread["replies"]["comments"]
+      replies.each do |reply|
+        yt_comment_id = reply["id"]
+        db_comment = db_video.comments.find_by(comment_id_youtube: yt_comment_id)
+        db_comment = Comment.new if db_comment.nil?
+
+        # set the ids
+        db_comment.comment_id_youtube = reply["id"] # ex. Ugzf8yYkr0lnr5neKmF4AaABAg.8gqO6MzYsEQ8gqP4sjy0C9
+        db_comment.top_level_comment_id_youtube = reply["snippet"]["parentId"] # ex. Ugzf8yYkr0lnr5neKmF4AaABAg
+        # set all other params
+        db_comment = set_comment_data(db_comment, reply, db_video)
+        db_comment.save
+      end
+    end
+  end
+
+  def create_update_fan(fan_id, fan_avatar, fan_name)
+    db_fan = Fan.find_by(channel_id_youtube: fan_id)
+    db_fan = Fan.new if db_fan.nil?
+    db_fan.memo = create_memo if db_fan.memo.nil?
+    db_fan.channel_id_youtube = fan_id
+    db_fan.profile_picture_url = fan_avatar
+    db_fan.youtube_username = fan_name
+    db_fan.save
+    return db_fan
+  end
+
+  def create_memo
+    db_memo = Memo.new
+    db_memo.user = @user
+    db_memo.save
+    return db_memo
+  end
+
+  def set_comment_data(db_comment, shorcut, db_video)
+    db_comment.content = shorcut["snippet"]["textDisplay"]
+    db_comment.published_at = shorcut["snippet"]["publishedAt"]
+
+    db_comment.video = db_video
+
+    fan_id = shorcut["snippet"]["authorChannelId"]["value"]
+    fan_avatar = shorcut["snippet"]["authorProfileImageUrl"]
+    fan_name = shorcut["snippet"]["authorDisplayName"]
+    db_comment.fan = create_update_fan(fan_id, fan_avatar, fan_name)
+    return db_comment
   end
 end
-
-# # FANS
-# channel_id_youtube
-# profile_picture_url

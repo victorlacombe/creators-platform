@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_29_135555) do
+ActiveRecord::Schema.define(version: 2018_05_30_103529) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -18,12 +18,13 @@ ActiveRecord::Schema.define(version: 2018_05_29_135555) do
   create_table "comments", force: :cascade do |t|
     t.string "content"
     t.datetime "published_at"
-    t.boolean "is_pinned"
+    t.boolean "is_pinned", default: false
     t.string "top_level_comment_id_youtube"
     t.bigint "video_id"
     t.bigint "fan_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.string "comment_id_youtube"
     t.index ["fan_id"], name: "index_comments_on_fan_id"
     t.index ["video_id"], name: "index_comments_on_video_id"
   end
@@ -39,7 +40,7 @@ ActiveRecord::Schema.define(version: 2018_05_29_135555) do
   end
 
   create_table "memos", force: :cascade do |t|
-    t.string "content"
+    t.string "content", default: ""
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -65,9 +66,9 @@ ActiveRecord::Schema.define(version: 2018_05_29_135555) do
     t.string "last_name"
     t.string "token"
     t.datetime "token_expiry"
-    t.string "channel_id_youtube"
     t.string "channel_name"
     t.string "channel_thumbnail"
+    t.string "channel_id_youtube"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
   end
