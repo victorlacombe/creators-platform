@@ -1,48 +1,52 @@
-console.log("Ready to go");
+console.log("Content Script is working")
+// -------   FUNCTION TO ADD A LINK IN A COMMUNITY'S YouTube Page     ----------
 
 const dashboardCommentAuthors = document.querySelectorAll(".comment-header");
-
 dashboardCommentAuthors.forEach(function(dashboardCommentAuthor) {
-  dashboardCommentAuthor.insertAdjacentHTML("beforeend", '<a href="https://www.youtube.com/comments">See fan details</a>' )
+  dashboardCommentAuthor.insertAdjacentHTML("beforeend", '<a class=".btn-see-details">See fan details</a>' )
 })
 
 
-// ----------------------- FUNCTION TO ADD A LINK IN A VIDEO'S COMMENT FLOW (update every 900ms)  -----------------
-// Do not use 'scroll' event, since it would overload the page each time the is a scroll on a pixel
-// Do not use the 'NodeInserted' event, since Youtube seems to load a lot of new Nodes even after page DOM is Loaded
-
-
+// ----------- FUNCTION TO ADD A LINK IN A VIDEO'S COMMENT FLOW  ---------------
+//                           (update every 900ms)
+// Do not use 'scroll' event, since it would overload the page each time there is
+// a scroll on each window pixel
+// Do not use the 'NodeInserted' event, since Youtube seems to load a lot of new
+// nodes even after page DOM is Loaded
 
 setInterval(function() {
-  // sélectionner les header-authors (les entêtes des div de commentaire)
-  const videoCommentAuthors = document.querySelectorAll("#header-author");
-  // itérer sur les résultats
-  videoCommentAuthors.forEach(function(videoCommentAuthor) {
-    // pour chaque header si le lien existe
-    if (videoCommentAuthor.querySelector(".btn-see-details")) {
-      console.log('already there')
+  // slect the main div that contains the comment block and the profil picture
+  const commentMainDivs = document.querySelectorAll("#body")
+  commentMainDivs.forEach(function(commentMainDiv) {
+    // select the header-author (the header of the comment div)
+    const videoCommentAuthor = commentMainDiv.querySelector("#header-author");
+    if (videoCommentAuthor.querySelector('.btn-see-details')) {
+      // do nothing, the "see fan details" button is already present
     } else {
-      videoCommentAuthor.insertAdjacentHTML("beforeend", '<a class="btn-see-details" href="https://www.youtube.com/comments">See fan details</a>' )
+      videoCommentAuthor.insertAdjacentHTML("beforeend", '<a class="btn-see-details">See fan details</a>');
+      let insertedLink = videoCommentAuthor.querySelector('.btn-see-details')
+      // Then implement the next block to reconciliate data between YouTube and our App
+      if (insertedLink) {
+        insertedLink.addEventListener('click', function() {
+          // retrieve the fan's fanPictureUrl: it's unique identificator with our API
+          const fanPicture = commentMainDiv.querySelector("#author-thumbnail #img")
+          const fanPictureUrl = fanPicture.getAttribute("src").match(/(.+)\/s48/)[1]
+          // faire une requête à ta DB
+          // injecter des infos dans le DOM
+        })
+      }
     }
   })
 }, 900);
 
 
-// chrome.runtime.onMessage.addListener(gotMessage);
-
-// function gotMessage(message, sender, sendResponse) {
-//   console.log(message)
-//   if (message === "hello") {
-//     const videoTitles = document.querySelectorAll("#video-title")
-//     videoTitles.forEach (function(videoTitle) {
-//       videoTitle.innerText = "COIN COIN !"
-//     })
-//   }
-// }
 
 
 
-// ----------------------- ALTERNATIVES QUI NE MARCHENT PAS (BIEN)  -----------------
+// -----------------------------------------------------------------------------
+//   ***********   THIS PART IS FORM FORMER IRRELEVANT ATTEMPTS   ***********
+// -----------------------------------------------------------------------------
+
 
 
 // setTimeout(function() {
@@ -72,5 +76,10 @@ setInterval(function() {
 //     }
 //   })
 // })
+
+
+
+
+
 
 
