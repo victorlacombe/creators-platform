@@ -1,7 +1,8 @@
 // Specific CSS for your home-page
 .flex-container {
   display: flex;
-  justify-content: space-between;
+  justify-content: space-around;
+  align-items: stretch;
 }
 
 .arguments-elements {
