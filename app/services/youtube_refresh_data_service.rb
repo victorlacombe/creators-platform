@@ -1,11 +1,9 @@
-# refresher = YoutubeRefreshDataService.new(User.first)
-require 'rest-client'
 require 'json'
 
 class YoutubeRefreshDataService
   def initialize(user)
     @user = user
-    @yt_channel = Yt::Channel.new(id: @user.channel_id_youtube)
+    @yt_gem_channel = Yt::Channel.new(id: @user.channel_id_youtube)
   end
 
   def refresh_all
@@ -15,21 +13,21 @@ class YoutubeRefreshDataService
   end
 
   def refresh_channel_data
-    @user.channel_name = @yt_channel.title # yt makes an API Request. 'channel' is then populated with data.
-    @user.channel_thumbnail = @yt_channel.thumbnail_url # Does yt make a request again? Data is a bit different
+    @user.channel_name = @yt_gem_channel.title # yt makes an API Request. 'channel' is then populated with data.
+    @user.channel_thumbnail = @yt_gem_channel.thumbnail_url # Does yt make a request again? Data is a bit different
     # @user.channel_comment_count = channel.comment_count # Doesn't seem to work.. Always return 0
     @user.save
     return # to avoid returning anything
   end
 
-  # db_video : is persisted in the database, yt_video comes fromthe gem Yt.
+  # db_video : is persisted in the database, yt_gem_video comes fromthe gem Yt.
   def refresh_all_videos
     # Get all videos from Youtube
-    @yt_channel.videos.each do |yt_video|
-      db_video = @user.videos.find_by(video_id_youtube: yt_video.id)
+    @yt_gem_channel.videos.each do |yt_gem_video|
+      db_video = @user.videos.find_by(video_id_youtube: yt_gem_video.id)
       # Check if video exists in db else we create it
       db_video = Video.new if db_video.nil?
-      db_video = set_video_data(db_video, yt_video)
+      db_video = set_video_data(db_video, yt_gem_video)
       db_video.save
     end
     return # to avoid returning anything
@@ -38,7 +36,8 @@ class YoutubeRefreshDataService
   # To try out/create youtube API requests : https://developers.google.com/apis-explorer/#p/youtube/v3/youtube.commentThreads.list?part=snippet%252Creplies&allThreadsRelatedToChannelId=UCcIZ5L8w-VXDim5r7sINIww&_h=1&
   # NOT USING YT GEM - replies param does not exist in the gem
   def refresh_all_comments
-    url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&allThreadsRelatedToChannelId=UCcIZ5L8w-VXDim5r7sINIww&key=#{ENV['YOUTUBE_API_V3']}"
+    channel_id = @user.channel_id_youtube
+    url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&allThreadsRelatedToChannelId=#{channel_id}&key=#{ENV['YOUTUBE_API_V3']}"
     response = RestClient.get(url)
     h_response = JSON.parse(response)
 
@@ -58,13 +57,13 @@ class YoutubeRefreshDataService
 
   private
 
-  def set_video_data(db_video, yt_video)
-    db_video.video_id_youtube = yt_video.id
-    db_video.title = yt_video.title
-    db_video.thumbnail = yt_video.thumbnail_url
-    db_video.likes = yt_video.like_count
-    db_video.dislikes = yt_video.dislike_count
-    db_video.comment_count = yt_video.comment_count # we don't need it actually?
+  def set_video_data(db_video, yt_gem_video)
+    db_video.video_id_youtube = yt_gem_video.id
+    db_video.title = yt_gem_video.title
+    db_video.thumbnail = yt_gem_video.thumbnail_url
+    db_video.likes = yt_gem_video.like_count
+    db_video.dislikes = yt_gem_video.dislike_count
+    db_video.comment_count = yt_gem_video.comment_count # we don't need it actually?
     db_video.user = @user
     return db_video
   end
