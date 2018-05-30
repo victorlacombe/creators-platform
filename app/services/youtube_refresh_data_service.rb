@@ -29,7 +29,7 @@ class YoutubeRefreshDataService
       db_video = Video.new if db_video.nil?
       db_video = set_video_data(db_video, yt_gem_video)
       db_video.save
-    end
+    d
     return # to avoid returning anything
   end
 
@@ -37,7 +37,7 @@ class YoutubeRefreshDataService
   # NOT USING YT GEM - replies param does not exist in the gem
   def refresh_all_comments
     channel_id = @user.channel_id_youtube
-    url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&allThreadsRelatedToChannelId=#{channel_id}&key=#{ENV['YOUTUBE_API_V3']}"
+    url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&allThreadsRelatedToChannelId=cIZ5L8w-VXDim5r7sINIww&key=AIzaSyCs9kLG3PwIcjwvpkcEnqdj5zgCFpOKeDk"
     response = RestClient.get(url)
     h_response = JSON.parse(response)
 
