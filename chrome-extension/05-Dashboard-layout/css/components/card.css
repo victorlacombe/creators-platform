@@ -1,0 +1,27 @@
+.card {
+  background: white;
+  padding: 40px;
+  box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin: 10px;
+}
+
+
+.stats h3 {
+  color: rgb(221, 121, 72);
+}
+
+.stats p {
+  color: rgb(200,200,200);
+  font-size: 18px;
+}
+
+.card.description-section p {
+  color: rgb(150,150,150);
+}
+
+.card.description-section h3 {
+  font-color: black;
+}
