@@ -30,10 +30,12 @@ class User < ApplicationRecord
   private
 
   def get_channel_id_youtube
-    url = "https://www.googleapis.com/youtube/v3/channels?part=id&mine=true&access_token=#{self.token}"
-    data_serialized = RestClient.get(url)
-    data = JSON.parse(data_serialized)
-    self.channel_id_youtube = data["items"].first["id"]
-    self.save
+    if token
+      url = "https://www.googleapis.com/youtube/v3/channels?part=id&mine=true&access_token=#{self.token}"
+      data_serialized = RestClient.get(url)
+      data = JSON.parse(data_serialized)
+      self.channel_id_youtube = data["items"].first["id"]
+      self.save
+    end
   end
 end
