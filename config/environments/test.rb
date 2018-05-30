@@ -43,4 +43,10 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Yt Gem Configuration to see more details
+  Yt.configure do |config|
+    config.log_level = :debug
+  end
+  Yt.configuration.api_key = ENV['YOUTUBE_API_V3']
 end

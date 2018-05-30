@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 <div class="container">
     <div class="header">
       <a href="#" class="btn-tab">Back to my fans</a>
@@ -9,6 +10,10 @@
       <p class="pseudo">@fan.youtube_username</p>
       <p class="followers">520 Followers</p>
       <p class="last-msg">Last message #{@comment.published_at.fan_id}</p>
+      <%= simple_form_for @memo do |f|%>
+      <%= f.input :content%>
+      <%= f.submit %>
+      <% end %>
     </div>
     <div class="scrollbar">
       <% index_comments_on_fan_id.each do%>
@@ -28,3 +33,8 @@
     </div>
   </div>
 </div>
+=======
+
+
+
+>>>>>>> f0f540f767a1900591d24eb1eee6ece083d09964
