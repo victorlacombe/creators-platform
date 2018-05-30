@@ -14,30 +14,34 @@
   <li><a href="#" class="btn btn-xl">Button</a></li>
 </ul>
 
-<!-- <div class="card">
-  <div class="card_top">
-    <div class="card_top_left">
-        <%= image_tag "julie.jpg", class: "avatar-large" %>
-        <div class="txt">
-          <h2>Julie Walt</h2>
+<!-- Fan card, displayed on dashboard pages -->
+<div class="container">
+  <div class="fard">
+    <div class="fard-top">
+      <div class="fard-top-left">
+        <%= image_tag "julie.jpg", class: "avatar-medium" %>
+        <div class="atxt">
           <span>@juwalt</span>
         </div>
       </div>
+      <div class="fard-top-right">
+        <span>530 Followers</span>
+      </div>
     </div>
-    <div class="card_top_right">
-      <span>530 Followers</span>
-    </div>
-  </div>
-  <div class="card_bottom">
-    <div class="card_bottom_left">
-      <span>Active 3 hours ago</span>
-    </div>
-    <div class="card_bottom_right">
-      <a href="#">See details</a>
+    <div class="fard-bottom">
+      <div class="fard-bottom-left">
+        <span>Active 3 hours ago</span>
+      </div>
+      <div class="vertical-line"></div>
+      <div class="fard-bottom-right">
+        <a href="#">See details</a>
+      </div>
     </div>
   </div>
 </div>
- -->
+
+<br>
+<!-- Fan show    -->
 
  <div class="container">
     <div class="header">
@@ -65,7 +69,7 @@
             </div>
           </div>
         </div>
-      <%end %>
+      <% end %>
     </div>
   </div>
 </div>
