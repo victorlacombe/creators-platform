@@ -1,15 +1,21 @@
-require 'json'
-
 class YoutubeRefreshDataService
   def initialize(user)
     @user = user
+    @youtube_api_v3 = ENV['YOUTUBE_API_V3']
+    @yt_gem_account = Yt::Account.new refresh_token: @user.token if @user.token # If there is a token we will use it for some requests (get subscribers list)
     @yt_gem_channel = Yt::Channel.new(id: @user.channel_id_youtube)
   end
 
-  def refresh_all
-    refresh_channel_data
-    refresh_all_videos
-    refresh_all_comments
+  # def refresh_all
+  #   refresh_channel_data
+  #   refresh_all_videos
+  #   refresh_all_comments
+  # end
+
+  def refresh_public_subscribers
+    if @yt_gem_account
+      @yt_gem_account.subscribers
+    end
   end
 
   def refresh_channel_data
@@ -17,11 +23,15 @@ class YoutubeRefreshDataService
     @user.channel_thumbnail = @yt_gem_channel.thumbnail_url # Does yt make a request again? Data is a bit different
     # @user.channel_comment_count = channel.comment_count # Doesn't seem to work.. Always return 0
     @user.save
+    puts "---------------"
+    puts "User id: #{@user.id} 's Channel data has been added/updated"
+    puts "---------------"
     return # to avoid returning anything
   end
 
   # db_video : is persisted in the database, yt_gem_video comes fromthe gem Yt.
   def refresh_all_videos
+    @count = 0 # Counter to check how many updated/new videos
     # Get all videos from Youtube
     @yt_gem_channel.videos.each do |yt_gem_video|
       db_video = @user.videos.find_by(video_id_youtube: yt_gem_video.id)
@@ -30,28 +40,84 @@ class YoutubeRefreshDataService
       db_video = set_video_data(db_video, yt_gem_video)
       db_video.save
     end
+    puts "---------------"
+    puts "#{@count} VIDEOS have been added/updated"
+    puts "---------------"
     return # to avoid returning anything
   end
+
+  # Auth Issue because of isMine parameter -> require OAuth. Can't only use API Key.
+  # def refresh_all_videos_JSON
+  #   @count = 0 # Counter to check how many updated/new videos
+  #   # Get all videos from Youtube
+  #   max_results = 50 # limited to 50 for search requests on videos
+  #   url = "https://www.googleapis.com/youtube/v3/search?part=snippet&forMine=true&maxResults=#{max_results}&type=video&key=#{@youtube_api_v3}"
+  #   p url
+  #   response = RestClient.get(url)
+  #   h_response = JSON.parse(response)
+  #   @yt_gem_channel.videos.each do |yt_gem_video|
+  #     db_video = @user.videos.find_by(video_id_youtube: yt_gem_video.id)
+  #     # Check if video exists in db else we create it
+  #     db_video = Video.new if db_video.nil?
+  #     db_video = set_video_data(db_video, h_response)
+  #     db_video.save
+  #     @count += 1
+  #   end
+  #   puts "---------------"
+  #   puts "#{@count} VIDEOS have been added/updated"
+  #   puts "---------------"
+  #   return # to avoid returning anything
+  # end
 
   # To try out/create youtube API requests : https://developers.google.com/apis-explorer/#p/youtube/v3/youtube.commentThreads.list?part=snippet%252Creplies&allThreadsRelatedToChannelId=UCcIZ5L8w-VXDim5r7sINIww&_h=1&
   # NOT USING YT GEM - replies param does not exist in the gem
   def refresh_all_comments
+    @count = 0 # Counter to check how many updated/new comments
+
+    # ------------------------
+    # Initial comment request
+    # ------------------------
     channel_id = @user.channel_id_youtube
-    url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&allThreadsRelatedToChannelId=#{channel_id}&key=#{ENV['YOUTUBE_API_V3']}"
+    max_results = 100 # Youtube API V3 limit comments list to 100 results - https://developers.google.com/apis-explorer/#p/youtube/v3/youtube.commentThreads.list?part=snippet%252Creplies&maxResults=100&videoId=1cMoaxEPJ_Y&_h=18&
+    "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&maxResults=#{max_results}&allThreadsRelatedToChannelId=#{channel_id}&key=#{@youtube_api_v3}"
     response = RestClient.get(url)
     h_response = JSON.parse(response)
 
-    # Going throught the comment threads
-    h_response["items"].each do |comment_thread|
-      yt_video_id = comment_thread["snippet"]["videoId"]
-      db_video = @user.videos.find_by(video_id_youtube: yt_video_id)
-      if !db_video.nil? # if the video exists in our db
-        # we update or create a new parent comment in our db
-        create_update_parent_comment(comment_thread, db_video)
-        # we update or create replies/children comments in our db
-        create_update_replies_comment(comment_thread, db_video)
+    arr_reponse = []
+    arr_reponse << h_response
+
+    # ------------------------
+    # Other comment requests (if more than one page)
+    # ------------------------
+    until h_response["nextPageToken"].nil? do # if There is a next page of comment we loop
+      next_page_token = h_response["nextPageToken"]
+      url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&maxResults=#{max_results}&pageToken=#{next_page_token}&allThreadsRelatedToChannelId=#{channel_id}&key=#{@youtube_api_v3}"
+      response = RestClient.get(url)
+      h_response = JSON.parse(response)
+      # We add all new responses in an array
+      arr_reponse << h_response
+    end
+
+    # ------------------------
+    # Putting results in database
+    # ------------------------
+    arr_reponse.each do |h_response| # we go throught each results
+      unless h_response["items"] == [] # Sometimes there can be nil results!
+        h_response["items"].each do |comment_thread|
+          yt_video_id = comment_thread["snippet"]["videoId"]
+          db_video = @user.videos.find_by(video_id_youtube: yt_video_id)
+          if !db_video.nil? # if the video exists in our db
+            # we update or create a new parent comment in our db
+            create_update_parent_comment(comment_thread, db_video)
+            # we update or create replies/children comments in our db
+            create_update_replies_comment(comment_thread, db_video)
+          end
+        end
       end
     end
+    puts "---------------"
+    puts "#{@count} COMMENTS have been added/updated"
+    puts "---------------"
     return # to avoid returning anything
   end
 
@@ -80,6 +146,7 @@ class YoutubeRefreshDataService
     # set all other params
     db_comment = set_comment_data(db_comment, parent, db_video)
     db_comment.save
+    @count += 1
   end
 
   def create_update_replies_comment(comment_thread, db_video)
@@ -96,6 +163,7 @@ class YoutubeRefreshDataService
         # set all other params
         db_comment = set_comment_data(db_comment, reply, db_video)
         db_comment.save
+        @count += 1
       end
     end
   end

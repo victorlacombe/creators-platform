@@ -12,7 +12,9 @@ class FansController < ApplicationController
   # end
 
   def show
-    @memo = Fan.find(params[:id]).memo
+    @fan = Fan.find(params[:id])
+    @memo = @fan.memo
+    authorize @fan
     authorize @memo
   end
 

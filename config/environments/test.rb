@@ -49,4 +49,6 @@ Rails.application.configure do
     config.log_level = :debug
   end
   Yt.configuration.api_key = ENV['YOUTUBE_API_V3']
+  Yt.configuration.client_id = ENV['GOOGLE_CLIENT_ID']
+  Yt.configuration.client_secret = ENV['GOOGLE_CLIENT_SECRET']
 end
