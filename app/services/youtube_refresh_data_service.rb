@@ -13,8 +13,9 @@ class YoutubeRefreshDataService
   # end
 
   def refresh_public_subscribers
-    if @yt_gem_account
+    unless @yt_gem_account.nil?
       @yt_gem_account.subscribers
+      binding.pry
     end
   end
 
