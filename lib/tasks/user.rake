@@ -14,6 +14,9 @@ namespace :user do
       RefreshVideosCommentsJob.perform_later(user.id)
       count += 1
     end
+    puts "--------------------------------------------"
+    puts "Enqueuing DB update (VIDEOS, COMMENTS & FANS): DONE"
+    puts "--------------------------------------------"
   end
 
   desc "Refresh for ALL USERS | the DB with new/updated CHANNEL DATA"
@@ -27,6 +30,9 @@ namespace :user do
       RefreshChannelDataJob.perform_later(user.id)
       count += 1
     end
+    puts "--------------------------------------------"
+    puts "Enqueuing DB update (CHANNEL DATA): DONE"
+    puts "--------------------------------------------"
   end
 
   # -----------------
@@ -41,6 +47,9 @@ namespace :user do
     puts "--------------------------------------------"
     RefreshVideosCommentsJob.perform_now(user.id) #ATTENTION: Perform_now !
     # rake task will return when job is _done_
+    puts "--------------------------------------------"
+    puts "Enqueuing DB update (VIDEOS, COMMENTS & FANS) #{user.email} - DONE"
+    puts "--------------------------------------------"
   end
 
   desc "Refresh for ONE USER | the DB with new/updated CHANNEL DATA"
@@ -51,6 +60,9 @@ namespace :user do
     puts "--------------------------------------------"
     RefreshChannelDataJob.perform_now(user.id) #ATTENTION: Perform_now !
     # rake task will return when job is _done_
+    puts "--------------------------------------------"
+    puts "Enqueuing DB update (Channel Data) #{user.email} - DONE"
+    puts "--------------------------------------------"
   end
 
 end
