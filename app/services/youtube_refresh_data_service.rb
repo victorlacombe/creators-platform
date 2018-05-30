@@ -1,5 +1,3 @@
-require 'json'
-
 class YoutubeRefreshDataService
   def initialize(user)
     @user = user
