@@ -2,14 +2,14 @@
   color: white;
   padding: 10px 15px;
   border-radius: 2px;
-  font-weight: bold;
-  background: #ce161f;
+  background: $red;
+  opacity: 0.9;
   transition: background 0.3s ease;
+  border: none;
 }
 .btn :hover {
   color: white;
   opacity: 1;
-  background: #ce161f;
   text-decoration: none;
 }
 .btn-xl {
