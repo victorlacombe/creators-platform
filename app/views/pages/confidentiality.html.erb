@@ -1,0 +1,79 @@
+<!-- used to test css components while the website is not on production.
+ -->
+
+<ul>
+  <li><%= image_tag "julie.jpg", class: "avatar" %></li>
+  <li><%= image_tag "julie.jpg", class: "avatar-large" %></li>
+  <li><%= image_tag "julie.jpg", class: "avatar-bordered" %></li>
+</ul>
+
+
+<ul>
+  <li><a href="#" class="btn">Button</a></li>
+  <br>
+  <li><a href="#" class="btn btn-xl">Button</a></li>
+</ul>
+
+<!-- Fan card, displayed on dashboard pages -->
+<div class="container">
+  <div class="fard">
+    <div class="fard-top">
+      <div class="fard-top-left">
+        <%= image_tag "julie.jpg", class: "avatar-medium" %>
+        <div class="atxt">
+          <span>@juwalt</span>
+        </div>
+      </div>
+      <div class="fard-top-right">
+        <span>530 Followers</span>
+      </div>
+    </div>
+    <div class="fard-bottom">
+      <div class="fard-bottom-left">
+        <ul>
+          <li><i class="fas fa-comments">5</i></li>
+          <li><span>Active 3 hours ago</span></li>
+        </ul>
+      </div>
+      <div class="vertical-line"></div>
+      <div class="fard-bottom-right">
+        <a href="#">See details</a>
+      </div>
+    </div>
+  </div>
+</div>
+
+<br>
+<!-- Fan show    -->
+
+ <div class="container">
+    <div class="header">
+      <a href="#" class="btn-tab">Back to my fans</a>
+    </div>
+  <div class="content">
+    <div class="left-card">
+      <%= image_tag "julie.jpg", class: "avatar-large" %>
+      <p>Julie Walt</p>
+      <p class="pseudo">@juwalt</p>
+      <p class="followers">520 Followers</p>
+      <p class="last-msg">Last message 2 days ago</p>
+    </div>
+    <div class="scrollbar">
+      <% 10.times do %>
+        <div class="comment-card">
+          <div class="thumbnail">
+            <%= image_tag "julien.jpg", class: "avatar-square" %>
+            <p>Video title</p>
+          </div>
+          <div class="right">
+            <p class="date">On 30/04/18</p>
+            <div class="txt">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam optio officiis vel laborum, obcaecati, dolore fuga sint repudiandae similique quibusdam, fugit molestiae laudantium soluta voluptates eaque, enim iure veritatis consectetur.
+            </div>
+          </div>
+        </div>
+      <% end %>
+    </div>
+  </div>
+</div>
+
