@@ -39,3 +39,34 @@
 </div>
  -->
 
+ <div class="container">
+    <div class="header">
+      <a href="#" class="btn-tab">Back to my fans</a>
+    </div>
+  <div class="content">
+    <div class="left-card">
+      <%= image_tag "julie.jpg", class: "avatar-large" %>
+      <p>Julie Walt</p>
+      <p class="pseudo">@juwalt</p>
+      <p class="followers">520 Followers</p>
+      <p class="last-msg">Last message 2 days ago</p>
+    </div>
+    <div class="scrollbar">
+      <% 10.times do %>
+        <div class="comment-card">
+          <div class="thumbnail">
+            <%= image_tag "julien.jpg", class: "avatar-square" %>
+            <p>Video title</p>
+          </div>
+          <div class="right">
+            <p class="date">On 30/04/18</p>
+            <div class="txt">
+              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam optio officiis vel laborum, obcaecati, dolore fuga sint repudiandae similique quibusdam, fugit molestiae laudantium soluta voluptates eaque, enim iure veritatis consectetur.
+            </div>
+          </div>
+        </div>
+      <%end %>
+    </div>
+  </div>
+</div>
+
