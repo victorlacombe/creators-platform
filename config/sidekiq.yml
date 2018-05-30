@@ -1,6 +1,7 @@
 :concurrency: 3
 :timeout: 60
 :verbose: true # Show debug text
+# we create two queues
 :queues:  # Queue priority: https://github.com/mperham/sidekiq/wiki/Advanced-Options
   - default
-  - mailers
+  - mailers # In case we use mailer ?
