@@ -2,7 +2,7 @@ class YoutubeRefreshDataService
   def initialize(user)
     @user = user
     @youtube_api_v3 = ENV['YOUTUBE_API_V3']
-    @yt_gem_account = Yt::Account.new refresh_token: @user.token if @user.token # If there is a token we will use it for some requests (get subscribers list)
+    @yt_gem_account = Yt::Account.new access_token: @user.token if @user.token # If there is a token we will use it for some requests (get subscribers list)
     @yt_gem_channel = Yt::Channel.new(id: @user.channel_id_youtube)
   end
 
@@ -13,10 +13,25 @@ class YoutubeRefreshDataService
   # end
 
   def refresh_public_subscribers
-    unless @yt_gem_account.nil?
-      @yt_gem_account.subscribers
-      binding.pry
+    unless @yt_gem_account.nil? # If the user is logged out for a long time, we can't get token
+      # @yt_gem_account.subscribers
+      url = "https://www.googleapis.com/youtube/v3/subscriptions?part=subscriberSnippet&maxResults=50&mySubscribers=true&access_token=#{@user.token}"
+      response = RestClient.get(url)
+      h_response = JSON.parse(response)
+      arr_yt_subs = []
+      h_response["items"].each do |subscriber|
+        yt_sub_channel_id = subscriber["subscriberSnippet"]["channelId"] # this fan is subscribed
+        arr_yt_subs << yt_sub_channel_id
+        binding.pry
+        # db_fan = Fan.find_by(channel_id_youtube: yt_sub_channel_id) # we search him in our db
+        # if !db_fan.nil? # if we find him, we put him to subscribed
+        #   db_fan.is_subscribed = true
+        #   db_fan.save
+        # end
+      end
+      p arr_yt_subs
     end
+    return # to avoid returning anything
   end
 
   def refresh_channel_data
