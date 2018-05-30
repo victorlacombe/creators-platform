@@ -1,0 +1,30 @@
+.btn {
+  color: white;
+  padding: 10px 15px;
+  border-radius: 2px;
+  font-weight: bold;
+  background: #ce161f;
+  transition: background 0.3s ease;
+}
+.btn :hover {
+  color: white;
+  opacity: 1;
+  background: #ce161f;
+  text-decoration: none;
+}
+.btn-xl {
+  padding: 20px 30px;
+}
+
+.btn-txt {
+
+}
+
+.btn-tab {
+  color: #9c9595;
+  padding: 10px 15px;
+  border-radius: 2px;
+  font-weight: bold;
+  transition: background 0.3s ease;
+  border-bottom: 3px solid #e0530130;
+}
