@@ -3,7 +3,7 @@ console.log("Content Script is working")
 
 const dashboardCommentAuthors = document.querySelectorAll(".comment-header");
 dashboardCommentAuthors.forEach(function(dashboardCommentAuthor) {
-  dashboardCommentAuthor.insertAdjacentHTML("beforeend", '<a class=".btn-see-details" href=#>See fan details</a>' )
+  dashboardCommentAuthor.insertAdjacentHTML("beforeend", '<a class=".btn-see-details">See fan details</a>' )
 })
 
 
@@ -19,25 +19,27 @@ setInterval(function() {
   videoCommentAuthors.forEach(function(videoCommentAuthor) {
     // pour chaque header si le lien existe
     if (videoCommentAuthor.querySelector(".btn-see-details")) {
-      console.log('already there')
+      // do nothing, the button is already present
     } else {
-      videoCommentAuthor.insertAdjacentHTML("beforeend", '<a class="btn-see-details" href=#>See fan details</a>' )
+      videoCommentAuthor.insertAdjacentHTML("beforeend", '<a class="btn-see-details">See fan details</a>');
+      let link = videoCommentAuthor.querySelector('.btn-see-details')
+      if (link) {
+        link.addEventListener('click', function(event) {
+          // retrieve the fan's youtube_username or channel_id_youtube
+          // youtube_username exemple: /user/MarcGamesons
+          // channel_id_youtube exemple  : /channel/UC5QXpT_ALp-b_OUcv4WtRvw
+          const fan = videoCommentAuthor.querySelector('#author-text')
+          const fanIdentificator = fan.getAttribute("href")
+          fanIdentificator.replace(/.*\//, '');
+          console.log(fanIdentificator);
+
+          // faire une requête à ta DB
+          // injecter des infos dans le DOM
+        })
+      }
     }
   })
 }, 900);
-
-
-chrome.runtime.onMessage.addListener(gotMessage);
-
-function gotMessage(message, sender, sendResponse) {
-  console.log(message);
-  };
-
-
-
-
-
-
 
 
 
