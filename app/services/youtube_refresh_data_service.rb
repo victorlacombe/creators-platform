@@ -37,22 +37,22 @@ class YoutubeRefreshDataService
         # Video does not exist in db. We do nothing.
       else
         # video exists, we update the comments
-        db_video = @user.videos.find_by(video_id_youtube: yt_video.id)
-        p yt_video
-        binding.pry
-        if comment_count_changed?(yt_video, db_video)
-          ===> use snippet, replies either on channel_id or video_id
-          ==> https://developers.google.com/youtube/v3/code_samples/code_snippets
-          https://developers.google.com/youtube/v3/code_samples/ruby#search_by_keyword
+        #db_video = @user.videos.find_by(video_id_youtube: yt_video.id)
+        #p yt_video
+        #binding.pry
+        #if comment_count_changed?(yt_video, db_video)
+        #  ===> use snippet, replies either on channel_id or video_id
+        #  ==> https://developers.google.com/youtube/v3/code_samples/code_snippets
+        #  https://developers.google.com/youtube/v3/code_samples/ruby#search_by_keyword
 
-          require 'rest-client'
-          require 'json'
+        #  require 'rest-client'
+        #  require 'json'
 
-          url = 'https://api.spotify.com/v1/search?type=artist&q=tycho'
-          response = RestClient.get(url)
-          JSON.parse(response)
+        #  url = 'https://api.spotify.com/v1/search?type=artist&q=tycho'
+        #  response = RestClient.get(url)
+        #  JSON.parse(response)
 
-          use this code to make your ruby request instead of json
+        #  use this code to make your ruby request instead of json
 
           # @user.videos.comments
           # comments = yt_video.comment_threads # Get all parent comments of a video
