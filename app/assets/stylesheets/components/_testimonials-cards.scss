@@ -1,0 +1,49 @@
+.flex-container, .testimonials {
+  margin: 40px;
+  justify-content: space-around;
+}
+
+.review {
+  background-color: white;
+  border-radius: 3px;
+  height: 270px;
+  width: 256px;
+  margin-bottom: 10px;
+  text-align: center;
+  padding: 30px;
+  position: relative;
+
+  .fas {
+    font-size: 30px;
+  }
+
+  p {
+    font-size: 16PX;
+    margin: 15PX;
+  }
+  img {
+    position: absolute;
+    left: calc(50% - 30px);
+    bottom: -15%;
+    left: 50%;
+    margin-left: -43px;
+  }
+}
+
+.user{
+  margin-top: 30px;
+ .fas {
+    font-size: 30px;
+  }
+  .name {
+    font-weight: bolder;
+  }
+  .function{
+    font-weight: lighter;
+    font-size: 10px;
+    margin: -12px;
+  }
+}
+
+
+
