@@ -4,7 +4,7 @@ class FansController < ApplicationController
   end
 
   def show
-    @fan = #define @fan as a specific element of the youtubeAPI
+    @fan = Fan.find(params[:id])
     authorize @fan
   end
 end
