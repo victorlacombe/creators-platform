@@ -4,18 +4,18 @@
     </div>
   <div class="content">
     <div class="left-card">
-      <%= image_tag "julie.jpg", class: "avatar-large" %>
+      <%= image_tag "@fan.profile_picture_url", class: "avatar-large" %>
       <p>Julie Walt</p>
-      <p class="pseudo">@juwalt</p>
+      <p class="pseudo">@fan.youtube_username</p>
       <p class="followers">520 Followers</p>
-      <p class="last-msg">Last message 2 days ago</p>
+      <p class="last-msg">Last message #{@comment.published_at.fan_id}</p>
       <%= simple_form_for @memo do |f|%>
       <%= f.input :content%>
       <%= f.submit %>
-<% end %>
+      <% end %>
     </div>
     <div class="scrollbar">
-      <% 10.times do %>
+      <% index_comments_on_fan_id.each do%>
         <div class="comment-card">
           <div class="thumbnail">
             <%= image_tag "julien.jpg", class: "avatar-square" %>

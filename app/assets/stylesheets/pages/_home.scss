@@ -4,3 +4,42 @@
   justify-content: space-around;
   align-items: stretch;
 }
+
+.arguments-elements {
+  margin-top: 80px;
+  margin-bottom: 80px;
+  text-align: center;
+    i {
+      font-size: 80px;
+      color: $purple;
+    }
+}
+
+.wrapper-why {
+  font-size: 2em;
+  text-align: center;
+  background-color: $purple;
+  height: 35vh;
+  color: white;
+  display: flex;
+  align-items: center;
+    .banner-why {
+      font-weight: 300;
+    }
+}
+
+.wrapper-join {
+  font-size: 2em;
+  text-align: center;
+  background-color: $purple;
+  height: 45vh;
+  color: white;
+  display: flex;
+  align-items: center;
+    .banner-join {
+      font-weight: 300;
+        p {
+        font-weight: 300;
+        }
+    }
+}

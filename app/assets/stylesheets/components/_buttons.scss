@@ -2,14 +2,14 @@
   color: white;
   padding: 10px 15px;
   border-radius: 2px;
-  font-weight: bold;
-  background: #ce161f;
+  background: $red;
+  opacity: 0.9;
   transition: background 0.3s ease;
+  border: none;
 }
 .btn :hover {
   color: white;
   opacity: 1;
-  background: #ce161f;
   text-decoration: none;
 }
 .btn-xl {
@@ -21,10 +21,24 @@
 }
 
 .btn-tab {
-  color: #9c9595;
+  color: #283149;
   padding: 10px 15px;
   border-radius: 2px;
   font-weight: bold;
   transition: background 0.3s ease;
-  border-bottom: 3px solid #e0530130;
+  border-bottom: 3px solid #283149;
+}
+
+
+.btn-tab:hover {
+    color: #283149;
+    border-bottom: 3px solid #283149;
+    text-decoration: none;
+    opacity: 0.6;
+}
+
+.btn-tab:active {
+    color: #283149;
+    text-decoration: none;
+    opacity: 0.6;
 }
