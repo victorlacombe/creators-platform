@@ -20,6 +20,10 @@
   }
 }
 
+.fard-top, span {
+  font-size: 13px
+}
+
 .fard-top-left {
   max-width: 100%;
   display: flex;
@@ -39,6 +43,7 @@
   display: flex;
   padding: 10px;
   border-top: 1px solid #e0530130;
+  height: 46px;
 
   .fard-bottom-right {
     margin-left: 10px;
@@ -48,21 +53,19 @@
   .fard-bottom-right a {
     text-decoration: none;
     color: #9c9595;
-    font-size: 13px;
+    font-size: 10px;
     font-weight: bolder;
     margin-left: 10px;
+
   }
-  .fard-bottom-left span {
+  .fard-bottom, .fard-bottom-left, ul, span, .fas {
     font-weight: lighter;
+    font-size: 10px;
+    text-align: right;
   }
 }
-
   h2 {
     font-size: 14px;
-  }
-
-  span {
-    font-size: 13px;
   }
 
 ul {
