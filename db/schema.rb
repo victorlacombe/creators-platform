@@ -65,6 +65,8 @@ ActiveRecord::Schema.define(version: 2018_05_29_135555) do
     t.string "last_name"
     t.string "token"
     t.datetime "token_expiry"
+    t.string "channel_name"
+    t.string "channel_thumbnail"
     t.string "channel_id_youtube"
     t.index ["email"], name: "index_users_on_email", unique: true
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true
@@ -79,6 +81,7 @@ ActiveRecord::Schema.define(version: 2018_05_29_135555) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.integer "comment_count"
     t.index ["user_id"], name: "index_videos_on_user_id"
   end
 

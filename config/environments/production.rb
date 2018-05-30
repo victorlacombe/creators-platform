@@ -94,4 +94,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Yt Gem Configuration to see more details
+  Yt.configuration.api_key = ENV['YOUTUBE_API_V3']
 end
