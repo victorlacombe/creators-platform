@@ -1,17 +1,16 @@
-console.log("Ready to go");
+console.log("Content Script is working")
+// -------   FUNCTION TO ADD A LINK IN A COMMUNITY'S YouTube Page     ----------
 
 const dashboardCommentAuthors = document.querySelectorAll(".comment-header");
-
 dashboardCommentAuthors.forEach(function(dashboardCommentAuthor) {
-  dashboardCommentAuthor.insertAdjacentHTML("beforeend", '<a href="https://www.youtube.com/comments">See fan details</a>' )
+  dashboardCommentAuthor.insertAdjacentHTML("beforeend", '<a class=".btn-see-details" href=#>See fan details</a>' )
 })
 
 
-// ----------------------- FUNCTION TO ADD A LINK IN A VIDEO'S COMMENT FLOW (update every 900ms)  -----------------
+// ----------- FUNCTION TO ADD A LINK IN A VIDEO'S COMMENT FLOW  ---------------
+//                           (update every 900ms)
 // Do not use 'scroll' event, since it would overload the page each time the is a scroll on a pixel
 // Do not use the 'NodeInserted' event, since Youtube seems to load a lot of new Nodes even after page DOM is Loaded
-
-
 
 setInterval(function() {
   // sélectionner les header-authors (les entêtes des div de commentaire)
@@ -22,27 +21,32 @@ setInterval(function() {
     if (videoCommentAuthor.querySelector(".btn-see-details")) {
       console.log('already there')
     } else {
-      videoCommentAuthor.insertAdjacentHTML("beforeend", '<a class="btn-see-details" href="https://www.youtube.com/comments">See fan details</a>' )
+      videoCommentAuthor.insertAdjacentHTML("beforeend", '<a class="btn-see-details" href=#>See fan details</a>' )
     }
   })
 }, 900);
 
 
-// chrome.runtime.onMessage.addListener(gotMessage);
+chrome.runtime.onMessage.addListener(gotMessage);
 
-// function gotMessage(message, sender, sendResponse) {
-//   console.log(message)
-//   if (message === "hello") {
-//     const videoTitles = document.querySelectorAll("#video-title")
-//     videoTitles.forEach (function(videoTitle) {
-//       videoTitle.innerText = "COIN COIN !"
-//     })
-//   }
-// }
+function gotMessage(message, sender, sendResponse) {
+  console.log(message);
+  };
 
 
 
-// ----------------------- ALTERNATIVES QUI NE MARCHENT PAS (BIEN)  -----------------
+
+
+
+
+
+
+
+
+// -----------------------------------------------------------------------------
+//   ***********   THIS PART IS FORM FORMER IRRELEVANT ATTEMPTS   ***********
+// -----------------------------------------------------------------------------
+
 
 
 // setTimeout(function() {

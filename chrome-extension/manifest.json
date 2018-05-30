@@ -15,8 +15,8 @@
   },
 
   "browser_action": {
-    "default_icon": "DataIcons-Recall.png",
-    "default_popup": "05-Dashboard-layout/index.html",
-    "default_title": "A popup will come here."
+    "default_icon": "DataIcons-Recall.png"
+    // "default_popup": "05-Dashboard-layout/index.html",
+    // "default_title": "A popup will come here."
   }
 }
