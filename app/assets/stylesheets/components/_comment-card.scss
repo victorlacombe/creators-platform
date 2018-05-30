@@ -1,0 +1,86 @@
+// Show page
+.content {
+  display: grid;
+  grid-template-columns: 1fr 3fr;
+  justify-content: space-around;
+  width: 950px;
+  margin: 0 auto;
+}
+
+@media(max-width: 720px) {
+  .content {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    justify-content: space-around;
+    width: 950px;
+    margin: 0 auto;
+  }
+}
+
+.left-card {
+  text-align: center;
+  background-color: #ff572205;
+  padding: 30px;
+  border-radius: 3px;
+  border-right: 1px solid #e05301;
+  border-top: 1px solid #e05301;
+
+  .avatar-large {
+    margin-bottom: 15px;
+  }
+
+  h3 {
+    font-weight: bold;
+  }
+  .pseudo {
+    font-weight: lighter;
+  }
+  .last-msg, .followers {
+    font-size: 12px;
+  }
+}
+
+
+
+// single comment card
+.comment-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  width: 730px;
+  background-color: white;
+  border-radius: 3px;
+  padding: 16px;
+  border-bottom: 1px solid #e0530130;
+
+  .date {
+    font-size: 13px;
+  }
+
+  .txt {
+
+    font-weight: lighter;
+  }
+}
+
+.thumbnail {
+  width: 160px;
+
+  p {
+    text-align: center;
+    margin-top: 10px;
+  }
+}
+.scrollbar {
+  width: 600px;
+}
+.header {
+    width: 950px;
+    display: flex;
+    justify-content: flex-end;
+    margin: 0 auto;
+  }
+
+.txt {
+  width: 500px;
+}
