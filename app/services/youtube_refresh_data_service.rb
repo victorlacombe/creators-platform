@@ -40,14 +40,10 @@ class YoutubeRefreshDataService
       db_video = Video.new if db_video.nil?
       db_video = set_video_data(db_video, yt_gem_video)
       db_video.save
-<<<<<<< HEAD
     end
     puts "---------------"
     puts "#{@count} VIDEOS have been added/updated"
     puts "---------------"
-=======
-    d
->>>>>>> 03ec5a9f82aefe1828705132a8996e7044306435
     return # to avoid returning anything
   end
 
