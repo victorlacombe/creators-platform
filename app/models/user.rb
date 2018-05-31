@@ -4,9 +4,9 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable,
          :omniauthable, omniauth_providers: [:google_oauth2]
-  has_many :videos
-  has_many :memos
-  has_many :subscribers
+  has_many :videos, dependent: :destroy
+  has_many :memos, dependent: :destroy
+  has_many :subscribers, dependent: :destroy
   after_create :get_channel_id_youtube
 
   def self.from_omniauth(request_data)
