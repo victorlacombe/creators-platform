@@ -1,15 +1,12 @@
 class FansController < ApplicationController
   def index
-    @fans = policy_scope(Fan)
+    if params[:query].present?
+      sql_query = "youtube_username ILIKE :query"
+      @fans = policy_scope(Fan.where(sql_query, query: "%#{params[:query]}%"))
+    else
+      @fans = policy_scope(Fan)
+    end
   end
-
-  # def create_fan
-  #   @fan = Fan.new(API info)
-  #   @memo = Memo.create
-  #   @fan.memo = memo
-  #   authorize @fan
-  #   authorize @memo
-  # end
 
   def show
     @fan = Fan.find(params[:id])
