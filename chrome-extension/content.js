@@ -28,11 +28,26 @@ setInterval(function() {
       // Then implement the next block to reconciliate data between YouTube and our App
       if (insertedLink) {
         insertedLink.addEventListener('click', function() {
-          // retrieve the fan's fanPictureUrl: it's unique identificator with our API
+
+//-------------------- 1.  retrieve the fan's fanPictureUrl --------------------
+
           const fanPicture = commentMainDiv.querySelector("#author-thumbnail #img")
-          const fanPictureUrl = fanPicture.getAttribute("src").match(/(.+)\/s48/)[1]
-          // faire une requête à ta DB
-          // injecter des infos dans le DOM
+          const fanPictureUrl = fanPicture.getAttribute("src").replace(/\/s48-/, "/s28-")
+
+//---------------- 2. Request the DB to get the fan information ----------------
+          console.log(fanPictureUrl)
+
+          fetch(`http://localhost:3000/api/v1/fans?query=${fanPictureUrl}`)
+          .then(response => response.json())
+          .then((data) => {
+            console.log(data)
+            data.forEach(function(fan) {
+              console.log(fan.profile_picture_url)
+            })
+          });
+
+//------------------- 3. Inject the retrived data in the DOM -------------------
+
         })
       }
     }
