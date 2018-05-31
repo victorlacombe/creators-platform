@@ -25,6 +25,7 @@ gem 'rest-client', '~> 1.8'
 gem 'json'
 gem 'sidekiq'
 gem 'sidekiq-failures', '~> 1.0'
+gem 'rack-cors', require: 'rack/cors'
 
 
 group :development do

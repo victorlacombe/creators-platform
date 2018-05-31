@@ -22,5 +22,12 @@ module CreatorsPlatform
     # the framework and any gems in your application.
 
     config.active_job.queue_adapter = :sidekiq # Use sidekiq to process queued jobs
+
+    config.middleware.insert_before 0, Rack::Cors do
+      allow do
+        origins '*'
+        resource '*', headers: :any, methods: [:get, :update]
+      end
+    end
   end
 end
