@@ -24,7 +24,7 @@
             <div class="fard">
               <div class="fard-top">
                 <div class="fard-top-left">
-                  <%= image_tag fan.profile_picture_url, class: "avatar-medium" %>
+                  <%= image_tag fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-medium" %>
                   <div class="atxt">
                     <span><%= link_to fan.youtube_username.capitalize, "https://www.youtube.com/channel/#{fan.channel_id_youtube}"%></span>
                   </div>
