@@ -282,6 +282,6 @@ Devise.setup do |config|
   # config.omniauth_path_prefix = '/my_engine/users/auth'
 
   config.omniauth :google_oauth2, ENV["GOOGLE_CLIENT_ID"], ENV["GOOGLE_CLIENT_SECRET"],
-    scope: 'email, profile, youtube',
+    scope: 'email, profile, youtube.readonly', #we only ask for read only access, if we want more rights ex. "youtube", we will have to unlink existing user accounts
     prompt: 'select_account'
 end

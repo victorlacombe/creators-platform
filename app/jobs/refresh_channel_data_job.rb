@@ -6,10 +6,8 @@ class RefreshChannelDataJob < ApplicationJob
   def perform(user_id)
     user = User.find(user_id)
     puts "--------------------------------------------"
-    puts "BEGIN - refreshing CHANNEL DATA for user: ID #{user_id} - #{user.email}"
+    puts "JOB - refreshing CHANNEL DATA for user: ID #{user_id} - #{user.email}"
     refresher = YoutubeRefreshDataService.new(user)
     refresher.refresh_channel_data
-    puts "DONE - refreshing CHANNEL DATA for user: ID #{user_id} - #{user.email}"
-    puts "--------------------------------------------"
   end
 end
