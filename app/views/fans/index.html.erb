@@ -1,51 +1,53 @@
-<div class="container">
-  <h1 class="text-center">My dashboard - fans</h1>
-  <div class="search-form">
-  <div class="row">
-    <div class="col-xs-12 col-sm-4">
-      <%= form_tag fans_path, method: :get do %>
-      <%= text_field_tag :query,
-      params[:query],
-      class: "form-control",
-      placeholder: "Search a fan"%>
-      <% end %>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div class="container fans-cards">
-  <div class="row">
-    <% @fans.each do |fan| %>
-      <div class="container">
-        <div class="col-xs-12 col-sm-4">
-          <div class="fard">
-            <div class="fard-top">
-              <div class="fard-top-left">
-                <%= image_tag fan.profile_picture_url, class: "avatar-medium" %>
-                <div class="atxt">
-                  <span><%= link_to fan.youtube_username.capitalize, "https://www.youtube.com/channel/#{fan.channel_id_youtube}"%></span>
-                </div>
-              </div>
-              <div class="fard-top-right">
-                <span>? Followers</span>
-              </div>
-            </div>
-            <div class="fard-bottom">
-              <div class="fard-bottom-left">
-                <ul>
-                  <li><i class="fas fa-comments"> ???</i></li>
-                  <li><span>Active ? hours ago</span></li>
-                </ul>
-              </div>
-              <div class="vertical-line"></div>
-              <div class="fard-bottom-right">
-                <%= link_to "Show fan details", fan_path(fan)%>
-              </div>
-            </div>
+<h1 class="text-center">All my fans</h1>
+  <div class="wrapper-search">
+    <div class="container">
+      <div class="search-form">
+      <div class="row">
+        <div class="col-md-4">
+          <%= form_tag fans_path, method: :get do %>
+          <%= text_field_tag :query,
+          params[:query],
+          class: "form-control",
+          placeholder: "Search a fan"%>
+          <% end %>
           </div>
         </div>
       </div>
-    <% end %>
+    </div>
+  </div>
+
+<div class="container">
+  <div class="fans-cards">
+    <div class="row">
+      <% @fans.each do |fan| %>
+          <div class="col-xs-12 col-sm-6 col-md-4">
+            <div class="fard">
+              <div class="fard-top">
+                <div class="fard-top-left">
+                  <%= image_tag fan.profile_picture_url, class: "avatar-medium" %>
+                  <div class="atxt">
+                    <span><%= link_to fan.youtube_username.capitalize, "https://www.youtube.com/channel/#{fan.channel_id_youtube}"%></span>
+                  </div>
+                </div>
+                <div class="fard-top-right">
+                  <span>? Followers</span>
+                </div>
+              </div>
+              <div class="fard-bottom">
+                <div class="fard-bottom-left">
+                  <ul>
+                    <li><i class="fas fa-comments"> ???</i></li>
+                    <li><span>Active ? hours ago</span></li>
+                  </ul>
+                </div>
+                <div class="vertical-line"></div>
+                <div class="fard-bottom-right">
+                  <%= link_to "Show fan details", fan_path(fan)%>
+                </div>
+              </div>
+            </div>
+          </div>
+      <% end %>
+    </div>
   </div>
 </div>

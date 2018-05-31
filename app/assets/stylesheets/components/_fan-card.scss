@@ -11,7 +11,7 @@
   display: flex;
   max-width: 100%;
   justify-content: space-around;
-  align-items: CENTER;
+  align-items: center;
   padding: 10px;
   height: 92px;
 
@@ -42,17 +42,17 @@
   max-width: 100%;
   display: flex;
   padding: 10px;
-  border-top: 1px solid #283149;
+  border-top: 1px solid $purple;
   height: 46px;
 
   .fard-bottom-right {
     margin-left: 10px;
-    border-left: 1px solid #283149;
+    border-left: 1px solid $purple;
   }
 
   .fard-bottom-right a {
     text-decoration: none;
-    color: #283149;
+    color: $purple;
     font-size: 10px;
     font-weight: bolder;
     margin-left: 10px;
