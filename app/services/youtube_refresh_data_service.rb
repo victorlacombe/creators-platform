@@ -9,7 +9,7 @@ class YoutubeRefreshDataService
 
   def refresh_channel_data
     @user.channel_name = @yt_gem_channel.title # yt makes an API Request. 'channel' is then populated with data.
-    @user.channel_thumbnail = @yt_gem_channel.thumbnail_url # Does yt make a request again? Data is a bit different
+    @user.channel_thumbnail = @yt_gem_channel.thumbnail_url(:medium) # Does yt make a request again? Data is a bit different
     # @user.channel_comment_count = channel.comment_count # Doesn't seem to work.. Always return 0
     @user.save
     puts "---------------"

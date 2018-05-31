@@ -6,7 +6,7 @@
   </div>
   <div class="content">
     <div class="left-card">
-      <%= image_tag  @fan.profile_picture_url, class: "avatar-large" %>
+      <%= image_tag  @fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-large" %>
       <div class="pseudo btn-tab">
         <a href="http://youtube.com/channel/<%= @fan.channel_id_youtube %>" target="_blank"><%= @fan.youtube_username %></a>
       </div>

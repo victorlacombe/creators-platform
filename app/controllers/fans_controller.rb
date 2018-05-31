@@ -26,6 +26,10 @@ class FansController < ApplicationController
     redirect_to fan_path(@fan)
   end
 
+  def avatar
+    @fan.profile_picture_url.gsub(/\/s28-/, “/s300-“)
+  end
+
   private
 
   def memo_params
