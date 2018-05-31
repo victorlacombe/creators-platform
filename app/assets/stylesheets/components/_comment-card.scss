@@ -50,7 +50,6 @@
 // single comment card
 .comment-card {
   display: flex;
-  align-items: center;
   justify-content: space-around;
   width: 730px;
   background-color: white;
@@ -68,12 +67,19 @@
   }
 }
 
-.thumbnail {
+.video-card {
   width: 160px;
+
+  img {
+    width: 160px;
+  }
 
   p {
     text-align: center;
     margin-top: 10px;
+    font-size: 14px;
+    font-weight: bolder;
+    color: #283149;
   }
 }
 .scrollbar {
