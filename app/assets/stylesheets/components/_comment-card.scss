@@ -5,6 +5,7 @@
   justify-content: space-around;
   width: 950px;
   margin: 0 auto;
+  margin-bottom: 80px;
 }
 
 @media(max-width: 720px) {
@@ -40,6 +41,11 @@
   }
   .pseudo {
     font-weight: lighter;
+    color: white;
+    a {
+      color: white;
+      font-weight: bolder;
+    }
   }
   .last-msg, .followers {
     font-size: 12px;
@@ -50,7 +56,6 @@
 // single comment card
 .comment-card {
   display: flex;
-  align-items: center;
   justify-content: space-around;
   width: 730px;
   background-color: white;
@@ -68,12 +73,20 @@
   }
 }
 
-.thumbnail {
+.video-card {
   width: 160px;
 
-  p {
+  img {
+    width: 160px;
+  }
+
+  .btn-tab, a {
     text-align: center;
     margin-top: 10px;
+    font-size: 14px;
+    font-weight: bolder;
+    color: #283149;
+    border-bottom: none;
   }
 }
 .scrollbar {
