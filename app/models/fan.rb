@@ -8,9 +8,9 @@ class Fan < ApplicationRecord
 
   # Return False if user doesn't display his subscriptions list or if he is not subscribed
   # Return True if subscribed
-  def is_subscribed?(fan_id)
-    fan_channel_id = Fan.find(fan_id).channel_id_youtube
-    subscriber = current_user.subscribers.find_by(fan_channel_id: fan_channel_id)
+  def is_subscribed?(user)
+    fan_channel_id_youtube = self.channel_id_youtube
+    subscriber = user.subscribers.find_by(channel_id_youtube: fan_channel_id_youtube)
     sub_status = subscriber.nil? ? false : subscriber.is_subscribed # if subscriber exists in db, we show his status, else it's false anyway
     return sub_status
   end

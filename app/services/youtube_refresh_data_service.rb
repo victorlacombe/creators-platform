@@ -119,7 +119,6 @@ class YoutubeRefreshDataService
       # We add all new responses in an array
       arr_response << h_response
     end
-
     # ------------------------
     # Putting results in database
     # ------------------------
@@ -137,6 +136,7 @@ class YoutubeRefreshDataService
           yt_sub.is_subscribed = true
           yt_sub.channel_id_youtube = yt_sub_channel_id
           yt_sub.user = @user
+          yt_sub.save
           @count += 1 # Counter to puts at the end
         end
       end
