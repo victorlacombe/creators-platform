@@ -5,9 +5,13 @@ class CommentsController < ApplicationController
 
   def find
     @fan = Fan.find(params[:id])
-    comments = Comment.where(fan_id: @fan)
+    authorize @fan
+    @comments = Comment.where(fan_id: @fan)
+    authorize @comments
     @comment = Comment.find(params[:id])
-    videos = Video.where(video_id_youtube: @comment)
+    authorize @comment
+    @videos = policy_scope(Video.where(video_id_youtube: @comment))
+    authorize videos
   end
 
   private

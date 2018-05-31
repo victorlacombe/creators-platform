@@ -4,4 +4,8 @@ class CommentPolicy < ApplicationPolicy
       scope.all
     end
   end
+
+  def find
+    record.user == user
+  end
 end
