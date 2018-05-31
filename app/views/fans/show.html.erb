@@ -1,11 +1,17 @@
 <div class="container">
   <div class="header">
-    <a href="#" class="btn-tab">Back to my fans</a>
+    <div class="btn-tab">
+      <%= link_to "Back to my fans", fans_path%>
+    </div>
   </div>
   <div class="content">
     <div class="left-card">
       <%= image_tag  @fan.profile_picture_url, class: "avatar-large" %>
-      <p class="pseudo"><%= @fan.youtube_username %></p>
+      <div class="pseudo btn-tab">
+        <a href="http://youtube.com/channel/<%= @fan.channel_id_youtube %>" target="_blank"><%= @fan.youtube_username %></a>
+      </div>
+
+
       <% comments = Comment.where(fan_id: @fan) %>
       <% comment = comments.last %>
       <p class="last-msg">Last message on<% c = comment.published_at %>
@@ -21,10 +27,12 @@
             <% video = Video.find(comment.video_id) %>
             <div class="comment-card">
               <div class="video-card">
-                <%= image_tag  video.thumbnail, class: "avatar-square" %>
-                <p>
-                  <%= video.title.first(20) %>
-                </p>
+                <%= link_to "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' do %>
+                  <%= image_tag  video.thumbnail, class: "avatar-square" %>
+                <% end %>
+                <div class='btn-tab'>
+                  <%= link_to video.title.first(20), "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' %>
+                </div>
               </div>
               <div class="right">
                 <p class="date">
