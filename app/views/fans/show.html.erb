@@ -1,34 +1,49 @@
 <div class="container">
-    <div class="header">
-      <a href="#" class="btn-tab">Back to my fans</a>
+  <div class="header">
+    <div class="btn-tab">
+      <%= link_to "Back to my fans", fans_path%>
     </div>
+  </div>
   <div class="content">
     <div class="left-card">
-      <%= image_tag "@fan.profile_picture_url", class: "avatar-large" %>
-      <p>Julie Walt</p>
-      <p class="pseudo">@fan.youtube_username</p>
-      <p class="followers">520 Followers</p>
-      <p class="last-msg">Last message #{@comment.published_at.fan_id}</p>
+      <%= image_tag  @fan.profile_picture_url, class: "avatar-large" %>
+      <div class="pseudo btn-tab">
+        <a href="http://youtube.com/channel/<%= @fan.channel_id_youtube %>" target="_blank"><%= @fan.youtube_username %></a>
+      </div>
+
+
+      <% comments = Comment.where(fan_id: @fan) %>
+      <% comment = comments.last %>
+      <p class="last-msg">Last message on<% c = comment.published_at %>
+        <%= c.strftime("%e %b %Y %H:%M:%S%p") %>
+      </p>
       <%= simple_form_for @memo do |f|%>
       <%= f.input :content%>
       <%= f.submit %>
       <% end %>
     </div>
     <div class="scrollbar">
-      <% index_comments_on_fan_id.each do%>
-        <div class="comment-card">
-          <div class="thumbnail">
-            <%= image_tag "julien.jpg", class: "avatar-square" %>
-            <p>Video title</p>
-          </div>
-          <div class="right">
-            <p class="date">On 30/04/18</p>
-            <div class="txt">
-              Lorem ipsum dolor sit amet, consectetur adipisicing elit. Magnam optio officiis vel laborum, obcaecati, dolore fuga sint repudiandae similique quibusdam, fugit molestiae laudantium soluta voluptates eaque, enim iure veritatis consectetur.
+          <% @comments.each do |comment|%>
+            <% video = Video.find(comment.video_id) %>
+            <div class="comment-card">
+              <div class="video-card">
+                <%= link_to "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' do %>
+                  <%= image_tag  video.thumbnail, class: "avatar-square" %>
+                <% end %>
+                <div class='btn-tab'>
+                  <%= link_to video.title.first(20), "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' %>
+                </div>
+              </div>
+              <div class="right">
+                <p class="date">
+                  <%= comment.published_at %>
+                </p>
+                <div class="txt">
+                  <%= comment.content %>
+                </div>
+              </div>
             </div>
-          </div>
+          <%end %>
         </div>
-      <%end %>
+      </div>
     </div>
-  </div>
-</div>

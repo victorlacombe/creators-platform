@@ -15,7 +15,8 @@ class MemosController < ApplicationController
     @memo = Memo.find(params[:id])
     authorize @memo
     @memo.update(memo_params)
-    redirect_to edit_memo_path(@memo)
+    @fan = Fan.find(params[:id])
+    redirect_to fan_path(@fan)
   end
 
   private
