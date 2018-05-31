@@ -11,16 +11,17 @@
         <a href="http://youtube.com/channel/<%= @fan.channel_id_youtube %>" target="_blank"><%= @fan.youtube_username %></a>
       </div>
 
-
       <% comments = Comment.where(fan_id: @fan) %>
       <% comment = comments.last %>
-      <p class="last-msg">Last message on<% c = comment.published_at %>
-        <%= c.strftime("%e %b %Y %H:%M:%S%p") %>
-      </p>
-      <%= simple_form_for @memo do |f|%>
-      <%= f.input :content%>
-      <%= f.submit %>
+      <% if comment %>
+        <p class="last-msg">Last message :</p>
+        <p class="last-msg"><% c = comment.published_at %></p>
+        <p class="last-msg"><%= c.strftime("%e %b %Y %H:%M") %></p>
       <% end %>
+        <%= simple_form_for @memo do |f|%>
+        <%= f.input :content%>
+        <%= f.submit %>
+        <% end %>
     </div>
     <div class="scrollbar">
           <% @comments.each do |comment|%>
