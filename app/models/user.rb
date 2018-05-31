@@ -6,6 +6,7 @@ class User < ApplicationRecord
          :omniauthable, omniauth_providers: [:google_oauth2]
   has_many :videos
   has_many :memos
+  has_many :subscribers
   after_create :get_channel_id_youtube
 
   def self.from_omniauth(request_data)

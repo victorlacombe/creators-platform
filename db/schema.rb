@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_31_085615) do
+ActiveRecord::Schema.define(version: 2018_05_31_104400) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -36,7 +36,6 @@ ActiveRecord::Schema.define(version: 2018_05_31_085615) do
     t.bigint "memo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.boolean "is_subscribed", default: false, null: false
     t.index ["memo_id"], name: "index_fans_on_memo_id"
   end
 
@@ -46,6 +45,15 @@ ActiveRecord::Schema.define(version: 2018_05_31_085615) do
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_memos_on_user_id"
+  end
+
+  create_table "subscribers", force: :cascade do |t|
+    t.boolean "is_subscribed"
+    t.string "channel_id_youtube"
+    t.bigint "user_id"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_subscribers_on_user_id"
   end
 
   create_table "users", force: :cascade do |t|
@@ -93,5 +101,6 @@ ActiveRecord::Schema.define(version: 2018_05_31_085615) do
   add_foreign_key "comments", "videos"
   add_foreign_key "fans", "memos"
   add_foreign_key "memos", "users"
+  add_foreign_key "subscribers", "users"
   add_foreign_key "videos", "users"
 end
