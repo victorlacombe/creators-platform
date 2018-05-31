@@ -2,7 +2,8 @@ class YoutubeRefreshDataService
   def initialize(user)
     @user = user
     @youtube_api_v3 = ENV['YOUTUBE_API_V3']
-    @yt_gem_account = Yt::Account.new access_token: @user.token if @user.token # If there is a token we will use it for some requests (get subscribers list)
+    @user.refresh_token_if_expired # we refresh the access_token with the refresh_token we had the first time the user sign up
+    @yt_gem_account = Yt::Account.new access_token: @user.token # If there is a token we will use it for some requests (get subscribers list)
     @yt_gem_channel = Yt::Channel.new(id: @user.channel_id_youtube)
   end
 
