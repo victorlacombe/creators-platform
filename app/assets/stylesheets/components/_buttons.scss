@@ -1,9 +1,9 @@
 .btn {
   color: white;
   padding: 10px 15px;
-  border-radius: 2px;
+  border-radius: 4px;
   background: $red;
-  opacity: 0.9;
+  opacity: 0.85;
   transition: background 0.3s ease;
   border: none;
 }
@@ -21,12 +21,12 @@
 }
 
 .btn-tab {
-  color: #283149;
+  color: $purple;
   padding: 10px 15px;
   border-radius: 2px;
   font-weight: bold;
   transition: background 0.3s ease;
-  border-bottom: 3px solid #283149;
+  border-bottom: 3px solid $purple;
   text-decoration: none;
 
   a {
@@ -37,14 +37,14 @@
 
 
 .btn-tab:hover {
-    color: #283149;
-    border-bottom: 3px solid #283149;
+    color: $purple;
+    border-bottom: 3px solid $purple;
     text-decoration: none;
     opacity: 0.6;
 }
 
 .btn-tab:active {
-    color: #283149;
+    color: $purple;
     text-decoration: none;
     opacity: 0.6;
 }
