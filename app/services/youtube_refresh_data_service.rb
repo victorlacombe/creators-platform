@@ -7,12 +7,6 @@ class YoutubeRefreshDataService
     @yt_gem_channel = Yt::Channel.new(id: @user.channel_id_youtube)
   end
 
-  # def refresh_all
-  #   refresh_channel_data
-  #   refresh_all_videos
-  #   refresh_all_comments
-  # end
-
   def refresh_channel_data
     @user.channel_name = @yt_gem_channel.title # yt makes an API Request. 'channel' is then populated with data.
     @user.channel_thumbnail = @yt_gem_channel.thumbnail_url # Does yt make a request again? Data is a bit different
@@ -41,29 +35,6 @@ class YoutubeRefreshDataService
     puts "---------------"
     return # to avoid returning anything
   end
-
-  # Auth Issue because of isMine parameter -> require OAuth. Can't only use API Key.
-  # def refresh_all_videos_JSON
-  #   @count = 0 # Counter to check how many updated/new videos
-  #   # Get all videos from Youtube
-  #   max_results = 50 # limited to 50 for search requests on videos
-  #   url = "https://www.googleapis.com/youtube/v3/search?part=snippet&forMine=true&maxResults=#{max_results}&type=video&key=#{@youtube_api_v3}"
-  #   p url
-  #   response = RestClient.get(url)
-  #   h_response = JSON.parse(response)
-  #   @yt_gem_channel.videos.each do |yt_gem_video|
-  #     db_video = @user.videos.find_by(video_id_youtube: yt_gem_video.id)
-  #     # Check if video exists in db else we create it
-  #     db_video = Video.new if db_video.nil?
-  #     db_video = set_video_data(db_video, h_response)
-  #     db_video.save
-  #     @count += 1
-  #   end
-  #   puts "---------------"
-  #   puts "#{@count} VIDEOS have been added/updated"
-  #   puts "---------------"
-  #   return # to avoid returning anything
-  # end
 
   # To try out/create youtube API requests : https://developers.google.com/apis-explorer/#p/youtube/v3/youtube.commentThreads.list?part=snippet%252Creplies&allThreadsRelatedToChannelId=UCcIZ5L8w-VXDim5r7sINIww&_h=1&
   # NOT USING YT GEM - replies param does not exist in the gem
