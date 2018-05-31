@@ -1,4 +1,10 @@
 Rails.application.routes.draw do
+  # Sidekiq Web UI, only for admins.
+  require "sidekiq/web" # A Sinatra service in sidekiq that will generate a dashboard page to monitor jobs
+  authenticate :user, lambda { |u| u.admin } do # A user need user.admin = true to access it
+    mount Sidekiq::Web => '/sidekiq'
+  end
+
   # the callback routes are defined for omniauth
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
   root to: 'pages#home'
