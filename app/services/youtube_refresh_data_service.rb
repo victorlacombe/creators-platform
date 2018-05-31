@@ -79,12 +79,8 @@ class YoutubeRefreshDataService
     # Initial comment request
     # ------------------------
     channel_id = @user.channel_id_youtube
-<<<<<<< HEAD
     max_results = 100 # Youtube API V3 limit comments list to 100 results - https://developers.google.com/apis-explorer/#p/youtube/v3/youtube.commentThreads.list?part=snippet%252Creplies&maxResults=100&videoId=1cMoaxEPJ_Y&_h=18&
     url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&maxResults=#{max_results}&allThreadsRelatedToChannelId=#{channel_id}&key=#{@youtube_api_v3}"
-=======
-    url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet%2Creplies&allThreadsRelatedToChannelId=cIZ5L8w-VXDim5r7sINIww&key=AIzaSyCs9kLG3PwIcjwvpkcEnqdj5zgCFpOKeDk"
->>>>>>> 03ec5a9f82aefe1828705132a8996e7044306435
     response = RestClient.get(url)
     h_response = JSON.parse(response)
 
