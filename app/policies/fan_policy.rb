@@ -9,4 +9,8 @@ class FanPolicy < ApplicationPolicy
     record.user == user
   end
 
+  def update?
+    true
+  end
+
 end

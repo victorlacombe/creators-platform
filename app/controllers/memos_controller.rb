@@ -17,6 +17,7 @@ class MemosController < ApplicationController
     @memo.update(memo_params)
     @fan = Fan.find(params[:id])
     redirect_to fan_path(@fan)
+    authorize @fan
   end
 
   private
