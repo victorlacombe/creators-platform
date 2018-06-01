@@ -37,12 +37,10 @@
                   <ul>
                     <li>
                       <i class="fas fa-comments"></i>
-                      <!-- /!\ FAN COUNT DOESNT WORK YET  -->
-                      <span><% fan.comments.count %></span>
+                      <span><%= fan.comments.count %></span>
                     </li>
                     <li>
-                      <!-- /!\ ACTIVE HOURS AGO DOESNT WORK YET  -->
-                      <span>Active ? hours ago</span>
+                      <span>Active <%= time_ago_in_words(fan.comments.last.published_at) %> ago</span>
                     </li>
                   </ul>
                 </div>
