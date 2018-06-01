@@ -10,7 +10,7 @@ class CommentsController < ApplicationController
     authorize @comments
     @comment = Comment.find(params[:id])
     authorize @comment
-    @videos = policy_scope(Video).where(video_id_youtube: @comment))
+    @videos = policy_scope(Video).where(video_id_youtube: @comment)
     authorize videos
   end
 
