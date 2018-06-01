@@ -25,11 +25,13 @@ class FansController < ApplicationController
     redirect_to fan_path(@fan)
   end
 
-  private
-
-  def memo_params
-    params.require(:memo).permit(:content)
+  def comments_count
+    @fan = Fan.find(params[:id])
+    authorize @fan
+    @fan.comments.count
   end
+
+  private
 
   def memo_params
     params.require(:comment).permit(:content, :published_at, :video_id)

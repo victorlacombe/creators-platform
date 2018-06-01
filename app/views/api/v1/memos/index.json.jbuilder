@@ -1,3 +1,3 @@
 json.array! @memos do |memo|
-  json.extract! memo, :content, :user_id
+  json.extract! memo, :id, :content, :user_id
 end
