@@ -1,3 +1,10 @@
+DEV = true;
+
+BASE_URL = DEV ? "http://localhost:3000" : "https://www.recll.xyz";
+
+
+
+
 console.log("Content Script is working")
 // -------   FUNCTION TO ADD A LINK IN A COMMUNITY'S YouTube Page     ----------
 
@@ -41,11 +48,12 @@ setInterval(function() {
 //-------------------- 2.  retrieve the fan's fanPictureUrl --------------------
 
           const fanPicture = commentMainDiv.querySelector("#author-thumbnail #img")
-          const fanPictureUrl = fanPicture.getAttribute("src").replace(/\/s48-/, "/s28-")
+          const fanPictureUrl = fanPicture.getAttribute("src").match(/(.*)\/s\d+/)[1]
+          console.log(fanPictureUrl)
 
 //---------------- 3. Request the DB to get the fan information ----------------
 
-          fetch(`http://localhost:3000/api/v1/fans?query=${fanPictureUrl}`)
+          fetch(`${BASE_URL}/api/v1/fans?query=${fanPictureUrl}`)
           .then(response => response.json())
           .then((data) => {
             console.log(data)
