@@ -7,6 +7,8 @@ class User < ApplicationRecord
   has_many :videos, dependent: :destroy
   has_many :memos, dependent: :destroy
   has_many :subscribers, dependent: :destroy
+  has_many :fans, through: :memos
+  has_many :comments, through: :videos
   after_create :get_channel_id_youtube
 
   def self.from_omniauth(request_data)

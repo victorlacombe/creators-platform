@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_05_31_104400) do
+ActiveRecord::Schema.define(version: 2018_06_01_121807) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -40,7 +40,7 @@ ActiveRecord::Schema.define(version: 2018_05_31_104400) do
   end
 
   create_table "memos", force: :cascade do |t|
-    t.string "content", default: ""
+    t.text "content", default: ""
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
