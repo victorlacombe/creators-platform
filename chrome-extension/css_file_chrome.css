@@ -1,0 +1,26 @@
+.btn-see-details-recll {
+  cursor: pointer;
+  font-size: 10px;
+  color: white;
+  background-color: red;
+  font-weight: bolder;
+  border: 1px solid red;
+  border-radius: 20px;
+  margin-left: 20px;
+  padding: 5px 10px
+}
+
+.fan-info-recll {
+  box-shadow: 1px 1px 7px lightgrey;
+  border-radius: 5px;
+  margin: 10px;
+  padding: 10px 20px;
+  width: 60%;
+  margin-bottom: 20px;
+}
+
+/*.fan-info-transition-recll {
+  height: 200px;
+  transition: height 10s ease-in-out;
+}
+*/

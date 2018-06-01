@@ -14,27 +14,36 @@ dashboardCommentAuthors.forEach(function(dashboardCommentAuthor) {
 // nodes even after page DOM is Loaded
 
 setInterval(function() {
-  // slect the main div that contains the comment block and the profil picture
+  // select the main div that contains the comment block and the profil picture
   const commentMainDivs = document.querySelectorAll("#body")
   commentMainDivs.forEach(function(commentMainDiv) {
     // select the header-author (the header of the comment div)
     const videoCommentAuthor = commentMainDiv.querySelector("#header-author");
-    if (videoCommentAuthor.querySelector('.btn-see-details')) {
+    if (videoCommentAuthor.querySelector('.btn-see-details-recll')) {
       // do nothing, the "see fan details" button is already present
     } else {
-      videoCommentAuthor.insertAdjacentHTML("beforeend", '<a class="btn-see-details" style="font-size: 10px; color: white; background-color: red; font-weight: bolder; border: 1px solid red; border-radius: 20px; margin-left: 20px; padding: 5px 10px">See fan details</a>');
+      videoCommentAuthor.insertAdjacentHTML("beforeend", '<a class="btn-see-details-recll">See fan details</a>');
 
-      let insertedLink = videoCommentAuthor.querySelector('.btn-see-details')
+      let insertedLink = videoCommentAuthor.querySelector('.btn-see-details-recll')
       // Then implement the next block to reconciliate data between YouTube and our App
       if (insertedLink) {
         insertedLink.addEventListener('click', function(event) {
 
-//-------------------- 1.  retrieve the fan's fanPictureUrl --------------------
+//---------- 1.  Remove former opened popup when openning a new one ------------
+
+
+          const visibleInfoWindow = document.querySelector(".fan-info-recll")
+          console.log(visibleInfoWindow)
+          if (visibleInfoWindow) {
+            visibleInfoWindow.remove()
+          }
+
+//-------------------- 2.  retrieve the fan's fanPictureUrl --------------------
 
           const fanPicture = commentMainDiv.querySelector("#author-thumbnail #img")
           const fanPictureUrl = fanPicture.getAttribute("src").replace(/\/s48-/, "/s28-")
 
-//---------------- 2. Request the DB to get the fan information ----------------
+//---------------- 3. Request the DB to get the fan information ----------------
 
           fetch(`http://localhost:3000/api/v1/fans?query=${fanPictureUrl}`)
           .then(response => response.json())
@@ -49,27 +58,27 @@ setInterval(function() {
             const memoContent = data[0]["memo"]["memo_details"]["content"]
             // Retrieving the fan's profil picture
             const profilPictureUrl = data[0].profile_picture_url
-            // Inject the retrived data in the DOM
-            const commentMainDiv = document.querySelector("#comment").insertAdjacentHTML("afterbegin",
-              `<div style="border: 1px solid red; border-radius: 5px; margin: 10px; width: 100%; padding: 10px">
-                <img src="${profilPictureUrl}" alt="" />
-                <p>${userName}</p>
-                <p>Commented ${commentsNumber} time(s) on your videos</p>
 
-                <p>Comments: ${data[0]["comments"].forEach(function(comment) {
-                // Retrieving the comment's
-                comment.content
-                })}</p>
-                <p>Memo: ${memoContent}</p>
+//------------------- 4. Inject the retrived data in the DOM -------------------
+
+            commentMainDiv.insertAdjacentHTML("beforebegin",
+              `<div class="fan-info-recll">
+                  <img src="${profilPictureUrl}" alt="" />
+                  <p>${userName}</p>
+                  <p>Commented ${commentsNumber} time(s) on your videos</p>
+
+                  <p>Comments: ${data[0]["comments"].forEach(function(comment) {
+                  // Retrieving the comment's
+                  comment.content
+                  })}</p>
+                  <p>Memo: ${memoContent}</p>
               </div>`)
           })
-
-//------------------- 3. Inject the retrived data in the DOM -------------------
         })
       }
     }
   })
-}, 900);
+}, 100);
 
 
 
