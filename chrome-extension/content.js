@@ -58,27 +58,27 @@ setInterval(function() {
             const memoContent = data[0]["memo"]["memo_details"]["content"]
             // Retrieving the fan's profil picture
             const profilPictureUrl = data[0].profile_picture_url
-            // Inject the retrived data in the DOM
-            commentMainDiv.insertAdjacentHTML("afterbegin",
-              `<div class="fan-info-recll">
-                <img src="${profilPictureUrl}" alt="" />
-                <p>${userName}</p>
-                <p>Commented ${commentsNumber} time(s) on your videos</p>
 
-                <p>Comments: ${data[0]["comments"].forEach(function(comment) {
-                // Retrieving the comment's
-                comment.content
-                })}</p>
-                <p>Memo: ${memoContent}</p>
+//------------------- 4. Inject the retrived data in the DOM -------------------
+
+            commentMainDiv.insertAdjacentHTML("beforebegin",
+              `<div class="fan-info-recll">
+                  <img src="${profilPictureUrl}" alt="" />
+                  <p>${userName}</p>
+                  <p>Commented ${commentsNumber} time(s) on your videos</p>
+
+                  <p>Comments: ${data[0]["comments"].forEach(function(comment) {
+                  // Retrieving the comment's
+                  comment.content
+                  })}</p>
+                  <p>Memo: ${memoContent}</p>
               </div>`)
           })
-
-//------------------- 3. Inject the retrived data in the DOM -------------------
         })
       }
     }
   })
-}, 900);
+}, 100);
 
 
 
