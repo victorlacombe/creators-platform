@@ -40,7 +40,7 @@
                   <%= comment.published_at %>
                 </p>
                 <div class="txt">
-                  <%= comment.content %>
+                  <%= comment.content.html_safe %>
                 </div>
               </div>
             <%end %>
