@@ -1,0 +1,19 @@
+.btn-see-details-recll {
+  font-size: 10px;
+  color: white;
+  background-color: red;
+  font-weight: bolder;
+  border: 1px solid red;
+  border-radius: 20px;
+  margin-left: 20px;
+  padding: 5px 10px
+}
+
+
+.fan-info-recll {
+  border: 1px solid red;
+  border-radius: 5px;
+  margin: 10px;
+  width: 100%;
+  padding: 10px
+}
