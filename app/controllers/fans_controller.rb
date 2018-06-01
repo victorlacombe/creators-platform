@@ -31,7 +31,7 @@ class FansController < ApplicationController
     # All comments of a user filtered by the @fan and ordered from last published
     comments = current_user.comments.where(fan_id: @fan).order(published_at: :desc)
     # comments is grouped in a hash by video_id and reordered depending on the last comment date
-    comments_by_video = comments.group_by { |comment| comment.video_id }.sort_by { |video_id, comments| (comments.last.published_at) }
+    comments_by_video = comments.group_by { |comment| comment.video_id }.sort_by { |video_id, comments| -(comments.last.published_at.to_i) }
     return comments_by_video
   end
 
