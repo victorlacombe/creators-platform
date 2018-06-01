@@ -26,23 +26,28 @@
                 <div class="fard-top-left">
                   <%= image_tag fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-medium" %>
                   <div class="atxt">
-                    <span><%= link_to fan.youtube_username.capitalize, "https://www.youtube.com/channel/#{fan.channel_id_youtube}"%></span>
+                    <span><%= link_to fan.youtube_username.capitalize, fan_path(fan)%>
                   </div>
                 </div>
                 <div class="fard-top-right">
-                  <span>? Followers</span>
                 </div>
               </div>
               <div class="fard-bottom">
                 <div class="fard-bottom-left">
                   <ul>
-                    <li><i class="fas fa-comments"> ???</i></li>
-                    <li><span>Active ? hours ago</span></li>
+                    <li>
+                      <i class="fas fa-comments"></i>
+                      <!-- /!\ FAN COUNT DOESNT WORK YET  -->
+                      <span><% fan.comments.count %></span>
+                    </li>
+                    <li>
+                      <!-- /!\ ACTIVE HOURS AGO DOESNT WORK YET  -->
+                      <span>Active ? hours ago</span>
+                    </li>
                   </ul>
                 </div>
-                <div class="vertical-line"></div>
                 <div class="fard-bottom-right">
-                  <%= link_to "Show fan details", fan_path(fan)%>
+                  <%= link_to "fan channel", "https://www.youtube.com/channel/#{fan.channel_id_youtube}", target: "_blank"%>
                 </div>
               </div>
             </div>

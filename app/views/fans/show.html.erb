@@ -37,7 +37,7 @@
               </div>
               <div class="right">
                 <p class="date">
-                  <%= comment.published_at %>
+                  <%= comment.published_at.strftime("%e %b %Y %H:%M") %>
                 </p>
                 <div class="txt">
                   <%= comment.content %>
