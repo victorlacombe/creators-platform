@@ -25,12 +25,6 @@ class FansController < ApplicationController
     redirect_to fan_path(@fan)
   end
 
-  def comments_count
-    @fan = Fan.find(params[:id])
-    authorize @fan
-    @fan.comments.count
-  end
-
   private
 
   def memo_params
