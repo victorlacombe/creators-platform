@@ -3,7 +3,7 @@ console.log("Content Script is working")
 
 const dashboardCommentAuthors = document.querySelectorAll(".comment-header");
 dashboardCommentAuthors.forEach(function(dashboardCommentAuthor) {
-  dashboardCommentAuthor.insertAdjacentHTML("beforeend", '<a class=".btn-see-details-recll">See fan details</a>' )
+  dashboardCommentAuthor.insertAdjacentHTML("beforeend", '<a class=".btn-see-details">See fan details</a>' )
 })
 
 // ----------- FUNCTION TO ADD A LINK IN A VIDEO'S COMMENT FLOW  ---------------
@@ -14,7 +14,7 @@ dashboardCommentAuthors.forEach(function(dashboardCommentAuthor) {
 // nodes even after page DOM is Loaded
 
 setInterval(function() {
-  // slect the main div that contains the comment block and the profil picture
+  // select the main div that contains the comment block and the profil picture
   const commentMainDivs = document.querySelectorAll("#body")
   commentMainDivs.forEach(function(commentMainDiv) {
     // select the header-author (the header of the comment div)
@@ -29,12 +29,21 @@ setInterval(function() {
       if (insertedLink) {
         insertedLink.addEventListener('click', function(event) {
 
-//-------------------- 1.  retrieve the fan's fanPictureUrl --------------------
+//---------- 1.  Remove former opened popup when openning a new one ------------
+
+
+          const visibleInfoWindow = document.querySelector(".fan-info-recll")
+          console.log(visibleInfoWindow)
+          if (visibleInfoWindow) {
+            visibleInfoWindow.remove()
+          }
+
+//-------------------- 2.  retrieve the fan's fanPictureUrl --------------------
 
           const fanPicture = commentMainDiv.querySelector("#author-thumbnail #img")
           const fanPictureUrl = fanPicture.getAttribute("src").replace(/\/s48-/, "/s28-")
 
-//---------------- 2. Request the DB to get the fan information ----------------
+//---------------- 3. Request the DB to get the fan information ----------------
 
           fetch(`http://localhost:3000/api/v1/fans?query=${fanPictureUrl}`)
           .then(response => response.json())
@@ -50,7 +59,7 @@ setInterval(function() {
             // Retrieving the fan's profil picture
             const profilPictureUrl = data[0].profile_picture_url
             // Inject the retrived data in the DOM
-            const commentMainDiv = document.querySelector("#comment").insertAdjacentHTML("afterbegin",
+            commentMainDiv.insertAdjacentHTML("afterbegin",
               `<div class="fan-info-recll">
                 <img src="${profilPictureUrl}" alt="" />
                 <p>${userName}</p>

@@ -1,4 +1,5 @@
 .btn-see-details-recll {
+  cursor: pointer;
   font-size: 10px;
   color: white;
   background-color: red;
@@ -11,9 +12,11 @@
 
 
 .fan-info-recll {
+  visibility: visible;
   border: 1px solid red;
   border-radius: 5px;
   margin: 10px;
   width: 100%;
   padding: 10px
 }
+
