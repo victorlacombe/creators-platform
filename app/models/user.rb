@@ -25,7 +25,8 @@ class User < ApplicationRecord
             uid: request_data['uid'],
             token: request_data.credentials['token'],
             token_expiry: Time.at(request_data.credentials['expires_at']),
-            refresh_token: request_data.credentials['refresh_token']
+            refresh_token: request_data.credentials['refresh_token'],
+            channel_thumbnail: data['image']
           )
       end
       user
