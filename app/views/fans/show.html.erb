@@ -10,7 +10,7 @@
       </div>
 
       <% comments = Comment.where(fan_id: @fan) %>
-      <% comment = comments.last %>
+      <% comment = comments.order(published_at: :desc).first %>
       <% if comment %>
         <p class="last-msg">Last message :</p>
         <p class="last-msg"><% c = comment.published_at %></p>
