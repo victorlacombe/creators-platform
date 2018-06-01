@@ -5,6 +5,7 @@
   justify-content: space-around;
   width: 950px;
   margin: 0 auto;
+  margin-bottom: 80px;
 }
 
 @media(max-width: 720px) {
@@ -19,11 +20,11 @@
 
 .left-card {
   text-align: center;
-  background-color: #283149;
+  background-color: $purple;
   padding: 30px;
   border-radius: 3px;
-  border-right: 1px solid #283149;
-  border-top: 1px solid #283149;
+  border-right: 1px solid $purple;
+  border-top: 1px solid $purple;
   flex: 0 0 450px;
   height: 100vh;
   position: sticky;
@@ -40,6 +41,11 @@
   }
   .pseudo {
     font-weight: lighter;
+    color: white;
+    a {
+      color: white;
+      font-weight: bolder;
+    }
   }
   .last-msg, .followers {
     font-size: 12px;
@@ -50,13 +56,12 @@
 // single comment card
 .comment-card {
   display: flex;
-  align-items: center;
   justify-content: space-around;
   width: 730px;
   background-color: white;
   border-radius: 3px;
   padding: 16px;
-  border-bottom: 1px solid #283149;
+  border-bottom: 1px solid $purple;
 
   .date {
     font-size: 13px;
@@ -68,12 +73,20 @@
   }
 }
 
-.thumbnail {
+.video-card {
   width: 160px;
 
-  p {
+  img {
+    width: 160px;
+  }
+
+  .btn-tab, a {
     text-align: center;
     margin-top: 10px;
+    font-size: 14px;
+    font-weight: bolder;
+    color: #283149;
+    border-bottom: none;
   }
 }
 .scrollbar {
