@@ -1,8 +1,6 @@
 <div class="container">
   <div class="header">
-    <div class="btn-tab">
-      <%= link_to "Back to my fans", fans_path%>
-    </div>
+    <%= link_to "Back to my fans", fans_path%>
   </div>
   <div class="content">
     <div class="left-card">
@@ -18,24 +16,26 @@
         <p class="last-msg"><% c = comment.published_at %></p>
         <p class="last-msg"><%= c.strftime("%e %b %Y %H:%M") %></p>
       <% end %>
-        <%= simple_form_for @memo do |f|%>
+      <%= simple_form_for @memo do |f|%>
         <%= f.input :content%>
-        <%= f.submit %>
-        <% end %>
+        <%= f.submit "Save", class: "memo-btn"%>
+      <% end %>
     </div>
-    <div class="scrollbar">
-          <% @comments.each do |comment|%>
-            <% video = Video.find(comment.video_id) %>
-            <div class="comment-card">
-              <div class="video-card">
-                <%= link_to "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' do %>
-                  <%= image_tag  video.thumbnail, class: "avatar-square" %>
-                <% end %>
-                <div class='btn-tab'>
-                  <%= link_to video.title.first(20), "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' %>
-                </div>
-              </div>
-              <div class="right">
+    <div class="all-videos">
+      <% @comments_by_video.each do |video_id, comments|%>
+        <div class="video-comment-card">
+          <% video = Video.find(video_id) %>
+          <div class="video-card">
+            <%= link_to "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' do %>
+              <%= image_tag  video.thumbnail, class: "avatar-square" %>
+            <% end %>
+            <div class='btn-tab'>
+              <%= link_to video.title.first(20), "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' %>
+            </div>
+          </div>
+          <div class="comments">
+            <% comments.each do |comment|%>
+              <div class="comment-card">
                 <p class="date">
                   <%= comment.published_at %>
                 </p>
@@ -43,8 +43,10 @@
                   <%= comment.content %>
                 </div>
               </div>
-            </div>
-          <%end %>
+            <%end %>
+          </div>
         </div>
-      </div>
+      <%end %>
     </div>
+  </div>
+</div>

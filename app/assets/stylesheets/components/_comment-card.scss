@@ -1,86 +1,82 @@
 // Show page
-.content {
-  display: grid;
-  grid-template-columns: 1fr 3fr;
-  justify-content: space-around;
-  width: 950px;
-  margin: 0 auto;
-  margin-bottom: 80px;
+.header {
 }
-
-@media(max-width: 720px) {
-  .content {
-    display: grid;
-    grid-template-columns: 1fr 3fr;
-    justify-content: space-around;
-    width: 950px;
-    margin: 0 auto;
-  }
+.content {
+  display: flex;
 }
 
 .left-card {
   text-align: center;
   background-color: $purple;
+  color: white;
   padding: 30px;
   border-radius: 3px;
   border-right: 1px solid $purple;
   border-top: 1px solid $purple;
-  flex: 0 0 450px;
+
+  flex: 0 0 300px;
   height: 100vh;
-  position: sticky;
-  top: 0;
-  color: white;
+  position: sticky !important;
+  top: 0 !important;
 
   .avatar-large {
     margin-bottom: 15px;
   }
 }
 
-  h3 {
-    font-weight: bold;
-  }
-  .pseudo {
-    font-weight: lighter;
+h3 {
+  font-weight: bold;
+}
+.pseudo {
+  font-weight: lighter;
+  color: white;
+  a {
     color: white;
-    a {
-      color: white;
-      font-weight: bolder;
-    }
+    font-weight: bolder;
   }
-  .last-msg, .followers {
-    font-size: 12px;
-  }
+}
+.last-msg, .followers {
+  font-size: 12px;
+}
 
+.memo-btn {
+  color: $purple;
+}
 
 
 // single comment card
-.comment-card {
-  display: flex;
-  justify-content: space-around;
-  width: 730px;
-  background-color: white;
-  border-radius: 3px;
-  padding: 16px;
-  border-bottom: 1px solid $purple;
+.all-videos {
+  flex-grow: 1;
+  padding-left: 10px;
+}
 
+.video-comment-card {
+  background: white;
+  margin-bottom: 10px;
+  border-radius: 3px;
+  box-shadow: 1px 1px 5px #ccc;
+  padding: 20px;
+  display: flex;
+}
+
+.comment-card {
+  padding-left: 20px;
+  padding-bottom: 20px;
   .date {
     font-size: 13px;
   }
 
   .txt {
-
     font-weight: lighter;
   }
 }
 
 .video-card {
-  width: 160px;
-
   img {
     width: 160px;
   }
-
   .btn-tab, a {
+    max-width: 160px;
     text-align: center;
     margin-top: 10px;
     font-size: 14px;
@@ -89,21 +85,3 @@
     border-bottom: none;
   }
 }
-.scrollbar {
-  width: 600px;
-}
-.header {
-    width: 950px;
-    display: flex;
-    justify-content: flex-end;
-    margin: 0 auto;
-  }
-
-.txt {
-  width: 500px;
-}
-
-.sticky-wrapper {
-  display: flex;
-}
-

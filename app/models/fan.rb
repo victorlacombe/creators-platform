@@ -5,6 +5,7 @@ class Fan < ApplicationRecord
 
   has_many :comments, dependent: :destroy
   belongs_to :memo
+  has_many :users, through: :memo
 
   # Return False if user doesn't display his subscriptions list or if he is not subscribed
   # Return True if subscribed

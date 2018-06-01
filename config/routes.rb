@@ -16,10 +16,10 @@ Rails.application.routes.draw do
   resources :memos, only: [:create, :edit, :update]
 
   # VIDEO : no need for a video view, will be displayed in the fans view.
-  resources :videos, only: [:create, :update]
+  # resources :videos, only: [:create, :update]
 
   # COMMENTS : no need for a comments view, will be displayed in the fans view.
-  resources :comments, only: [:create, :update]
+  # resources :comments, only: [:create, :update]
 
   # -----------------------------  API ROUTES  ---------------------------------
 

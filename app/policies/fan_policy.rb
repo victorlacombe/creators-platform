@@ -5,8 +5,8 @@ class FanPolicy < ApplicationPolicy
     end
   end
 
-  def show
-    record.user == user
+  def show?
+    record.users.include?(user)
   end
 
   def update?
