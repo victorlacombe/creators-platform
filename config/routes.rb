@@ -26,9 +26,6 @@ Rails.application.routes.draw do
   namespace :api, defaults: { format: :json } do
     namespace :v1 do
       resources :fans, only: [:index]
-      resources :memos, only: [:index]
-      resources :videos, only: [:index]
-      resources :comments, only: [:index]
     end
   end
 end
