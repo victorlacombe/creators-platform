@@ -6,7 +6,7 @@ class Api::V1::FansController < Api::V1::BaseController
     # for the end of the URL is not the same in YouTube website and Youtube Database (through API)
     query = params[:query]
     if query
-      @fans = policy_scope(Fan).where(profile_picture_url: query)
+      @fans = policy_scope(Fan).where("profile_picture_url ILIKE ?", "%#{query}%")
     else
       @fans = policy_scope(Fan)
     end
