@@ -14,4 +14,8 @@ json.array! @fans do |fan|
                            :fan_id,
                            :comment_id_youtube
   end
+
+  json.memo do
+    json.memo_details fan.memo
+  end
 end
