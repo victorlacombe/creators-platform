@@ -21,7 +21,32 @@
         <%= f.submit "Save", class: "memo-btn"%>
       <% end %>
     </div>
+
+
     <div class="all-videos">
+
+      <!-- CODE TO BE ADDED SOMEWHERE AFTER MERGING -->
+      <% favorite_comments = comments.to_a.select{ |comment| comment.is_pinned == true } %>
+      <% unless favorite_comments.empty? %>
+        <h2>Favorite Comments</h2>
+        <div class="pinned-comments">
+          <% favorite_comments.each do |comment|%>
+            <% if comment.is_pinned %>
+              <div class="comment-card">
+                <p class="date">
+                  <%= comment.published_at.strftime("%e %b %Y %H:%M") %>
+                </p>
+                <div class="txt">
+                  <%= link_to "<i class='fas fa-star'></i>".html_safe, comment_path(comment.id, is_pinned: false), method: :patch %>
+                  <%= comment.content.html_safe %>
+                </div>
+              </div>
+            <% end %>
+          <%end %>
+        </div>
+      <% end %>
+      <h2>All Comments</h2>
+      <!-- CODE TO BE ADDED SOMEWHERE AFTER MERGING -->
       <% @comments_by_video.each do |video_id, comments|%>
         <div class="video-comment-card">
           <% video = Video.find(video_id) %>
@@ -35,11 +60,20 @@
           </div>
           <div class="comments">
             <% comments.each do |comment|%>
-              <div class="comment-card">
+              <!-- CODE TO BE ADDED SOMEWHERE AFTER MERGING -->
+              <div class="comment-card <%= "pinned" if comment.is_pinned %>">
+                <!-- CODE TO BE ADDED SOMEWHERE AFTER MERGING -->
                 <p class="date">
                   <%= comment.published_at.strftime("%e %b %Y %H:%M") %>
                 </p>
                 <div class="txt">
+                  <!-- CODE TO BE ADDED SOMEWHERE AFTER MERGING -->
+                  <% if comment.is_pinned%>
+                    <%= link_to "<i class='fas fa-star'></i>".html_safe, comment_path(comment.id, is_pinned: false), method: :patch %>
+                  <% else %>
+                    <%= link_to "<i class='far fa-star'></i>".html_safe, comment_path(comment.id, is_pinned: true), method: :patch %>
+                  <% end %>
+                  <!-- CODE TO BE ADDED SOMEWHERE AFTER MERGING -->
                   <%= comment.content.html_safe %>
                 </div>
               </div>
