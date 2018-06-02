@@ -26,7 +26,7 @@
     <div class="all-videos">
 
       <!-- CODE TO BE ADDED SOMEWHERE AFTER MERGING -->
-      <% favorite_comments = comments.to_a.select{ |comment| comment.is_pinned == true } %>
+      <% favorite_comments = comments.to_a.select{ |comment| comment.is_pinned == true }.sort_by{ |comment| -(comment.published_at.to_i) } %>
       <% unless favorite_comments.empty? %>
         <h2>Favorite Comments</h2>
         <div class="pinned-comments">
@@ -68,9 +68,9 @@
                 </p>
                 <div class="txt">
                   <!-- CODE TO BE ADDED SOMEWHERE AFTER MERGING -->
-                  <% if comment.is_pinned%>
+                  <% if comment.is_pinned && comment.fan_id == @fan.id %>
                     <%= link_to "<i class='fas fa-star'></i>".html_safe, comment_path(comment.id, is_pinned: false), method: :patch %>
-                  <% else %>
+                  <% elsif !comment.is_pinned && comment.fan_id == @fan.id %>
                     <%= link_to "<i class='far fa-star'></i>".html_safe, comment_path(comment.id, is_pinned: true), method: :patch %>
                   <% end %>
                   <!-- CODE TO BE ADDED SOMEWHERE AFTER MERGING -->
