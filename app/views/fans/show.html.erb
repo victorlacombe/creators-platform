@@ -57,7 +57,9 @@
               <div class="comment-card <%= is_parent_comment ? 'parent-comment' : 'child-comment'  %> <%= 'creator-comment' if is_creator %>">
                 <p class="date">
                   <% if is_creator %><%= image_tag  Fan.find(comment.fan_id).profile_picture_url, class: "avatar-square" %><% end %>
-                  <%= comment.published_at.strftime("%e %b %Y %H:%M") %>
+                  <%= link_to "http://youtube.com/watch?v=" + video.video_id_youtube + "&lc=" + comment.comment_id_youtube, target: '_blank' do %>
+                    <%= comment.published_at.strftime("%e %b %Y %H:%M") %>
+                  <% end %>
                 </p>
                 <div class="txt">
                   <%= comment.content.html_safe %>
