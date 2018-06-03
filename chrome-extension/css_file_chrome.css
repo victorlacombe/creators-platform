@@ -18,13 +18,12 @@
 .fan-info-recll {
   overflow: auto;
   position: relative;
-  width: 360px;
-  min-height: 130px;
+  width: 60%;
+  min-height: 150px;
 
-  margin: 10px;
+  margin: 10px 0 20px 0;
   padding: 10px 20px;
   border-radius: 5px;
-  margin-bottom: 20px;
   box-shadow: 1px 1px 7px lightgrey;
 
   font-size: 10px;
@@ -47,39 +46,53 @@
   left: 10px;
 }
 
-
-.fan-info-recll #more-details {
+#more-details {
   position: absolute;
   right: 10px;
   top: 15px;
   text-decoration: none;
   color: black;
   margin: 5px 0;
-  }
+}
 
 
 
-.fan-info-recll #commentNumber {
+#commentNumber {
   position: absolute;
   top: 50px;
   left: 10px;
   margin: 5px 0;
 }
 
-.fan-info-recll #nb-of-video-commented {
+
+#last-comment-date {
   position: absolute;
   top: 60px;
   left: 10px;
 }
 
-.fan-info-recll #memo {
+#nb-of-video-commented {
+  position: absolute;
+  top: 70px;
+  left: 10px;
+}
+
+#memo {
     background-color: rgba(93, 93, 93, 0.1);
     width: 91%;
+    min-height: 54px;
     margin: 10px auto;
     padding: 8px;
-    top: 80px;
+    top: 90px;
     left: 10px;
     border-radius: 5px;
     position: absolute;
+    line-height: 1.5em;
+}
+
+
+#memo a {
+  text-decoration: none;
+  color: black;
 }
 
