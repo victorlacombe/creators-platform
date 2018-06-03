@@ -26,25 +26,17 @@
     <div class="all-videos">
 
       <!-- CODE TO BE ADDED SOMEWHERE AFTER MERGING -->
-      <% favorite_comments = comments.to_a.select{ |comment| comment.is_pinned == true }.sort_by{ |comment| -(comment.published_at.to_i) } %>
-      <% unless favorite_comments.empty? %>
-        <h2>Favorite Comments</h2>
-        <div class="pinned-comments">
-          <% favorite_comments.each do |comment|%>
-            <% if comment.is_pinned %>
-              <div class="comment-card">
-                <p class="date">
-                  <%= comment.published_at.strftime("%e %b %Y %H:%M") %>
-                </p>
-                <div class="txt">
-                  <%= link_to "<i class='fas fa-star'></i>".html_safe, comment_path(comment.id, is_pinned: false), method: :patch %>
-                  <%= comment.content.html_safe %>
-                </div>
-              </div>
-            <% end %>
-          <%end %>
-        </div>
-      <% end %>
+      <h2>Pinned Comments</h2>
+      <div id="pinned-comments">
+        <% favorite_comments = comments.to_a.select{ |comment| comment.is_pinned == true }.sort_by{ |comment| -(comment.published_at.to_i) } %>
+        <% unless favorite_comments.empty? %>
+            <% favorite_comments.each do |comment|%>
+              <% if comment.is_pinned %>
+                <%= render "comments/show", comment: comment %>
+              <% end %>
+            <%end %>
+        <% end %>
+      </div>
       <h2>All Comments</h2>
       <!-- CODE TO BE ADDED SOMEWHERE AFTER MERGING -->
       <% @comments_by_video.each do |video_id, comments|%>
@@ -61,7 +53,7 @@
           <div class="comments">
             <% comments.each do |comment|%>
               <!-- CODE TO BE ADDED SOMEWHERE AFTER MERGING -->
-              <div class="comment-card <%= "pinned" if comment.is_pinned %>">
+              <div class="comment-card">
                 <!-- CODE TO BE ADDED SOMEWHERE AFTER MERGING -->
                 <p class="date">
                   <%= comment.published_at.strftime("%e %b %Y %H:%M") %>
@@ -69,9 +61,9 @@
                 <div class="txt">
                   <!-- CODE TO BE ADDED SOMEWHERE AFTER MERGING -->
                   <% if comment.is_pinned && comment.fan_id == @fan.id %>
-                    <%= link_to "<i class='fas fa-star'></i>".html_safe, comment_path(comment.id, is_pinned: false), method: :patch %>
+                    <%= link_to "<i class='fas fa-star' data-comment-id='#{comment.id}'></i>".html_safe, comment_path(comment.id), method: :patch, remote: true %>
                   <% elsif !comment.is_pinned && comment.fan_id == @fan.id %>
-                    <%= link_to "<i class='far fa-star'></i>".html_safe, comment_path(comment.id, is_pinned: true), method: :patch %>
+                    <%= link_to "<i class='far fa-star' data-comment-id='#{comment.id}'></i>".html_safe, comment_path(comment.id), method: :patch, remote: true %>
                   <% end %>
                   <!-- CODE TO BE ADDED SOMEWHERE AFTER MERGING -->
                   <%= comment.content.html_safe %>

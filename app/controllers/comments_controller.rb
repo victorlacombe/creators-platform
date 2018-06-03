@@ -2,9 +2,13 @@ class CommentsController < ApplicationController
   def update
     @comment = Comment.find(params[:id])
     authorize @comment
-    @comment.is_pinned = params[:is_pinned] if params[:is_pinned] == "true"
-    @comment.is_pinned = params[:is_pinned] if params[:is_pinned] == "false"
+    @comment.toggle_is_pinned!
     @comment.save
-    redirect_to fan_path(@comment.fan_id)
+
+    # Ajaxification
+    respond_to do |format|
+      format.html { redirect_to fan_path(@comment.fan_id) }
+      format.js  # <-- will render `app/views/comments/update.js.erb`
+    end
   end
 end

@@ -1,0 +1,36 @@
+// ---- EDIT THE CSS CLASS HERE ----
+var pinned_class = "fas fa-star";
+var not_pinned_class = "far fa-star";
+// ---------------------------------
+
+var comment = document.querySelector("[data-comment-id='<%= @comment.id %>']");
+var comment_card_top = document.querySelector("[data-comment-card-id='<%= @comment.id %>']");
+var pinning = (comment.className === pinned_class) // True if currently pinning, False if un-pinning
+
+function deletePinnedComment() {
+  comment_card_top.parentNode.removeChild(comment_card_top);
+}
+
+function addPinnedComment(pinnedHTML) {
+  const pinned_comments = document.getElementById('pinned-comments');
+  pinned_comments.insertAdjacentHTML('beforeend', pinnedHTML);
+}
+
+function togglePinComment() {
+  if (pinning) {
+      // unPin comment in comment list by changing css class
+      // Delete pinned comment on top
+      comment.className = not_pinned_class;
+      deletePinnedComment();
+  } else {
+      // Pin comment in comment list by changing css class
+      // Display pinned comment on top
+      comment.className = pinned_class;
+      addPinnedComment('<%= j render "comments/show", comment: @comment %>');
+  }
+}
+
+
+// Switch pinned class in the comment list section
+togglePinComment();
+

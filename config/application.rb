@@ -29,5 +29,8 @@ module CreatorsPlatform
         resource '*', headers: :any, methods: [:get, :update]
       end
     end
+
+    # FOR AJAX in RAILS
+    config.action_view.embed_authenticity_token_in_remote_forms = true
   end
 end
