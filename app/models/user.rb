@@ -28,6 +28,10 @@ class User < ApplicationRecord
             refresh_token: request_data.credentials['refresh_token'],
             channel_thumbnail: data['image']
           )
+
+          # We launch the first jobs to pre-populate his db
+          RefreshChannelDataJob.perform_later(user.id)
+          RefreshVideosCommentsJob.perform_later(user.id)
       end
       user
   end
