@@ -15,4 +15,21 @@ class Fan < ApplicationRecord
     sub_status = subscriber.nil? ? false : subscriber.is_subscribed # if subscriber exists in db, we show his status, else it's false anyway
     return sub_status
   end
+
+  # The following methods are applied in the index on @fans
+  # => after pre-selection of the user's fans in the controller
+  # Return an array of most recent fans
+  def most_recent_fans(user, max)
+    fans = user.fans
+    fans_filtered = fans.group_by { |fan| fan.comments.count }.sort_by { |count, fans| -count }
+    # .......... NEED TO BE FINISHED
+  end
+
+  # Return an array of churning fans (no comments on the last 2 videos, ordered from most comments done)
+  def churning_fans
+  end
+
+  # Return an array of most loyal fans (most comments done and not churning)
+  def most_loyal_fans
+  end
 end
