@@ -89,8 +89,11 @@ setInterval(function() {
             for (i = 0; i < data[0]["comments"].length; i++) {
               console.log(commentsDates)
               commentsDates.push(data[0]["comments"][i].published_at)
-              lastcommentDate = commentsDates.sort()[commentsDates.length - 1]
+              lastcommentDate = commentsDates.sort()[commentsDates.length - 1]..toLocaleDateString('en-GB')
               }
+
+            // Retrieving the fan's first activity date
+
 
 
 //------------------- 4. Inject the retrived data in the DOM -------------------
@@ -102,7 +105,7 @@ setInterval(function() {
                 <a id="more-details" target=”_blank” href=https://www.recll.xyz/fans/${fanId}> See more details</a>
                 <p id="commentNumber">Commented ${commentsNumber} time(s) on your videos</p>
                 <p id="nb-of-video-commented">Total video commented: ${numberOfCommentedVideos.length}</p>
-                <p id="last-comment-date">Last comment: ${lastcommentDate}</p>
+                <p id="last-comment-date">Latest comment: ${lastcommentDate}</p>
                 <div id="memo">
                   ${memoContent}
                 </div>
