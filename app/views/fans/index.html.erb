@@ -1,4 +1,5 @@
-<h1 class="text-center">All my fans</h1>
+<h1 class="text-center">Hello <%= current_user.first_name.nil? ? current_user.channel_name : current_user.first_name.capitalise  %> !</h1>
+<h2 class="text-center"> You have <strong><%= current_user.fans.where.not(channel_id_youtube: current_user.channel_id_youtube).count %></strong> comments from your fans</h2>
   <div class="wrapper-search">
     <div class="container">
       <div class="search-form">
@@ -15,10 +16,9 @@
       </div>
     </div>
   </div>
-
 <div class="container">
   <div class="fans-cards">
-    <div class="row">
+    <div class="row" id="all-fans" data-page="<%= @initial_page %>"> <!-- id : Used in kaminari.js for infinite scroll -->
       <% @fans.each do |fan| %>
           <div class="col-xs-12 col-sm-6 col-md-4">
             <div class="fard">
@@ -53,4 +53,5 @@
       <% end %>
     </div>
   </div>
+  <%= paginate @fans, remote: true %>
 </div>
