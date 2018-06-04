@@ -1,21 +1,16 @@
-<h1 class="text-center">All my fans</h1>
-  <div class="wrapper-search">
-    <div class="container">
-      <div class="search-form">
-      <div class="row">
-        <div class="col-md-4">
-          <%= form_tag fans_path, method: :get do %>
-          <%= text_field_tag :query,
-          params[:query],
-          class: "form-control",
-          placeholder: "Search a fan"%>
-          <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
+<!-- DASHBOARD LEFT NAVBAR BEGINS HERE -->
 
+<%= render 'shared/dashboard-left-navbar' %>
+
+
+<!-- DASHBOARD LEFT NAVBAR ENDS HERE -->
+
+<!-- NAVBAR IN SEARCH BAR STARTS HERE -->
+
+
+
+<!-- NAVBAR IN SEARCH BAR ENDS HERE -->
+<h1 class="text-center">All my fans</h1>
 <div class="container">
   <div class="row">
     <div class="fans-type">
