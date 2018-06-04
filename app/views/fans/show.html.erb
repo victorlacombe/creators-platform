@@ -50,15 +50,13 @@
               <%= link_to video.title.first(20), "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' %>
             </div>
           </div>
+
         <!-- --------------------------------------------------------- -->
         <!-- ---------------- This is the comments section------------ -->
         <!-- --------------------------------------------------------- -->
           <div class="comments">
             <% previous_comment = nil %>
             <% comments.each do |comment|%>
-              <div class="comment-card">
-
-
               <!-- --separator between different discussion/parents comment-- -->
               <% unless previous_comment.nil? %>
                 <% unless previous_comment.top_level_comment_id_youtube == comment.top_level_comment_id_youtube %>
