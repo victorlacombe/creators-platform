@@ -1,3 +1,14 @@
+DEV = false;
+
+BASE_URL = DEV ? "http://localhost:3000" : "https://www.recll.xyz";
+
+// // ----------------   Defining remove duplicates function     ------------------
+
+// function onlyUnique(value, index, self) {
+//     return self.indexOf(value) === index;
+// }
+
+
 console.log("Content Script is working")
 // -------   FUNCTION TO ADD A LINK IN A COMMUNITY'S YouTube Page     ----------
 
@@ -22,6 +33,7 @@ setInterval(function() {
     if (videoCommentAuthor.querySelector('.btn-see-details-recll')) {
       // do nothing, the "see fan details" button is already present
     } else {
+
       videoCommentAuthor.insertAdjacentHTML("beforeend", '<a class="btn-see-details-recll">See fan details</a>');
 
       let insertedLink = videoCommentAuthor.querySelector('.btn-see-details-recll')
@@ -33,7 +45,6 @@ setInterval(function() {
 
 
           const visibleInfoWindow = document.querySelector(".fan-info-recll")
-          console.log(visibleInfoWindow)
           if (visibleInfoWindow) {
             visibleInfoWindow.remove()
           }
@@ -41,37 +52,61 @@ setInterval(function() {
 //-------------------- 2.  retrieve the fan's fanPictureUrl --------------------
 
           const fanPicture = commentMainDiv.querySelector("#author-thumbnail #img")
-          const fanPictureUrl = fanPicture.getAttribute("src").replace(/\/s48-/, "/s28-")
+          const fanPictureUrl = fanPicture.getAttribute("src").match(/(.*)\/s\d+/)[1]
+          console.log(fanPictureUrl)
 
 //---------------- 3. Request the DB to get the fan information ----------------
 
-          fetch(`http://localhost:3000/api/v1/fans?query=${fanPictureUrl}`)
+          fetch(`${BASE_URL}/api/v1/fans?query=${fanPictureUrl}`)
           .then(response => response.json())
           .then((data) => {
-            console.log(data)
+            // console.log(data)
+            // Retrieving the fan id
+            const fanId = data[0].id
             // Retrieving the fan username
             const userName = data[0].youtube_username
             // Retrieving the fan comment number
             const commentsNumber = data[0]["comments"].length
-            // Retrieving the fan comments
             // Retrieving the memo
-            const memoContent = data[0]["memo"]["memo_details"]["content"]
+            if (data[0]["memo"]["memo_details"]["content"].length === 0) {
+              memoContent = `<a href="https://www.recll.xyz/fans/${fanId}" target="_blank" class="href">Add a memo</a>`
+            } else {
+              memoContent = `Memo: ${data[0]["memo"]["memo_details"]["content"]}`
+            }
+
             // Retrieving the fan's profil picture
             const profilPictureUrl = data[0].profile_picture_url
+            // Retrieving the fan's number of video commented
+            let videoIds = []
+            for (i = 0; i < data[0]["comments"].length; i++) {
+              videoIds.push(data[0]["comments"][i].video_id)
+              numberOfCommentedVideos = videoIds.filter(function(item, pos, self) {
+                return self.indexOf(item) == pos;
+              })
+            }
+            // Retrieving the fan's last comment date
+            let commentsDates = []
+            for (i = 0; i < data[0]["comments"].length; i++) {
+              console.log(commentsDates)
+              commentsDates.push(data[0]["comments"][i].published_at)
+              lastcommentDate = commentsDates.sort()[commentsDates.length - 1]
+              }
+
 
 //------------------- 4. Inject the retrived data in the DOM -------------------
 
             commentMainDiv.insertAdjacentHTML("beforebegin",
               `<div class="fan-info-recll">
-                  <img src="${profilPictureUrl}" alt="" />
-                  <p>${userName}</p>
-                  <p>Commented ${commentsNumber} time(s) on your videos</p>
+                <img src="${profilPictureUrl}" alt="" />
+                <h3>${userName}</h3>
+                <a id="more-details" target=”_blank” href=https://www.recll.xyz/fans/${fanId}> See more details</a>
+                <p id="commentNumber">Commented ${commentsNumber} time(s) on your videos</p>
+                <p id="nb-of-video-commented">Total video commented: ${numberOfCommentedVideos.length}</p>
+                <p id="last-comment-date">Last comment: ${lastcommentDate}</p>
+                <div id="memo">
+                  ${memoContent}
+                </div>
 
-                  <p>Comments: ${data[0]["comments"].forEach(function(comment) {
-                  // Retrieving the comment's
-                  comment.content
-                  })}</p>
-                  <p>Memo: ${memoContent}</p>
               </div>`)
           })
         })

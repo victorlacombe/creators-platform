@@ -71,6 +71,21 @@ h3 {
   }
 }
 
+.parent-comment {
+  .txt {
+    font-weight: bolder;
+  }
+}
+
+.child-comment {
+  margin-left: 20px;
+  border-left: 5px solid #aaa;
+}
+
+.creator-comment {
+  background: #eee;
+}
+
 .video-card {
   img {
     width: 160px;

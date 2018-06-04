@@ -1,3 +1,6 @@
+
+ /* ----------------------- See fan details button -------------------------- */
+
 .btn-see-details-recll {
   cursor: pointer;
   font-size: 10px;
@@ -10,17 +13,86 @@
   padding: 5px 10px
 }
 
+/* ----------------------- Fan details main section ------------------------- */
+
 .fan-info-recll {
-  box-shadow: 1px 1px 7px lightgrey;
-  border-radius: 5px;
-  margin: 10px;
-  padding: 10px 20px;
+  overflow: auto;
+  position: relative;
   width: 60%;
-  margin-bottom: 20px;
+  min-height: 150px;
+
+  margin: 10px 0 20px 0;
+  padding: 10px 20px;
+  border-radius: 5px;
+  box-shadow: 1px 1px 7px lightgrey;
+
+  font-size: 10px;
+  font-weight: lighter;
 }
 
-/*.fan-info-transition-recll {
-  height: 200px;
-  transition: height 10s ease-in-out;
+
+/* ------------------------ Fan details components -------------------------- */
+
+.fan-info-recll h3 {
+  position: absolute;
+  top: 6px;
+  font-weight: lighter;
+  left: 50px;
 }
-*/
+
+.fan-info-recll img {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+}
+
+#more-details {
+  position: absolute;
+  right: 10px;
+  top: 15px;
+  text-decoration: none;
+  color: black;
+  margin: 5px 0;
+}
+
+
+
+#commentNumber {
+  position: absolute;
+  top: 50px;
+  left: 10px;
+  margin: 5px 0;
+}
+
+
+#last-comment-date {
+  position: absolute;
+  top: 60px;
+  left: 10px;
+}
+
+#nb-of-video-commented {
+  position: absolute;
+  top: 70px;
+  left: 10px;
+}
+
+#memo {
+    background-color: rgba(93, 93, 93, 0.1);
+    width: 91%;
+    min-height: 54px;
+    margin: 10px auto;
+    padding: 8px;
+    top: 90px;
+    left: 10px;
+    border-radius: 5px;
+    position: absolute;
+    line-height: 1.5em;
+}
+
+
+#memo a {
+  text-decoration: none;
+  color: black;
+}
+
