@@ -1,10 +1,20 @@
 <%= content_for(:navbar_class, "navbar-home") %>
 
-<div class="banner">
+<!-- <div class="banner">
   <div class="banner-content text-center">
     <h1>Build a one-to-one relationship with your fans!</h1>
     <p>Take care of your fans : Improve your social media experience</p>
     <%= link_to "GET STARTED", fans_path, class: "btn btn-lg btn-danger"  %>
+  </div>
+</div> -->
+
+<div class="background">
+  <div class="text-left">
+    <h1>Build a one-to-one relationship with your fans!</h1>
+    <p>Take care of your fans : Improve your social media experience</p>
+    <%= link_to "GET STARTED", fans_path, class: "btn btn-lg btn-danger"  %>
+  </div>
+  <div class="img-right hidden-xs" style="background-image: url('<%= image_url "img-right.png" %>')">
   </div>
 </div>
 
@@ -35,55 +45,58 @@
   <div class="wrapper-why">
     <div class="container">
       <div class="banner-why">
-      <p>See why <strong>50,000+ creators</strong> use CreatorPlatform daily</p>
+      <p>See why <strong>50,000+ creators</strong> </p>
+      <p>use CreatorPlatform daily</p>
       </div>
     </div>
   </div>
 
-<div class="container">
-  <div class="flex-container testimonials">
-    <div class="row">
-        <div class='col-xs-12 col-sm-4'>
-          <div class="flex item testomnials">
-            <div class="review">
-              <i class="fas fa-quote-right"></i>
-              <p>“It’s really amazing, I love this app so much”</p>
-              <div class="user">
-                <p class="name">Julien Chim</p>
-                <p class="function">YouTube Creator since 3 years</p>
-              </div>
-              <div class="image">
-                <%= image_tag "julien.jpg", class: "avatar-testimo" %>
-              </div>
-            </div>
-          </div>
-        </div>
-        <div class='col-xs-12 col-sm-4'>
-          <div class="flex item testomnials">
-            <div class="review">
-              <i class="fas fa-quote-right"></i>
-              <p>“The best thing on earth after Tesla & Space X”</p>
-              <div class="user">
-                <p class="name">Elon Musk</p>
-                <p class="function">Creator since 21 years</p>
-              </div>
-              <div class="image">
-                <%= image_tag "elon.jpg", class: "avatar-testimo" %>
+<div class="wrapper-testimonials">
+  <div class="container">
+    <div class="flex-container testimonials">
+      <div class="row">
+          <div class='col-xs-12 col-sm-4'>
+            <div class="flex item testomnials">
+              <div class="review">
+                <i class="fas fa-quote-right"></i>
+                <p>“It’s really amazing, I love this app so much”</p>
+                <div class="user">
+                  <p class="name">Julien Chim</p>
+                  <p class="function">YouTube Creator since 3 years</p>
+                </div>
+                <div class="image">
+                  <%= image_tag "julien.jpg", class: "avatar-testimo" %>
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <div class='col-xs-12 col-sm-4'>
-          <div class="flex item testomnials ">
-            <div class="review">
-              <i class="fas fa-quote-right"></i>
-              <p>“The most powerful tool to manage my community, I love it!”</p>
-              <div class="user">
-                <p class="name">Norman</p>
-                <p class="function">10M followers on Youtube</p>
+          <div class='col-xs-12 col-sm-4'>
+            <div class="flex item testomnials">
+              <div class="review">
+                <i class="fas fa-quote-right"></i>
+                <p>“The best thing on earth after Tesla & Space X”</p>
+                <div class="user">
+                  <p class="name">Elon Musk</p>
+                  <p class="function">Creator since 21 years</p>
+                </div>
+                <div class="image">
+                  <%= image_tag "elon.jpg", class: "avatar-testimo" %>
+                </div>
               </div>
-              <div class="image">
-                <%= image_tag "norman.jpg", class: "avatar-testimo" %>
+            </div>
+          </div>
+          <div class='col-xs-12 col-sm-4'>
+            <div class="flex item testomnials ">
+              <div class="review">
+                <i class="fas fa-quote-right"></i>
+                <p>“The most powerful tool to manage my community, I love it!”</p>
+                <div class="user">
+                  <p class="name">Norman</p>
+                  <p class="function">10M followers on Youtube</p>
+                </div>
+                <div class="image">
+                  <%= image_tag "norman.jpg", class: "avatar-testimo" %>
+                </div>
               </div>
             </div>
           </div>
