@@ -1,0 +1,9 @@
+<div class="comment-card" data-comment-card-id='<%= comment.id %>'>
+  <p class="date">
+    <%= comment.published_at.strftime("%e %b %Y %H:%M") %>
+  </p>
+  <div class="txt">
+    <%= link_to "<i class='fas fa-star'></i>".html_safe, comment_path(comment.id), method: :patch, remote: true %>
+    <%= comment.content.html_safe %>
+  </div>
+</div>

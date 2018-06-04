@@ -21,7 +21,21 @@
         <%= f.submit "Save", class: "memo-btn"%>
       <% end %>
     </div>
+
+
     <div class="all-videos">
+      <h2>Pinned Comments</h2>
+      <div id="pinned-comments">
+        <% favorite_comments = comments.to_a.select{ |comment| comment.is_pinned == true }.sort_by{ |comment| -(comment.published_at.to_i) } %>
+        <% unless favorite_comments.empty? %>
+            <% favorite_comments.each do |comment|%>
+              <% if comment.is_pinned %>
+                <%= render "comments/show", comment: comment %>
+              <% end %>
+            <%end %>
+        <% end %>
+      </div>
+      <h2>All Comments</h2>
       <% @comments_by_video.each do |video_id, comments|%>
         <!-- ---------------------------------------------------------------------------- -->
         <!-- ----------------This is the video thumbnail left of the comments------------ -->
@@ -42,6 +56,9 @@
           <div class="comments">
             <% previous_comment = nil %>
             <% comments.each do |comment|%>
+              <div class="comment-card">
+
+
               <!-- --separator between different discussion/parents comment-- -->
               <% unless previous_comment.nil? %>
                 <% unless previous_comment.top_level_comment_id_youtube == comment.top_level_comment_id_youtube %>
@@ -62,6 +79,11 @@
                   <% end %>
                 </p>
                 <div class="txt">
+                  <% if comment.is_pinned && comment.fan_id == @fan.id %>
+                    <%= link_to "<i class='fas fa-star' data-comment-id='#{comment.id}'></i>".html_safe, comment_path(comment.id), method: :patch, remote: true %>
+                  <% elsif !comment.is_pinned && comment.fan_id == @fan.id %>
+                    <%= link_to "<i class='far fa-star' data-comment-id='#{comment.id}'></i>".html_safe, comment_path(comment.id), method: :patch, remote: true %>
+                  <% end %>
                   <%= comment.content.html_safe %>
                 </div>
               </div>
