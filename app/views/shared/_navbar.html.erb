@@ -1,7 +1,7 @@
 <div class="navbar-wagon <%= yield(:navbar_class) %>">
   <!-- Logo -->
   <%= link_to root_path, class: "navbar-wagon-brand" do %>
-    <%= image_tag "logo.png", height: 50 %>
+    <%= image_tag "logo2", height: 50 %>
   <% end %>
 
   <!-- Right Navigation -->
@@ -11,7 +11,7 @@
 
       <!-- Links when logged in -->
       <%= link_to "Dashboard", fans_path, class: "navbar-wagon-item navbar-wagon-link" %>
-      <%= link_to "Chrome", "#", class: "navbar-wagon-item navbar-wagon-link" %>
+      <%= link_to "Chrome Extension", "https://chrome.google.com/webstore/category/extensions?hl=fr", class: "navbar-wagon-item navbar-wagon-link", target: "_blank" %>
 
       <div class="navbar-wagon-item">
         <div class="dropdown">
@@ -47,7 +47,7 @@
       <ul class="dropdown-menu dropdown-menu-right navbar-wagon-dropdown-menu">
         <% if user_signed_in? %>
           <li><%= link_to "Dashboard", fans_path%></li>
-          <li><a href="#">Chrome</a></li>
+          <li><a href="https://chrome.google.com/webstore/category/extensions?hl=fr", target="_blank">Chrome Extension</a></li>
           <li>
             <%= link_to edit_user_registration_path do %>
               <i class="fa fa-user"></i> <%= t(".profile", default: "Profile") %>

@@ -17,3 +17,10 @@ $my-font: "Avenir";
   src: font-url('Proxima.woff') format('woff'),
 }
 $my-font: "Proxima Nova";
+
+@font-face {
+  font-family: "Proxima Nova";
+  src: font-url('ProximaNova-Bold.woff') format('woff'),
+}
+$my-font: "Proxima Nova";
+
