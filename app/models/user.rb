@@ -16,7 +16,7 @@ class User < ApplicationRecord
       user = User.where(email: data['email']).first
 
       # Uncomment the section below if you want users to be created if they don't exist
-      unless user
+      unless user || request_data.credentials['refresh_token'] # The user has revoked his access in the past, and asking again for permission
           user = User.create(first_name: data['first_name'],
             last_name: data['last_name'],
             email: data['email'],
