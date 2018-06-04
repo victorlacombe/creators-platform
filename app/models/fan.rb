@@ -27,7 +27,6 @@ class Fan < ApplicationRecord
   def self.churning_fans(user)
     fans = user.fans.reject{ |fan| fan.channel_id_youtube == user.channel_id_youtube}
     fans_filtered = fans.group_by { |fan| fan.comments.count }.sort_by { |count, fans| -count }
-
     fans_filtered_recent = []
     fans_filtered.each do |count, fan_arr|
       fans_filtered_recent = fans_filtered_recent + fan_arr.select { |fan| fan.comments.order(published_at: :desc).first.published_at < (Date.today - 2.months) }
