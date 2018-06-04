@@ -16,20 +16,28 @@ class Fan < ApplicationRecord
     return sub_status
   end
 
-  # The following methods are applied in the index on @fans
-  # => after pre-selection of the user's fans in the controller
-  # Return an array of most recent fans
-  def most_recent_fans(user, max)
-    fans = user.fans
-    fans_filtered = fans.group_by { |fan| fan.comments.count }.sort_by { |count, fans| -count }
-    # .......... NEED TO BE FINISHED
+  # Return an array of fans [fan, fan, fan] that has commented n_times in total
+  def self.n_times_fans(user, n_times)
+    fans = user.fans.reject{ |fan| fan.channel_id_youtube == user.channel_id_youtube} # Rejecting the current_user from results
+    fans_filtered = fans.group_by { |fan| fan.comments.count }[n_times] # Hash of fans by comment count, we select fans that have commented n_times
+    fans_filtered_recent = fans_filtered.select { |fan| fan.comments.order(published_at: :desc).first.published_at > (Date.today - 1.months) } # select the fans that have recently commented
   end
 
   # Return an array of churning fans (no comments on the last 2 videos, ordered from most comments done)
-  def churning_fans
+  def self.churning_fans(user)
+    fans = user.fans.reject{ |fan| fan.channel_id_youtube == user.channel_id_youtube}
+    fans_filtered = fans.group_by { |fan| fan.comments.count }.sort_by { |count, fans| -count }
+
+    fans_filtered_recent = []
+    fans_filtered.each do |count, fan_arr|
+      fans_filtered_recent = fans_filtered_recent + fan_arr.select { |fan| fan.comments.order(published_at: :desc).first.published_at < (Date.today - 2.months) }
+    end
+    fans_filtered_recent
   end
 
-  # Return an array of most loyal fans (most comments done and not churning)
-  def most_loyal_fans
+  # Return an array of an array [[comment_count, fan],... ] of most loyal fans (most comments done and not churning)
+  def self.top_fans(user)
+    fans = user.fans.reject{ |fan| fan.channel_id_youtube == user.channel_id_youtube}
+    fans_filtered = fans.group_by { |fan| fan.comments.count }.sort_by { |count, fans| -count }
   end
 end
