@@ -1,15 +1,17 @@
-function infinitescrolling() {
-  window.addEventListener('scroll', function(e) {
-  derniere_position_de_scroll_connue = window.scrollY;
-  if (!ticking) {
-    window.requestAnimationFrame(function() {
-      faitQuelquechose(derniere_position_de_scroll_connue);
-      ticking = false;
+function infinite_loader() {
+  var fans_cards = document.querySelector(".fans-cards")
+  if (fans_cards) {
+    window.addEventListener('scroll', function(event) {
+      var d = document.documentElement;
+      var offset = d.scrollTop + window.innerHeight;
+      var height = d.offsetHeight;
+      if (height - offset - 200 < 0 ) {
+        document.querySelector("[rel=next]").click();
+      }
     });
   }
-  ticking = true;
-  });
 }
+
 // sélectionner la div fans_cards
 // si je récupère une div
   // écouter le scroll sur window
@@ -17,3 +19,5 @@ function infinitescrolling() {
   // calculer le niveau de scroll
   // si le niveau de scroll atteint la height
     // on déclenche le click sur le lien next
+
+export { infinite_loader };
