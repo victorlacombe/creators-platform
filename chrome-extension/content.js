@@ -1,4 +1,4 @@
-DEV = true;
+DEV = false;
 
 BASE_URL = DEV ? "http://localhost:3000" : "https://www.recll.xyz";
 
@@ -26,52 +26,73 @@ dashboardCommentAuthors.forEach(function(dashboardCommentAuthor) {
 
 //-------------   Identify if the user is on a video of his own --------------
 
-//-----------> WE NEED AN ALTERNATIVE <-------------
-  setTimeout(function() {
-    const userChannelId = document.querySelector('#owner-name a').getAttribute("href").match(/\/channel\/(.*)/)[1]
-    console.log(userChannelId)
 
-    fetch(`${BASE_URL}/api/v1/users/verif?query=${userChannelId}`)
-    .then(response => {
-      if (response.status == 500) {
-        // PAS OK
-      } else {
-        // OK// fetch(`${BASE_URL}/api/v1/fans?query=${fanPictureUrl}`)
-        setInterval(function() {
-          // select the main div that contains the comment block and the profil picture
-          const commentMainDivs = document.querySelectorAll("#body")
-          commentMainDivs.forEach(function(commentMainDiv) {
-            // select the header-author (the header of the comment div)
-            const videoCommentAuthor = commentMainDiv.querySelector("#header-author");
-            if (videoCommentAuthor.querySelector('.btn-see-details-recll')) {
-              // do nothing, the "see fan details" button is already present
-            } else {
-              videoCommentAuthor.insertAdjacentHTML("beforeend", '<a class="btn-see-details-recll">See fan details</a>');
+let interval;
 
-              let insertedLink = videoCommentAuthor.querySelector('.btn-see-details-recll')
-              // Then implement the next block to reconciliate data between YouTube and our App
-              if (insertedLink) {
-                insertedLink.addEventListener('click', function(event) {
+setTimeout(function() {
 
-        //---------- 1.  Remove former opened popup when openning a new one ------------
+  const userChannelId = document.querySelector('#owner-name a').getAttribute("href").match(/\/channel\/(.*)/)[1]
+  console.log(userChannelId)
+
+  fetch(`${BASE_URL}/api/v1/users/verif?query=${userChannelId}`)
+  .then(response => {
+    if (response.status == 500) {
+
+      // Remove "See fan details" button from the former page
+
+      // const visibleSeeFanDetailsButtons = document.querySelectorAll(".btn-see-details-recll")
+      // console.log(visibleSeeFanDetailsButtons)
+      // console.log(visibleSeeFanDetailsButtons.length)
+      // if (visibleSeeFanDetailsButtons.length > 0) {
+      //   for (i = 0; i < visibleSeeFanDetailsButtons.length; i++ ) {
+      //     visibleSeeFanDetailsButtons[i].remove()
+      //   }
+      // }
+
+    } else {
+      // OK// fetch(`${BASE_URL}/api/v1/fans?query=${fanPictureUrl}`)
+      const currentUserYoutubeId = userChannelId;
+      interval = setInterval(function() {
+        // select the main div that contains the comment block and the profil picture
+        const commentMainDivs = document.querySelectorAll("#body")
+        commentMainDivs.forEach(function(commentMainDiv) {
+          // select the header-author (the header of the comment div)
+          const videoCommentAuthor = commentMainDiv.querySelector("#header-author");
+          if (videoCommentAuthor.querySelector('.btn-see-details-recll')) {
+            // do nothing, the "see fan details" button is already present
+            // récupérer l'id youtube la page actuelle (après potentielle navigation)
+            const newUserChannelId = document.querySelector('#owner-name a').getAttribute("href").match(/\/channel\/(.*)/)[1];
+            if (newUserChannelId !== currentUserYoutubeId) {
+              videoCommentAuthor.querySelector('.btn-see-details-recll').remove();
+            }
+          } else {
+            videoCommentAuthor.insertAdjacentHTML("beforeend", '<a class="btn-see-details-recll">See fan details</a>');
+
+            let insertedLink = videoCommentAuthor.querySelector('.btn-see-details-recll')
+            // Then implement the next block to reconciliate data between YouTube and our App
+            if (insertedLink) {
+              insertedLink.addEventListener('click', function(event) {
+
+      //---------- 1.  Remove former opened popup when openning a new one ------------
 
 
-                  const visibleInfoWindow = document.querySelector(".fan-info-recll")
-                  if (visibleInfoWindow) {
-                    visibleInfoWindow.remove()
-                  }
+                const visibleInfoWindow = document.querySelector(".fan-info-recll")
+                if (visibleInfoWindow) {
+                  visibleInfoWindow.remove()
+                }
 
-        //-------------------- 2.  retrieve the fan's fanPictureUrl --------------------
+      //-------------------- 2.  retrieve the fan's fanPictureUrl --------------------
 
-                  const fanPicture = commentMainDiv.querySelector("#author-thumbnail #img")
-                  const fanPictureUrl = fanPicture.getAttribute("src").match(/(.*)\/s\d+/)[1]
-                  console.log(fanPictureUrl)
+                const fanPicture = commentMainDiv.querySelector("#author-thumbnail #img")
+                const fanPictureUrl = fanPicture.getAttribute("src").match(/(.*)\/s\d+/)[1]
+                console.log(fanPictureUrl)
 
-        //---------------- 3. Request the DB to get the fan information ----------------
+      //---------------- 3. Request the DB to get the fan information ----------------
 
-                  fetch(`${BASE_URL}/api/v1/fans?query=${fanPictureUrl}`)
-                  .then(response => response.json())
-                  .then((data) => {
+                fetch(`${BASE_URL}/api/v1/fans?query=${fanPictureUrl}`)
+                .then(response => response.json())
+                .then((data) => {
+                  return new Promise((resolve) => {
                     // console.log(data)
                     // Retrieving the fan id
                     const fanId = data[0].id
@@ -104,10 +125,7 @@ dashboardCommentAuthors.forEach(function(dashboardCommentAuthor) {
                       lastcommentDate = new Date(commentsDates.sort()[commentsDates.length - 1]).toLocaleDateString('en-GB')
                       console.log(lastcommentDate)
                       }
-
                     // Retrieving the fan's first activity date
-
-
 
         //------------------- 4. Inject the retrived data in the DOM -------------------
 
@@ -123,15 +141,28 @@ dashboardCommentAuthors.forEach(function(dashboardCommentAuthor) {
                           ${memoContent}
                         </div>
                       </div>`)
-                  })
+                    resolve("ok to launch transition");
+                  });
+                }).then((data) => {
+                  console.log(data);
+                  // document.querySelector(".fan-info-recll").classList.add("fan-info-recll-opened");
+                  setTimeout(() => {
+                    commentMainDiv.parentElement.querySelector(".fan-info-recll").style.opacity = "1";
+                    commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "150px";
+                  }, 50)
                 })
-              }
+              })
             }
-          })
-        }, 100);
-      }
-    })
-  }, 5000)
+          }
+        })
+      }, 50);
+
+      document.addEventListener('yt-navigate', function() {
+        clearInterval(interval);
+      });
+    }
+  })
+}, 8000);
 
 
 
