@@ -1,0 +1,5 @@
+<% if comment.is_pinned && comment.fan_id == fan.id %>
+  <%= link_to "<i class='fas fa-heart' data-comment-id='#{comment.id}'></i>".html_safe, comment_path(comment.id), method: :patch, remote: true %>
+<% elsif !comment.is_pinned && comment.fan_id == fan.id %>
+  <%= link_to "<i class='far fa-heart' data-comment-id='#{comment.id}'></i>".html_safe, comment_path(comment.id), method: :patch, remote: true %>
+<% end %>

@@ -1,0 +1,15 @@
+<div class="comment-card" data-comment-card-id='<%= comment.id %>'>
+  <div class="comment-card-i">
+    <%= link_to "<i class='fas fa-heart'></i>".html_safe, comment_path(comment.id), method: :patch, remote: true %>
+  </div>
+  <div class="comment-card-content">
+    <div class="comment-card-content-top">
+      <div class="name truncate">
+        <%= comment.content.html_safe %>
+      </div>
+      <div class="date">
+        <%= comment.published_at.strftime("%e %b %Y %H:%M") %>
+      </div>
+    </div>
+  </div>
+</div>

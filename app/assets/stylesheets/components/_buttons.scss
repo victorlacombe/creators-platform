@@ -48,3 +48,9 @@
     text-decoration: none;
     opacity: 0.6;
 }
+
+.truncate {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

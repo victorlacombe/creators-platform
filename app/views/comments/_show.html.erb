@@ -1,9 +1,46 @@
-<div class="comment-card" data-comment-card-id='<%= comment.id %>'>
-  <p class="date">
-    <%= comment.published_at.strftime("%e %b %Y %H:%M") %>
-  </p>
-  <div class="txt">
-    <%= link_to "<i class='fas fa-star'></i>".html_safe, comment_path(comment.id), method: :patch, remote: true %>
-    <%= comment.content.html_safe %>
-  </div>
+<div class="comments">
+  <% previous_comment = nil %>
+  <% comments.each do |comment|%>
+    <!-- --separator between different discussion/parents comment-- -->
+    <% unless previous_comment.nil? %>
+      <% unless previous_comment.top_level_comment_id_youtube == comment.top_level_comment_id_youtube %>
+        <hr>
+      <% end %>
+    <% else %>
+        <hr>
+    <% end %>
+
+    <!-- Variables to know if it's a parent comment and if it's the creator himself -->
+    <% is_parent_comment = comment.top_level_comment_id_youtube == comment.comment_id_youtube %>
+    <% is_creator = comment.fan_id == @creator_fan_id %>
+
+    <!-- displaying the comment with correct classes -->
+    <div class="comment-card <%= is_parent_comment ? 'parent-comment' : 'child-comment'  %> <%= 'creator-comment' if is_creator %>">
+      <div class="comment-card-avatar">
+        <%= image_tag  Fan.find(comment.fan_id).profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-testimo" %>
+      </div>
+      <div class="comment-card-content">
+        <div class="comment-card-content-top">
+          <div class="name truncate">
+            <%= fan.youtube_username.capitalize %>
+            <%=  render "comments/pinned", comment: comment, fan: fan %>
+          </div>
+          <div class="date">
+            <%= link_to "http://youtube.com/watch?v=" + video.video_id_youtube + "&lc=" + comment.comment_id_youtube, target: '_blank' do %>
+              <%= comment.published_at.strftime("%e %b %Y %H:%M") %>
+            <% end %>
+          </div>
+        </div>
+        <div class="comment-card-content-bottom">
+          <div class="txt">
+            <%= comment.content.html_safe %>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- we set a previous_comment variable so we can track change of discussion (different parent comment) -->
+    <% previous_comment = comment %>
+  <%end %>
+  <hr> <!-- last separator -->
 </div>
