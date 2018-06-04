@@ -1,22 +1,14 @@
 class CommentsController < ApplicationController
-  # def index
-  #   @comments = Comment.all
-  # end
+  def update
+    @comment = Comment.find(params[:id])
+    authorize @comment
+    @comment.toggle_is_pinned!
+    @comment.save
 
-  # def find
-  #   @fan = Fan.find(params[:id])
-  #   authorize @fan
-  #   @comments = Comment.where(fan_id: @fan)
-  #   authorize @comments
-  #   @comment = Comment.find(params[:id])
-  #   authorize @comment
-  #   @videos = policy_scope(Video).where(video_id_youtube: @comment)
-  #   authorize videos
-  # end
-
-  # private
-
-  # def memo_params
-  #     params.require(:comment).permit(:content, :published_at, :video_id)
-  # end
+    # Ajaxification
+    respond_to do |format|
+      format.html { redirect_to fan_path(@comment.fan_id) }
+      format.js  # <-- will render `app/views/comments/update.js.erb`
+    end
+  end
 end

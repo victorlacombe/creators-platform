@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   # resources :videos, only: [:create, :update]
 
   # COMMENTS : no need for a comments view, will be displayed in the fans view.
-  # resources :comments, only: [:create, :update]
+  resources :comments, only: [:update]
 
   # -----------------------------  API ROUTES  ---------------------------------
 
