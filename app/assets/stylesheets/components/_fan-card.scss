@@ -1,78 +1,67 @@
-.fard {
-  margin-right: 4px;
-  width: 296px;
-  height: 136px;
-  margin-bottom: 24px;
-  background-color: white;
-  border-radius: 3px;
-  box-shadow: -2px 2px 28px grey;
+.fan-cards {
+display: flex; // TEMPORAIRE ! to delete when we put a bootstrap grid or a display grid
+align-items: center; // TEMPORAIRE ! to delete when we put a bootstrap grid or a display grid
+justify-contents: space-around; // TEMPORAIRE ! to delete when we put a bootstrap grid or a display grid
 }
-
-.fard-top {
+.fan-card {
+  background: white;
   display: flex;
-  max-width: 100%;
-  justify-content: space-around;
-  align-items: center;
-  padding: 10px;
-  height: 92px;
-
-  .atxt {
-    margin-left: 10px;
+  flex-flow: column;
+  width: 280px;
+  height: 335px;
+  transition: transform .2s;
+  &:hover {
+    transform: scale(1.02);
   }
 }
 
-.fard-top, span {
-  font-size: 13px
-}
-
-.fard-top-left {
-  max-width: 100%;
-  display: flex;
-  align-items: center;
-  .txt {
-
+.fan-card-infos {
+  font-size: 14px;
+  padding: 20px;
+  .fan-name {
+    font-weight: bolder;
+    // Truncrating text if too long
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    overflow: hidden;
   }
-}
-.fard-top-right {
-  max-width: 100%;
-}
-
-.fard-bottom {
-  display: flex;
-  justify-content: flex-end;
-  max-width: 100%;
-  display: flex;
-  padding: 10px;
-  border-top: 1px solid $purple;
-  height: 46px;
-
-  .fard-bottom-right {
-    margin-left: 10px;
-    border-left: 1px solid $purple;
-  }
-
-  .fard-bottom-right a {
-    text-decoration: none;
-    color: $purple;
-    font-size: 10px;
+  .fan-since {
     font-weight: lighter;
-    margin-left: 10px;
-
-  }
-  .fard-bottom, .fard-bottom-left, ul, span, .fas {
-    font-weight: lighter;
-    font-size: 10px;
-    text-align: right;
   }
 }
-  h2 {
-    font-size: 14px;
-  }
 
-ul {
-  list-style-type: none;
+.fan-card-avatar {
+  text-align: center;
+  padding: 15px 0px;
 }
 
-.fans-cards {
-  margin-top: 40px;
+.fan-card-channel {
+  padding: 20px;
+  font-size: 14px;
+  font-weight: bolder;
+  a {
+    color: #333333;
+  }
+}
+
+.fan-card-activity {
+  color: white;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: $blue;
+  height: 100%;
+  .fan-card-activity-left {
+    flex-grow: 1;
+    padding: 20px;
+    text-align: left;
+    border-right: 1px solid white;
+  }
+  .fan-card-activity-right {
+    padding: 20px;
+    font-size: 16px;
+    text-align: center;
+    font-weight: bolder;
+  }
 }
