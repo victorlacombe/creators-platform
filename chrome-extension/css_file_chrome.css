@@ -17,7 +17,6 @@
 
 .fan-info-recll {
   overflow: auto;
-  position: relative;
   width: 60%;
   height: 0px;
   transition: all 0.3s ease-in-out;
@@ -50,37 +49,29 @@
 
 .header-left-section {
   height: 40px;
-  width: 175px;
+  width: 350px;
   display: flex;
   align-items: center;
-  justify-content: space-between;
 }
 
 .fan-info-recll h3 {
-  /*position: absolute;*/
-  /*top: 6px;*/
-  /*left: 50px;*/
   font-weight: lighter;
+  margin-left: 15px;
+  font-size: 14px;
 }
-
-.fan-info-recll #fan-picture {
-/*  position: absolute;
-  top: 10px;
-  left: 10px;*/
-}
-
-
-
 
 #more-details {
-  /*position: absolute;
-  right: 10px;
-  top: 15px;*/
   text-decoration: none;
-  color: black;
-  /*margin: 5px 0;*/
+  border: 1px solid lightblue;
+  border-radius: 10px;
+  padding: 6px;
+  background: lightblue;
+  color: white;
 }
 
+#more-details:hover {
+  border-bottom: 1px solid lightgrey;
+}
 
 
 /* ---------------------------- Stats section ------------------------------- */
@@ -90,6 +81,7 @@
   flex-direction: row;
   align-items: center;
   justify-content: space-around;
+  margin: 10px 0
 }
 
 .stats-section  img {
@@ -99,8 +91,9 @@
 .stats-section  p {
   font-size: 15px;
   font-weight: bolder;
-
+  margin-right: 3px
 }
+
 .stats-section div {
   width: 50px;
   display: flex;
@@ -119,8 +112,37 @@
 
 
 
+.separation-line {
+  margin: 5px 0;
+  border-top: 1px solid rgba(39, 195, 249, 0.2);
+}
+
+
+
 /* ----------------------------- Memo section ------------------------------- */
 
+.memo-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+
+#memo {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 100%;
+  min-height: 44px;
+  padding: 10px;
+
+  border-radius: 5px;
+  background-color: rgba(220, 220, 220, 0.08);
+
+  text-align: justify;
+  line-height: 20px;
+  font-size: 12px;
+}
 
 .button-memo {
   height: 100%;
@@ -137,24 +159,16 @@
   background: rgba(0, 184, 244, 1);
   opacity: 0.85;
   transition: background 0.3s ease;
-  font-size: 13px;
-}
-
-#memo {
-  width: 94%;
-  min-height: 44px;
-  margin: 10px auto;
-  padding: 8px;
-  top: 90px;
-  left: 10px;
-  position: absolute;
-  line-height: 1.5em;
+  font-size: 14px;
+  text-decoration: none;
 }
 
 
 #memo a {
-  text-decoration: none;
+  padding: 5px;
+  font-size: 12px;
 }
+
 
 
 

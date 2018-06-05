@@ -1,4 +1,4 @@
-DEV = true;
+DEV = false;
 
 BASE_URL = DEV ? "http://localhost:3000" : "https://www.recll.xyz";
 
@@ -113,7 +113,7 @@ const allScript = function() {
                       </div>`
 
                     } else {
-                      memoContent = `Memo: ${data[0]["memo"]["memo_details"]["content"]}`
+                      memoContent = `<p id="memo">${data[0]["memo"]["memo_details"]["content"]}</p>`
                     }
 
                     // Retrieving the fan's profil picture
@@ -131,7 +131,7 @@ const allScript = function() {
                     for (i = 0; i < data[0]["comments"].length; i++) {
                       console.log(commentsDates)
                       commentsDates.push(data[0]["comments"][i].published_at)
-                      lastcommentDate = new Date(commentsDates.sort()[commentsDates.length - 1]).toLocaleDateString('en-GB')
+                      lastcommentDate = new Date(commentsDates.sort()[commentsDates.length - 1]).toLocaleDateString('fr-FR')
                       console.log(lastcommentDate)
                       }
                     // Retrieving the fan's first activity date
@@ -141,8 +141,8 @@ const allScript = function() {
                     const videoImage = chrome.extension.getURL('video-viewed.png');
                     const lastCommentDate = chrome.extension.getURL('last-comment-date.png');
                     commentMainDiv.insertAdjacentHTML("beforebegin",
-                        `  <div class="fan-info-recll">
-                             <div class="extension-header">
+                        ` <div class="fan-info-recll">
+                            <div class="extension-header">
                               <div class="header-left-section">
                                 <img src="${profilPictureUrl}" alt="" id="fan-picture"/>
                                 <h3>${userName}</h3>
@@ -165,10 +165,9 @@ const allScript = function() {
                                 <img src="${lastCommentDate}" alt="" id="comments-image"/>
                               </div>
                             </div>
-
-
-                            <div id="memo">
-                              ${memoContent}
+                            <div class="separation-line"></div>
+                            <div class="memo-section">
+                                ${memoContent}
                             </div>
                           </div>`)
                     resolve("ok to launch transition");
@@ -177,7 +176,7 @@ const allScript = function() {
                   console.log(data);
                   setTimeout(() => {
                     commentMainDiv.parentElement.querySelector(".fan-info-recll").style.opacity = "1";
-                    commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "150px";
+                    commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "185px";
                   }, 50)
                 })
               })
