@@ -40,6 +40,7 @@
 
 .fan-card-channel {
   padding: 20px;
+  z-index: 2;
   font-size: 14px;
   font-weight: bolder;
   a {
@@ -78,4 +79,14 @@
 .fan-card-sticky {
   position: sticky !important;
   top: 0 !important;
+
+.fan-card-link {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  z-index: 2;
+  background: black;
+  opacity: 0;
 }
