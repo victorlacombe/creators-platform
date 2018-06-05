@@ -1,24 +1,44 @@
 <div class="dashboard-left-navbar hidden-xs">
   <div class="dashboard-left-navbar-components">
       <div>
-        <i class="far fa-chart-bar"></i>
-        <span>Stats</span>
+        <span>
+        <%= link_to fans_path do %>
+          <i class="fas fa-users"></i>
+          <br>All
+        <% end -%>
+        </span>
       </div>
       <div>
-        <i class="fas fa-star"></i>
-        <span>Top fans</span>
+        <span>
+        <%= link_to fans_path do %>
+          <i class="fas fa-crown"></i>
+          <br>Top fans
+        <% end -%>
+        </span>
       </div>
       <div>
-        <i class="fas fa-user-plus"></i>
-        <span>New fans</span>
+        <span>
+        <%= link_to fans_path do %>
+          <i class="fas fa-child"></i>
+          <br>New fans
+        <% end -%>
+        </span>
       </div>
       <div>
-        <i class="fas fa-bell"></i>
-        <span>Sleeping <br> fans</span>
+        <span>
+        <%= link_to fans_path do %>
+          <i class="fa fa-bed"></i>
+          <br>Sleeping<br>fans
+        <% end -%>
+        </span>
       </div>
       <div>
-        <i class="fas fa-angle-double-up"></i>
-        <span>Second <br> timers</span>
+        <span>
+        <%= link_to fans_path do %>
+          <i class="fas fa-star"></i>
+          <br>Second<br> timers
+        <% end -%>
+        </span>
       </div>
   </div>
 </div>
