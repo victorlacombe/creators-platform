@@ -2,11 +2,17 @@ class FansController < ApplicationController
   skip_after_action :verify_policy_scoped, only: :index
 
   def index
+    flash[:notice] = "Wait for it... Your fans are coming soon!" if current_user.sign_in_count == 1
     if params[:query].present?
       sql_query = "youtube_username ILIKE :query"
-      @fans = current_user.fans.where(sql_query, query: "%#{params[:query]}%").where.not(channel_id_youtube: current_user.channel_id_youtube)
+      @fans = current_user.fans.where(sql_query, query: "%#{params[:query]}%").where.not(channel_id_youtube: current_user.channel_id_youtube).page(params[:page]).per(3*5)
     else
-      @fans = current_user.fans.where.not(channel_id_youtube: current_user.channel_id_youtube)
+      # .page is from Kaminari gem
+      @fans = current_user.fans.where.not(channel_id_youtube: current_user.channel_id_youtube).page(params[:page]).per(3*5)
+    end
+    respond_to do |format|
+      format.html
+      format.js
     end
   end
 
