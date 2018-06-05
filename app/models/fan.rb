@@ -7,6 +7,12 @@ class Fan < ApplicationRecord
   belongs_to :memo
   has_many :users, through: :memo
 
+  # validate :is_not_the_creator
+
+  # def is_not_the_creator
+  #   self.errors.add(:channel_id_youtube, "is the same as the creator") if User.find(memo.user_id)&.channel_id_youtube == channel_id_youtube
+  # end
+
   # Return False if user doesn't display his subscriptions list or if he is not subscribed
   # Return True if subscribed
   def is_subscribed?(user)
