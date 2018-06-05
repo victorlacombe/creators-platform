@@ -26,6 +26,7 @@ gem 'json'
 gem 'sidekiq'
 gem 'sidekiq-failures', '~> 1.0'
 gem 'rack-cors', require: 'rack/cors'
+gem 'kaminari'
 
 
 group :development do
