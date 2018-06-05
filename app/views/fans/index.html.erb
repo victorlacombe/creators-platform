@@ -1,62 +1,109 @@
-<!-- DASHBOARD LEFT NAVBAR BEGINS HERE -->
-<%= render 'shared/dashboard-left-navbar' %>
-<!-- DASHBOARD LEFT NAVBAR ENDS HERE -->
+<div class="dashboard-content">
+  <!-- DASHBOARD LEFT NAVBAR BEGINS HERE -->
+  <%= render 'shared/dashboard-left-navbar' %>
+  <!-- DASHBOARD LEFT NAVBAR ENDS HERE -->
 
-<h1 class="text-center">Hello <%= current_user.first_name.nil? ? current_user.channel_name : current_user.first_name.capitalize  %> !</h1>
-<h2 class="text-center"> You have <strong><%= current_user.fans.where.not(channel_id_youtube: current_user.channel_id_youtube).count %></strong> comments from your fans</h2>
-<div class="container">
-  <div class="row">
-    <div class="fans-type">
-      <div class="fans-type-table">
-        <h2>First timer</h2>
-        <% Fan.n_times_fans(current_user, 1).first(10).each do |fan|%>
-          <p>
-            <%= image_tag fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-medium" %>
-            <%= link_to fan.youtube_username.capitalize, fan_path(fan) %>
-            </p>
-        <% end %>
+  <div class="dashboard-right-content">
+    <h1 class="text-center">Hello <%= current_user.first_name.nil? ? current_user.channel_name : current_user.first_name.capitalize  %> !</h1>
+    <div class="container">
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-4">
+          <div class="stats-card">
+            <div class="stats-label">
+              ALL-TIME
+            </div>
+            <div class="stats-content">
+              <div class="stats-number">
+                <strong><%= current_user.fans.where.not(channel_id_youtube: current_user.channel_id_youtube).count %></strong>
+              </div>
+              <div class="stats-numberlabel">FANS</div>
+              <div class="stats-numbersublabel">A fan is someone who commented on your video</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-4">
+          <div class="stats-card">
+            <div class="stats-label">
+              LAST MONTH
+            </div>
+            <div class="stats-content">
+              <div class="stats-number">
+                <strong><%= Fan.n_times_fans(current_user, 1).count %></strong>
+              </div>
+              <div class="stats-numberlabel">NEW FANS</div>
+              <div class="stats-numbersublabel">A first comment from a fan during the last month</div>
+            </div>
+          </div>
+        </div>
+        <div class="col-xs-12 col-sm-12 col-md-4">
+          <div class="stats-card">
+            <div class="stats-label">
+              LAST MONTH
+            </div>
+            <div class="stats-content">
+              <div class="stats-number">
+                <strong><%= Fan.n_times_fans(current_user, 2).count %></strong>
+              </div>
+              <div class="stats-numberlabel">NEW LOYAL FANS</div>
+              <div class="stats-numbersublabel">A second comment from a fan during the last month</div>
+            </div>
+          </div>
+        </div>
       </div>
-      <div class="fans-type-table">
-        <h2>Second timer - Make them loyal</h2>
-        <% Fan.n_times_fans(current_user, 2).first(10).each do |fan|%>
-          <p>
-            <%= image_tag fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-medium" %>
-            <%= link_to fan.youtube_username.capitalize, fan_path(fan) %>
-          </p>
-        <% end %>
+
+        <!-- ---------------------------------------------------------- -->
+        <!-- EACH OF THOSE ELEMENTS WILL BE PUT IN PARTIALS WHEN WE SET UP THE LEFT NAV BAR
+        <div class="fans-type">
+          <div class="fans-type-table">
+            <h2>First timer</h2>
+            <% Fan.n_times_fans(current_user, 1).first(10).each do |fan|%>
+              <p>
+                <%= image_tag fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-medium" %>
+                <%= link_to fan.youtube_username.capitalize, fan_path(fan) %>
+                </p>
+            <% end %>
+          </div>
+          <div class="fans-type-table">
+            <h2>Second timer - Make them loyal</h2>
+            <% Fan.n_times_fans(current_user, 2).first(10).each do |fan|%>
+              <p>
+                <%= image_tag fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-medium" %>
+                <%= link_to fan.youtube_username.capitalize, fan_path(fan) %>
+              </p>
+            <% end %>
+          </div>
+          <div class="fans-type-table">
+            <h2>Top fans by comments</h2>
+            <% Fan.top_fans(current_user).first(10).each do |count_and_fan|%>
+              <p>
+                <% fan = count_and_fan[1][0] %>
+                <%= image_tag fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-medium" %>
+                <%= link_to fan.youtube_username.capitalize, fan_path(fan) %>
+                <%= fan.comments.count %> comments
+              </p>
+            <% end %>
+          </div>
+          <div class="fans-type-table">
+            <h2>No comments for the last 2 months</h2>
+            <% Fan.churning_fans(current_user).first(10).each do |fan|%>
+              <p>
+                <%= image_tag fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-medium" %>
+                <%= link_to fan.youtube_username.capitalize, fan_path(fan) %>
+                <%= fan.comments.count %> comments
+              </p>
+            <% end %>
+          </div>
+        </div>
       </div>
-      <div class="fans-type-table">
-        <h2>Top fans by comments</h2>
-        <% Fan.top_fans(current_user).first(10).each do |count_and_fan|%>
-          <p>
-            <% fan = count_and_fan[1][0] %>
-            <%= image_tag fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-medium" %>
-            <%= link_to fan.youtube_username.capitalize, fan_path(fan) %>
-            <%= fan.comments.count %> comments
-          </p>
-        <% end %>
+      -->
+      <!-- ---------------------------------------------------------- -->
+      <div class="row">
+        <div id="all-fans"> <!-- Used for kaminari infinite scrolling -->
+          <%= render "fans/all_fans", fans: @fans %>
+        </div>
       </div>
-      <div class="fans-type-table">
-        <h2>No comments for the last 2 months</h2>
-        <% Fan.churning_fans(current_user).first(10).each do |fan|%>
-          <p>
-            <%= image_tag fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-medium" %>
-            <%= link_to fan.youtube_username.capitalize, fan_path(fan) %>
-            <%= fan.comments.count %> comments
-          </p>
-        <% end %>
-      </div>
+
+      <%= paginate @fans, remote: true %>
     </div>
   </div>
-
-<!-- COMPONENT CARDS A JOUTER QQL PART -->
-  <%= render 'fan_cards', fans: @fans %>
-<!-- COMPONENT CARDS A JOUTER QQL PART -->
-
-  <div class="fans-cards">
-    <div class="row" id="all-fans">
-      <%= render "fans/all_fans", fans: @fans %>
-    </div>
-  </div>
-  <%= paginate @fans, remote: true %>
 </div>

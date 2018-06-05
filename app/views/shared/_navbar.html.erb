@@ -53,27 +53,38 @@
 
   <!-- Dropdown list appearing on mobile only -->
   <div class="navbar-wagon-item hidden-md hidden-lg">
-    <div class="dropdown">
-      <i class="fa fa-bars dropdown-toggle" data-toggle="dropdown"></i>
-      <ul class="dropdown-menu dropdown-menu-right navbar-wagon-dropdown-menu">
-        <% if user_signed_in? %>
-          <li><%= link_to "Dashboard", fans_path%></li>
-          <li><a href="https://chrome.google.com/webstore/category/extensions?hl=fr", target="_blank">Chrome Extension</a></li>
-          <li>
-            <%= link_to edit_user_registration_path do %>
-              <i class="fa fa-user"></i> <%= t(".profile", default: "Profile") %>
-            <% end %>
-          </li>
-          <li>
-            <%= link_to destroy_user_session_path, method: :delete do %>
-              <i class="fas fa-sign-out-alt"></i>  <%= t(".sign_out", default: "Log out") %>
-            <% end %>
-        <% else %>
-          <!-- Login link (when logged out) -->
-          <%= link_to t(".sign_in", default: "Login"), new_user_session_path, class: "navbar-wagon-item navbar-wagon-link" %>
+    <div class="navbar-flexbox">
+      <div class="navbar-searchbar">
+        <%= form_tag fans_path, method: :get do %>
+        <%= text_field_tag :query,
+        params[:query],
+        class: "form-control",
+        placeholder: "Search a fan"%>
         <% end %>
-          </li>
-      </ul>
+      </div>
+
+      <div class="dropdown">
+        <i class="fa fa-bars dropdown-toggle" data-toggle="dropdown"></i>
+        <ul class="dropdown-menu dropdown-menu-right navbar-wagon-dropdown-menu">
+          <% if user_signed_in? %>
+            <li><%= link_to "Dashboard", fans_path%></li>
+            <li><a href="https://chrome.google.com/webstore/category/extensions?hl=fr", target="_blank">Chrome Extension</a></li>
+            <li>
+              <%= link_to edit_user_registration_path do %>
+                <i class="fa fa-user"></i> <%= t(".profile", default: "Profile") %>
+              <% end %>
+            </li>
+            <li>
+              <%= link_to destroy_user_session_path, method: :delete do %>
+                <i class="fas fa-sign-out-alt"></i>  <%= t(".sign_out", default: "Log out") %>
+              <% end %>
+          <% else %>
+            <!-- Login link (when logged out) -->
+            <%= link_to t(".sign_in", default: "Login"), new_user_session_path, class: "navbar-wagon-item navbar-wagon-link" %>
+          <% end %>
+            </li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
