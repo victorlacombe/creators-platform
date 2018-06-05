@@ -4,22 +4,6 @@
 
 <h1 class="text-center">Hello <%= current_user.first_name.nil? ? current_user.channel_name : current_user.first_name.capitalize  %> !</h1>
 <h2 class="text-center"> You have <strong><%= current_user.fans.where.not(channel_id_youtube: current_user.channel_id_youtube).count %></strong> comments from your fans</h2>
-  <div class="wrapper-search">
-    <div class="container">
-      <div class="search-form">
-      <div class="row">
-        <div class="col-md-4">
-          <%= form_tag fans_path, method: :get do %>
-          <%= text_field_tag :query,
-          params[:query],
-          class: "form-control",
-          placeholder: "Search a fan"%>
-          <% end %>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
 <div class="container">
   <div class="row">
     <div class="fans-type">
