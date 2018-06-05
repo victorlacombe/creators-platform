@@ -17,6 +17,50 @@
     </div>
   </div>
 <div class="container">
+  <div class="row">
+    <div class="fans-type">
+      <div class="fans-type-table">
+        <h2>First timer</h2>
+        <% Fan.n_times_fans(current_user, 1).first(10).each do |fan|%>
+          <p>
+            <%= image_tag fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-medium" %>
+            <%= link_to fan.youtube_username.capitalize, fan_path(fan) %>
+            </p>
+        <% end %>
+      </div>
+      <div class="fans-type-table">
+        <h2>Second timer - Make them loyal</h2>
+        <% Fan.n_times_fans(current_user, 2).first(10).each do |fan|%>
+          <p>
+            <%= image_tag fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-medium" %>
+            <%= link_to fan.youtube_username.capitalize, fan_path(fan) %>
+          </p>
+        <% end %>
+      </div>
+      <div class="fans-type-table">
+        <h2>Top fans by comments</h2>
+        <% Fan.top_fans(current_user).first(10).each do |count_and_fan|%>
+          <p>
+            <% fan = count_and_fan[1][0] %>
+            <%= image_tag fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-medium" %>
+            <%= link_to fan.youtube_username.capitalize, fan_path(fan) %>
+            <%= fan.comments.count %> comments
+          </p>
+        <% end %>
+      </div>
+      <div class="fans-type-table">
+        <h2>No comments for the last 2 months</h2>
+        <% Fan.churning_fans(current_user).first(10).each do |fan|%>
+          <p>
+            <%= image_tag fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-medium" %>
+            <%= link_to fan.youtube_username.capitalize, fan_path(fan) %>
+            <%= fan.comments.count %> comments
+          </p>
+        <% end %>
+      </div>
+    </div>
+  </div>
+
   <div class="fans-cards">
     <div class="row" id="all-fans">
       <%= render "fans/all_fans", fans: @fans %>

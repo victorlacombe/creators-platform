@@ -15,4 +15,32 @@ class Fan < ApplicationRecord
     sub_status = subscriber.nil? ? false : subscriber.is_subscribed # if subscriber exists in db, we show his status, else it's false anyway
     return sub_status
   end
+
+  # Return an array of fans [fan, fan, fan] that has commented n_times in total
+  def self.n_times_fans(user, n_times)
+    fans = user.fans.reject{ |fan| fan.channel_id_youtube == user.channel_id_youtube} if user.fans # Rejecting the current_user from results
+    fans_filtered = fans.group_by { |fan| fan.comments.count }[n_times] if fans # Hash of fans by comment count, we select fans that have commented n_times
+    fans_filtered_recent = fans_filtered.select { |fan| fan.comments.order(published_at: :desc).first.published_at > (Date.today - 1.months) } if fans_filtered# select the fans that have recently commented
+    fans_filtered_recent.nil? ? [] : fans_filtered_recent #if the result is nil, we prefer to return an empty array to avoid bug in view
+  end
+
+  # Return an array of churning fans (no comments on the last 2 videos, ordered from most comments done)
+  def self.churning_fans(user)
+    fans = user.fans.reject{ |fan| fan.channel_id_youtube == user.channel_id_youtube} if user.fans
+    fans_filtered = fans.group_by { |fan| fan.comments.count }.sort_by { |count, fans| -count } if fans
+    fans_filtered_recent = []
+    if fans_filtered
+      fans_filtered.each do |count, fan_arr|
+        fans_filtered_recent = fans_filtered_recent + fan_arr.select { |fan| fan.comments.order(published_at: :desc).first.published_at < (Date.today - 2.months) }
+      end
+    end
+    fans_filtered_recent.nil? ? [] : fans_filtered_recent  #if the result is nil, we prefer to return an empty array to avoid bug in view
+  end
+
+  # Return an array of an array [[comment_count, fan],... ] of most loyal fans (most comments done and not churning)
+  def self.top_fans(user)
+    fans = user.fans.reject{ |fan| fan.channel_id_youtube == user.channel_id_youtube} if user.fans
+    fans_filtered = fans.group_by { |fan| fan.comments.count }.sort_by { |count, fans| -count } if fans
+    fans_filtered.nil? ? [] : fans_filtered
+  end
 end
