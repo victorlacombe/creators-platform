@@ -1,13 +1,12 @@
 <div class="container">
   <div class="header">
-    <%= link_to "Back to my fans", fans_path%>
   </div>
   <div class="content">
     <div class="left-card">
-      <%= image_tag  @fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-large" %>
       <div class="pseudo btn-tab">
         <a href="http://youtube.com/channel/<%= @fan.channel_id_youtube %>" target="_blank"><%= @fan.youtube_username %></a>
       </div>
+      <%= image_tag  @fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-large" %>
 
       <% comments = Comment.where(fan_id: @fan) %>
       <% comment = comments.order(published_at: :desc).first %>
@@ -17,11 +16,10 @@
         <p class="last-msg"><%= c.strftime("%e %b %Y %H:%M") %></p>
       <% end %>
       <%= simple_form_for @memo do |f|%>
-        <%= f.input :content%>
-        <%= f.submit "Save", class: "memo-btn"%>
+        <%= f.input :content, label:"Notes",placeholder:'Add a memo ✍️', class: 'autoExpand', rows: '3'%>
+        <%= f.submit "Save", class: "btn memo-btn"%>
       <% end %>
     </div>
-
 
     <div class="all-videos">
       <h2>Pinned Comments</h2>
