@@ -1,75 +1,102 @@
-<div class="container">
-  <div class="header">
-  </div>
-  <div class="content">
-    <div class="left-card">
-      <div class="pseudo btn-tab">
-        <a href="http://youtube.com/channel/<%= @fan.channel_id_youtube %>" target="_blank"><%= @fan.youtube_username %></a>
+<div class="dashboard-content">
+  <!-- DASHBOARD LEFT NAVBAR BEGINS HERE -->
+  <%= render 'shared/dashboard-left-navbar' %>
+  <!-- DASHBOARD LEFT NAVBAR ENDS HERE -->
+
+  <div class="dashboard-right-content">
+    <div class="container">
+      <div class="header">
       </div>
-      <%= image_tag  @fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-large" %>
+      <div class="content">
 
-      <% comments = Comment.where(fan_id: @fan) %>
-      <% comment = comments.order(published_at: :desc).first %>
-      <% if comment %>
-        <p class="last-msg">Last message :</p>
-        <p class="last-msg"><% c = comment.published_at %></p>
-        <p class="last-msg"><%= c.strftime("%e %b %Y %H:%M") %></p>
-      <% end %>
-      <%= simple_form_for @memo do |f|%>
-        <%= f.input :content, label:"Notes",placeholder:'Add a memo ✍️', class: 'autoExpand', rows: '3'%>
-        <%= f.submit "Save", class: "btn memo-btn"%>
-      <% end %>
-    </div>
-
-    <div class="all-videos">
-      <h2>Pinned Comments</h2>
-      <div id="pinned-comments"> <!-- USED IN AJAXIFICATION -->
-        <% favorite_comments = comments.to_a.select{ |comment| comment.is_pinned == true }.sort_by{ |comment| -(comment.published_at.to_i) } %>
-        <% unless favorite_comments.empty? %>
-            <% favorite_comments.each do |comment|%>
-              <% if comment.is_pinned %>
-                <%= render "comments/pinned_comments", comment: comment, fan: @fan %>
-              <% end %>
-            <%end %>
-        <% end %>
-      </div>
-      <h2>All Comments</h2>
-      <% @comments_by_video.each do |video_id, comments|%>
-        <% video = Video.find(video_id) %>
-        <!-- ---------------------------------------------------------------------------- -->
-        <!-- ----------------This is the video thumbnail left of the comments------------ -->
-        <!-- ---------------------------------------------------------------------------- -->
-
-        <!-- For mobile -->
-        <div class="video-card-mobile hidden-md hidden-lg hidden-xl">
-          <%= link_to "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' do %>
-            <%= image_tag  video.thumbnail.gsub(/default/, 'mqdefault') %>
-          <% end %>
-          <div class='btn-tab'>
-            <%= link_to video.title, "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' %>
-          </div>
+        <!-- <div class="pseudo btn-tab">
+          <a href="http://youtube.com/channel/<%= @fan.channel_id_youtube %>" target="_blank"><%= @fan.youtube_username %></a>
         </div>
+        <%= image_tag  @fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-large" %>
 
-        <div class="video-comment-card">
-
-          <!-- For large screens -->
-          <div class="video-card hidden-xs hidden-sm">
-            <%= link_to "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' do %>
-              <%= image_tag  video.thumbnail%>
+        <% comments = Comment.where(fan_id: @fan) %>
+        <% comment = comments.order(published_at: :desc).first %>
+        <% if comment %>
+          <p class="last-msg">Last message :</p>
+          <p class="last-msg"><% c = comment.published_at %></p>
+          <p class="last-msg"><%= c.strftime("%e %b %Y %H:%M") %></p>
+        <% end %> -->
+        <div class="fan-card fan-card-sticky">
+          <div class="fan-card-infos">
+            <div class ="fan-name"><%= @fan.youtube_username.capitalize %></div>
+            <% comment_first = @fan.comments.order(published_at: :asc).first %>
+            <div class="fan-since">Fan since <% c_first = comment_first.published_at %><%= time_ago_in_words(c_first) %></div>
+          </div>
+          <div class="fan-card-avatar">
+            <%= image_tag @fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-large" %>
+          </div>
+          <div class="fan-card-channel">
+            <%= link_to "Fan Channel", "https://www.youtube.com/channel/#{@fan.channel_id_youtube}", target: "_blank"%>
+          </div>
+          <div class="fan-card-activity">
+            <div class="fan-card-activity-left">Active <%= time_ago_in_words(@fan.comments.last.published_at) %> ago</div>
+            <div class="fan-card-activity-right"><i class="far fa-comments"></i> <%= @fan.comments.count %></div>
+          </div>
+          <div class="fan-card-memo">
+            <%= simple_form_for @memo do |f|%>
+              <%= f.input :content, label: false ,placeholder:'Add a memo ✍️', class: 'autoExpand', rows: '3'%>
+              <%= f.submit "Save", class: "btn memo-btn"%>
             <% end %>
-            <div class='btn-tab truncate'>
-              <%= link_to video.title, "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' %>
-            </div>
           </div>
-
-
-
-        <!-- --------------------------------------------------------- -->
-        <!-- ---------------- This is the comments section------------ -->
-        <!-- --------------------------------------------------------- -->
-          <%= render "comments/show", comments: comments, video: video, fan: @fan %>
         </div>
-      <%end %>
+
+
+        <div class="all-videos">
+          <h2>Pinned Comments</h2>
+          <div id="pinned-comments"> <!-- USED IN AJAXIFICATION -->
+            <% favorite_comments = comments.to_a.select{ |comment| comment.is_pinned == true }.sort_by{ |comment| -(comment.published_at.to_i) } %>
+            <% unless favorite_comments.empty? %>
+                <% favorite_comments.each do |comment|%>
+                  <% if comment.is_pinned %>
+                    <%= render "comments/pinned_comments", comment: comment, fan: @fan %>
+                  <% end %>
+                <%end %>
+            <% end %>
+          </div>
+          <h2>All Comments</h2>
+          <% @comments_by_video.each do |video_id, comments|%>
+            <% video = Video.find(video_id) %>
+            <!-- ---------------------------------------------------------------------------- -->
+            <!-- ----------------This is the video thumbnail left of the comments------------ -->
+            <!-- ---------------------------------------------------------------------------- -->
+
+            <!-- For mobile -->
+            <div class="video-card-mobile hidden-md hidden-lg hidden-xl">
+              <%= link_to "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' do %>
+                <%= image_tag  video.thumbnail.gsub(/default/, 'mqdefault') %>
+              <% end %>
+              <div class='btn-tab'>
+                <%= link_to video.title, "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' %>
+              </div>
+            </div>
+
+            <div class="video-comment-card">
+
+              <!-- For large screens -->
+              <div class="video-card hidden-xs hidden-sm">
+                <%= link_to "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' do %>
+                  <%= image_tag  video.thumbnail%>
+                <% end %>
+                <div class='btn-tab truncate'>
+                  <%= link_to video.title, "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' %>
+                </div>
+              </div>
+
+
+
+            <!-- --------------------------------------------------------- -->
+            <!-- ---------------- This is the comments section------------ -->
+            <!-- --------------------------------------------------------- -->
+              <%= render "comments/show", comments: comments, video: video, fan: @fan %>
+            </div>
+          <%end %>
+        </div>
+      </div>
     </div>
   </div>
 </div>

@@ -22,8 +22,7 @@
       <div class="comment-card-content">
         <div class="comment-card-content-top">
           <div class="name truncate">
-            <%= fan.youtube_username.capitalize %>
-            <%=  render "comments/pinned", comment: comment, fan: fan %>
+            <%= fan.youtube_username.capitalize %>  <%=  render "comments/pinned", comment: comment, fan: fan %>
           </div>
           <div class="date">
             <%= link_to "http://youtube.com/watch?v=" + video.video_id_youtube + "&lc=" + comment.comment_id_youtube, target: '_blank' do %>
