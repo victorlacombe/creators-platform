@@ -1,6 +1,6 @@
 // ---- EDIT THE CSS CLASS HERE ----
-var pinned_class = "fas fa-star";
-var not_pinned_class = "far fa-star";
+var pinned_class = "fas fa-heart";
+var not_pinned_class = "far fa-heart";
 // ---------------------------------
 
 var comment = document.querySelector("[data-comment-id='<%= @comment.id %>']");
@@ -26,7 +26,7 @@ function togglePinComment() {
       // Pin comment in comment list by changing css class
       // Display pinned comment on top
       comment.className = pinned_class;
-      addPinnedComment('<%= j render "comments/show", comment: @comment %>');
+      addPinnedComment('<%= j render "comments/pinned_comments", comment: @comment %>');
   }
 }
 
