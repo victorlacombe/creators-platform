@@ -9,17 +9,14 @@
   margin-top: 80px;
   margin-bottom: 80px;
   text-align: center;
-    i {
-      font-size: 80px;
-      color: $purple;
-    }
 }
 
 .wrapper-why {
-  font-size: 2em;
+  font-size: 3em;
   text-align: center;
   background-color: $purple;
-  height: 35vh;
+  background-image: linear-gradient(to right, #0241ba, #0062cf, #0080dd, #009be5, #1eb6ea);
+  height: 40vh;
   color: white;
   display: flex;
   align-items: center;
@@ -32,6 +29,7 @@
   font-size: 2em;
   text-align: center;
   background-color: $purple;
+  background-image: linear-gradient(to right, #0241ba, #0062cf, #0080dd, #009be5, #1eb6ea);
   height: 45vh;
   color: white;
   display: flex;
@@ -42,4 +40,27 @@
         font-weight: 300;
         }
     }
+}
+
+.wrapper-testimonials {
+  background-color: $light-gray;
+}
+
+.background {
+  display: flex;
+  position: relative;
+  height: calc(100vh - 70px);
+  align-items: center;
+  background-color: white;
+  flex-wrap: wrap;
+}
+
+.text-left {
+  flex: 0 0 50%;
+  padding: 25px;
+}
+
+.img-right {
+  flex: 0 0 50%;
+  height: calc(100vh - 70px);
 }
