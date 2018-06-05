@@ -128,12 +128,13 @@ setTimeout(function() {
                     // Retrieving the fan's first activity date
 
         //------------------- 4. Inject the retrived data in the DOM -------------------
-
+                    const commentImage = chrome.extension.getURL('chat-46.png');
                     commentMainDiv.insertAdjacentHTML("beforebegin",
                       `<div class="fan-info-recll">
                         <img src="${profilPictureUrl}" alt="" />
                         <h3>${userName}</h3>
                         <a id="more-details" target=”_blank” href=https://www.recll.xyz/fans/${fanId}> See more details</a>
+                        <img src="${commentImage}" alt="" />
                         <p id="commentNumber">Commented ${commentsNumber} time(s) on your videos</p>
                         <p id="nb-of-video-commented">Total video commented: ${numberOfCommentedVideos.length}</p>
                         <p id="last-comment-date">Latest comment: ${lastcommentDate}</p>
