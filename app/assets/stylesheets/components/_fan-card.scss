@@ -11,6 +11,8 @@
   margin: 20px 5px;
   transition: transform .2s;
   box-shadow: 1px 1px 20px #ddd;
+  min-width: 250px;
+  height: 100%;
   &:hover {
     transform: scale(1.02);
   }
@@ -67,6 +69,16 @@
     font-weight: bolder;
   }
 }
+
+.fan-card-memo {
+  padding: 0px 10px;
+  padding-bottom: 10px;
+  background-color: $blue;
+}
+
+.fan-card-sticky {
+  position: sticky !important;
+  top: 0 !important;
 
 .fan-card-link {
   position: absolute;
