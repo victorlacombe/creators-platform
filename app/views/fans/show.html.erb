@@ -9,19 +9,11 @@
       </div>
       <div class="content">
 
-        <!-- <div class="pseudo btn-tab">
-          <a href="http://youtube.com/channel/<%= @fan.channel_id_youtube %>" target="_blank"><%= @fan.youtube_username %></a>
-        </div>
-        <%= image_tag  @fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-large" %>
-
         <% comments = Comment.where(fan_id: @fan) %>
         <% comment = comments.order(published_at: :desc).first %>
-        <% if comment %>
-          <p class="last-msg">Last message :</p>
-          <p class="last-msg"><% c = comment.published_at %></p>
-          <p class="last-msg"><%= c.strftime("%e %b %Y %H:%M") %></p>
-        <% end %> -->
-        <div class="fan-card fan-card-sticky">
+
+        <!-- PC VIEW  FAN CARD -->
+        <div class="fan-card fan-card-sticky hidden-xs hidden-sm">
           <div class="fan-card-infos">
             <div class ="fan-name"><%= @fan.youtube_username.capitalize %></div>
             <% comment_first = @fan.comments.order(published_at: :asc).first %>
@@ -47,6 +39,31 @@
 
 
         <div class="all-videos">
+          <!-- MOBILE VIEW  FAN CARD -->
+          <div class="fan-card-mobile hidden-md hidden-lg hidden-xl">
+            <div class="fan-card-infos">
+              <div class ="fan-name"><%= @fan.youtube_username.capitalize %></div>
+              <% comment_first = @fan.comments.order(published_at: :asc).first %>
+              <div class="fan-since">Fan since <% c_first = comment_first.published_at %><%= time_ago_in_words(c_first) %></div>
+            </div>
+            <div class="fan-card-avatar">
+              <%= image_tag @fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-large" %>
+            </div>
+            <div class="fan-card-channel">
+              <%= link_to "Fan Channel", "https://www.youtube.com/channel/#{@fan.channel_id_youtube}", target: "_blank"%>
+            </div>
+            <div class="fan-card-activity">
+              <div class="fan-card-activity-left">Active <%= time_ago_in_words(@fan.comments.last.published_at) %> ago</div>
+              <div class="fan-card-activity-right"><i class="far fa-comments"></i> <%= @fan.comments.count %></div>
+            </div>
+            <div class="fan-card-memo">
+              <%= simple_form_for @memo do |f|%>
+                <%= f.input :content, label: false ,placeholder:'Add a memo ✍️', class: 'autoExpand textarea-mobile', rows: '3'%>
+                <%= f.submit "Save", class: "btn memo-btn"%>
+              <% end %>
+            </div>
+          </div>
+
           <h2>Pinned Comments</h2>
           <div id="pinned-comments"> <!-- USED IN AJAXIFICATION -->
             <% favorite_comments = comments.to_a.select{ |comment| comment.is_pinned == true }.sort_by{ |comment| -(comment.published_at.to_i) } %>

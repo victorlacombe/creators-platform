@@ -18,6 +18,19 @@
   }
 }
 
+.fan-card-mobile{
+  background: white;
+  display: flex;
+  flex-flow: column;
+  margin: 20px 5px;
+  transition: transform .2s;
+  box-shadow: 1px 1px 20px #ddd;
+  min-width: 250px;
+  &:hover {
+    transform: scale(1.02);
+  }
+}
+
 .fan-card-infos {
   font-size: 14px;
   padding: 20px;
@@ -79,6 +92,7 @@
 .fan-card-sticky {
   position: sticky !important;
   top: 0 !important;
+}
 
 .fan-card-link {
   position: absolute;
