@@ -1,3 +1,7 @@
+<!-- DASHBOARD LEFT NAVBAR BEGINS HERE -->
+<%= render 'shared/dashboard-left-navbar' %>
+<!-- DASHBOARD LEFT NAVBAR ENDS HERE -->
+
 <h1 class="text-center">Hello <%= current_user.first_name.nil? ? current_user.channel_name : current_user.first_name.capitalize  %> !</h1>
 <h2 class="text-center"> You have <strong><%= current_user.fans.where.not(channel_id_youtube: current_user.channel_id_youtube).count %></strong> comments from your fans</h2>
   <div class="wrapper-search">
