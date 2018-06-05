@@ -5,10 +5,10 @@ class FansController < ApplicationController
     flash[:notice] = "Wait for it... Your fans are coming soon!" if current_user.sign_in_count == 1
     if params[:query].present?
       sql_query = "youtube_username ILIKE :query"
-      @fans = current_user.fans.where(sql_query, query: "%#{params[:query]}%").where.not(channel_id_youtube: current_user.channel_id_youtube).page(params[:page]).per(3*5)
+      @fans = current_user.fans.where(sql_query, query: "%#{params[:query]}%").where.not(channel_id_youtube: current_user.channel_id_youtube).page(params[:page]).per(4*5)
     else
       # .page is from Kaminari gem
-      @fans = current_user.fans.where.not(channel_id_youtube: current_user.channel_id_youtube).page(params[:page]).per(3*5)
+      @fans = current_user.fans.where.not(channel_id_youtube: current_user.channel_id_youtube).page(params[:page]).per(4*5)
     end
     respond_to do |format|
       format.html

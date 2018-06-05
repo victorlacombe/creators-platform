@@ -1,15 +1,16 @@
 .fan-cards {
-display: flex; // TEMPORAIRE ! to delete when we put a bootstrap grid or a display grid
-align-items: center; // TEMPORAIRE ! to delete when we put a bootstrap grid or a display grid
-justify-contents: space-around; // TEMPORAIRE ! to delete when we put a bootstrap grid or a display grid
+// display: flex; // TEMPORAIRE ! to delete when we put a bootstrap grid or a display grid
+// align-items: center; // TEMPORAIRE ! to delete when we put a bootstrap grid or a display grid
+// justify-content: space-around; // TEMPORAIRE ! to delete when we put a bootstrap grid or a display grid
 }
+
 .fan-card {
   background: white;
   display: flex;
   flex-flow: column;
-  width: 280px;
-  height: 335px;
+  margin: 20px 5px;
   transition: transform .2s;
+  box-shadow: 1px 1px 20px #ddd;
   &:hover {
     transform: scale(1.02);
   }
@@ -51,7 +52,7 @@ justify-contents: space-around; // TEMPORAIRE ! to delete when we put a bootstra
   align-items: center;
   justify-content: space-between;
   background-color: $blue;
-  height: 100%;
+  max-height: 50px;
   .fan-card-activity-left {
     flex-grow: 1;
     padding: 20px;

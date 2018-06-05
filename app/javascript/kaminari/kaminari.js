@@ -1,5 +1,5 @@
 function infinite_loader() {
-  var fans_cards = document.querySelector(".fans-cards")
+  var fans_cards = document.querySelector(".fan-cards")
   if (fans_cards) {
     window.addEventListener('scroll', function(event) {
       var d = document.documentElement;
