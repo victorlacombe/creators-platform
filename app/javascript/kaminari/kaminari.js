@@ -1,12 +1,23 @@
+import $ from 'jquery';
+
 function infinite_loader() {
-  var fans_cards = document.querySelector(".fan-cards")
+  // console.log('hello')
+  // $('.next').on('show', () => {
+  //   console.log('inside')
+  //   $(this).closest('a').click();
+  // });
+  var fans_cards = document.querySelector(".fan-cards");
   if (fans_cards) {
+    var date = new Date();
     window.addEventListener('scroll', function(event) {
       var d = document.documentElement;
       var offset = d.scrollTop + window.innerHeight;
       var height = d.offsetHeight;
-      if (height - offset - 200 < 0 ) {
+
+      if (height - offset - 200 < 0 && (new Date() - date) > 2000) {
+        // console.log(height - offset - 250);
         document.querySelector("[rel=next]").click();
+        date = new Date();
       }
     });
   }
