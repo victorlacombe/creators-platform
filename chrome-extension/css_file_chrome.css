@@ -156,11 +156,15 @@
   color: white;
   padding: 10px 15px;
   border-radius: 4px;
-  background: rgba(0, 184, 244, 1);
+  background-color: rgba(0, 184, 244, 1);
   opacity: 0.85;
-  transition: background 0.3s ease;
+  transition: background 1s ease;
   font-size: 14px;
   text-decoration: none;
+}
+
+.button-memo a:hover {
+  background-color: red;
 }
 
 
