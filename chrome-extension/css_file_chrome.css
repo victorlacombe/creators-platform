@@ -84,7 +84,8 @@
 }
 
 #memo {
-    background-color: rgba(93, 93, 93, 0.1);
+    background-color: rgb(70, 154, 224);
+    color: white;
     width: 91%;
     min-height: 44px;
     margin: 10px auto;
@@ -99,7 +100,7 @@
 
 #memo a {
   text-decoration: none;
-  color: black;
+  color: white;
 }
 
 

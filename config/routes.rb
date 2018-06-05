@@ -33,6 +33,8 @@ Rails.application.routes.draw do
       resources :fans, only: [:index]
       resources :users, only: [:index]
       get 'users/verif'
+      resources :videos, only: []
+      get 'videos/find_video_owner'
     end
   end
 end
