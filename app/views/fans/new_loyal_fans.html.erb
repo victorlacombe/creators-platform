@@ -4,7 +4,7 @@
   <!-- DASHBOARD LEFT NAVBAR ENDS HERE -->
 
   <div class="dashboard-right-content">
-    <h1 class="text-center">You have <%= @last_month_new_loyal_fans.size %> new loyal fans</h1>
+    <h1 class="text-center">Your <%= pluralize @last_month_new_loyal_fans.size, "new loyal fan" %></h1>
     <p class="text-center">They wrote their 2nd - 4th comment this month</p>
     <div class="container">
 
@@ -12,6 +12,7 @@
         <div id="all-fans"> <!-- Used for kaminari infinite scrolling -->
           <div class="fan-cards">
               <% @last_month_new_loyal_fans.each do |fan| %>
+                <% unless fan.channel_id_youtube == current_user.channel_id_youtube %>
                   <%#= link_to fan_path(fan) do%>
                   <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
                     <div class="fan-card ">
@@ -35,6 +36,7 @@
                     </div>
                   </div>
                 <%# end %>
+                <% end %>
               <% end %>
             </div>
           </div>
