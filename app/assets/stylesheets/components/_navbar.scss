@@ -89,16 +89,20 @@
 .form-control {
   border-radius: 20px;
   font-size: 14px;
-  height: 40px;
-  width: 180px;
+  height: 35px;
+  min-width: 180px;
   border: 0.7px solid rgb(150, 185, 242);
-  margin-right: 10px;
 }
 
 
 .navbar-flexbox {
   display: flex;
   align-items: flex-end;
-  justify-content: safe;
+  justify-content: space-around;
   min-width: 215px;
+}
+
+.dropdown {
+  padding-bottom: 2px;
+  margin-left: 10px;
 }
