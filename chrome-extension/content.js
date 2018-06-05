@@ -102,7 +102,10 @@ setTimeout(function() {
                     const commentsNumber = data[0]["comments"].length
                     // Retrieving the memo
                     if (data[0]["memo"]["memo_details"]["content"].length === 0) {
-                      memoContent = `<a href="https://www.recll.xyz/fans/${fanId}" target="_blank" class="href">Add a memo</a>`
+                      memoContent = `
+                      <div class="button-memo">
+                        <a href="https://www.recll.xyz/fans/${fanId}" target="_blank" class="button-centered-memo">Add a memo</a>
+                      </div>`
                     } else {
                       memoContent = `Memo: ${data[0]["memo"]["memo_details"]["content"]}`
                     }
@@ -129,19 +132,34 @@ setTimeout(function() {
 
         //------------------- 4. Inject the retrived data in the DOM -------------------
                     const commentImage = chrome.extension.getURL('chat-46.png');
+                    const videoImage = chrome.extension.getURL('video-viewed.png');
+                    const lastCommentDate = chrome.extension.getURL('last-comment-date.png');
                     commentMainDiv.insertAdjacentHTML("beforebegin",
-                      `<div class="fan-info-recll">
-                        <img src="${profilPictureUrl}" alt="" />
-                        <h3>${userName}</h3>
-                        <a id="more-details" target=”_blank” href=https://www.recll.xyz/fans/${fanId}> See more details</a>
-                        <img src="${commentImage}" alt="" />
-                        <p id="commentNumber">Commented ${commentsNumber} time(s) on your videos</p>
-                        <p id="nb-of-video-commented">Total video commented: ${numberOfCommentedVideos.length}</p>
-                        <p id="last-comment-date">Latest comment: ${lastcommentDate}</p>
-                        <div id="memo">
-                          ${memoContent}
-                        </div>
-                      </div>`)
+                      ` <div class="fan-info-recll">
+                          <div class="extension-header">
+                            <img src="${profilPictureUrl}" alt="" id="fan-picture"/>
+                            <h3>${userName}</h3>
+                          </div>
+                          <a id="more-details" target=”_blank” href=https://www.recll.xyz/fans/${fanId}> See more details</a>
+                          <div class="stats-section">
+                            <div class="comments-section">
+                              <p id="commentNumber">${commentsNumber}</p>
+                              <img src="${commentImage}" alt="" id="comments-image"/>
+                            </div>
+                            <div class="videos-section">
+                              <p id="nb-of-video-commented">${numberOfCommentedVideos.length}</p>
+                              <img src="${videoImage}" alt="" id="comments-image"/>
+                            </div>
+                            <div class="latest-comment-section">
+                              <p id="last-comment-date">${lastcommentDate}</p>
+                              <img src="${lastCommentDate}" alt="" id="comments-image"/>
+                            </div>
+                          </div>
+                          <div></div>
+                          <div id="memo">
+                            ${memoContent}
+                          </div>
+                        </div>`)
                     resolve("ok to launch transition");
                   });
                 }).then((data) => {

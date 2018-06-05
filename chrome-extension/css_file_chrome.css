@@ -46,11 +46,52 @@
   left: 50px;
 }
 
-.fan-info-recll img {
+.fan-info-recll #fan-picture {
   position: absolute;
   top: 10px;
   left: 10px;
 }
+
+
+/* ----------------------------- Stats section ------------------------------- */
+
+.stats-section {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  margin-top: 30px;
+  height: 50px;
+  width: 94%;
+}
+
+.stats-section  img {
+  height: 30px;
+}
+
+.stats-section  p {
+  font-size: 15px;
+  font-weight: bolder;
+
+}
+.stats-section div {
+  width: 50px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.later-comment-section img {
+  margin-left: 15px;
+}
+
+#comments-image {
+  height: 26px
+}
+
+
+
+/* ----------------------------- Memo section ------------------------------- */
 
 #more-details {
   position: absolute;
@@ -62,45 +103,42 @@
 }
 
 
-
-#commentNumber {
-  position: absolute;
-  top: 50px;
-  left: 10px;
-  margin: 5px 0;
+.button-memo {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 44px;
 }
 
-
-#last-comment-date {
-  position: absolute;
-  top: 60px;
-  left: 10px;
-}
-
-#nb-of-video-commented {
-  position: absolute;
-  top: 70px;
-  left: 10px;
+.button-memo a {
+  color: white;
+  padding: 10px 15px;
+  border-radius: 4px;
+  background: rgba(0, 184, 244, 1);
+  opacity: 0.85;
+  transition: background 0.3s ease;
+  font-size: 13px;
 }
 
 #memo {
-    background-color: rgba(93, 93, 93, 0.1);
-    width: 91%;
-    min-height: 44px;
-    margin: 10px auto;
-    padding: 8px;
-    top: 90px;
-    left: 10px;
-    border-radius: 5px;
-    position: absolute;
-    line-height: 1.5em;
+  width: 94%;
+  min-height: 44px;
+  margin: 10px auto;
+  padding: 8px;
+  top: 90px;
+  left: 10px;
+  position: absolute;
+  line-height: 1.5em;
 }
 
 
 #memo a {
   text-decoration: none;
-  color: black;
 }
+
+
+
 
 
 

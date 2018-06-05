@@ -19,5 +19,8 @@
   "browser_action": {
     "default_icon": "recll-logo.png"
   },
-  "web_accessible_resources": ["chat-46.png"]
+  "web_accessible_resources": ["chat-46.png",
+    "last-comment-date.png",
+    "video-viewed.png"
+  ]
 }
