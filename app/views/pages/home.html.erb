@@ -12,7 +12,10 @@
   <div class="text-left">
     <h1>Build a one-to-one relationship with your fans!</h1>
     <p>Take care of your fans : Improve your social media experience</p>
-    <%= link_to "GET STARTED", fans_path, class: "btn btn-lg btn-danger"  %>
+    <%= link_to fans_path, class: "btn btn-danger " do %>
+      <i class="fab fa-youtube"></i> Get Started
+    <% end -%>
+
   </div>
   <div class="img-right hidden-xs" style="background-image: url('<%= image_url "img-right.png" %>')">
   </div>
@@ -109,8 +112,10 @@
   <div class="wrapper-join">
     <div class="container">
       <div class="banner-join">
-      <p>Signing up is fast, easy and completely free</p>
-      <%= link_to "GET STARTED", fans_path, class: "btn btn-lg btn-danger"  %>
+        <p>Signing up is fast, easy and completely free</p>
+        <%= link_to fans_path, class: "yt-button" do %>
+        <i class="fab fa-youtube"></i> Get Started
+        <% end -%>
       </div>
     </div>
   </div>
