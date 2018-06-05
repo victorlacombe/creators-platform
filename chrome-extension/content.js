@@ -1,4 +1,4 @@
-DEV = false;
+DEV = true;
 
 BASE_URL = DEV ? "http://localhost:3000" : "https://www.recll.xyz";
 
@@ -12,42 +12,47 @@ BASE_URL = DEV ? "http://localhost:3000" : "https://www.recll.xyz";
 console.log("Content Script is working")
 // -------   FUNCTION TO ADD A LINK IN A COMMUNITY'S YouTube Page     ----------
 
-const dashboardCommentAuthors = document.querySelectorAll(".comment-header");
-dashboardCommentAuthors.forEach(function(dashboardCommentAuthor) {
-  dashboardCommentAuthor.insertAdjacentHTML("beforeend", '<a class=".btn-see-details">See fan details</a>' )
-})
+const allScript = function() {
 
-// ----------- FUNCTION TO ADD A LINK IN A VIDEO'S COMMENT FLOW  ---------------
-//                           (update every 900ms)
-// Do not use 'scroll' event, since it would overload the page each time there is
-// a scroll on each window pixel
-// Do not use the 'NodeInserted' event, since Youtube seems to load a lot of new
-// nodes even after page DOM is Loaded
+  const dashboardCommentAuthors = document.querySelectorAll(".comment-header");
+  dashboardCommentAuthors.forEach(function(dashboardCommentAuthor) {
+    dashboardCommentAuthor.insertAdjacentHTML("beforeend", '<a class=".btn-see-details">See fan details</a>' )
+  })
 
-//-------------   Identify if the user is on a video of his own --------------
+  // ----------- FUNCTION TO ADD A LINK IN A VIDEO'S COMMENT FLOW  ---------------
+  //                           (update every 900ms)
+  // Do not use 'scroll' event, since it would overload the page each time there is
+  // a scroll on each window pixel
+  // Do not use the 'NodeInserted' event, since Youtube seems to load a lot of new
+  // nodes even after page DOM is Loaded
+
+  //-------------   Identify if the user is on a video of his own --------------
 
 
-let interval;
+  let interval;
 
-setTimeout(function() {
-
-  const userChannelId = document.querySelector('#owner-name a').getAttribute("href").match(/\/channel\/(.*)/)[1]
+  const userChannelId = window.location.search.match(/\?v=(.*)/)[1]
   console.log(userChannelId)
 
-  fetch(`${BASE_URL}/api/v1/users/verif?query=${userChannelId}`)
+  fetch(`${BASE_URL}/api/v1/videos/find_video_owner?query=${userChannelId}`)
   .then(response => {
+    console.log(response)
     if (response.status == 500) {
-
+      console.log("MOFO", userChannelId)
       // Remove "See fan details" button from the former page
 
-      // const visibleSeeFanDetailsButtons = document.querySelectorAll(".btn-see-details-recll")
-      // console.log(visibleSeeFanDetailsButtons)
-      // console.log(visibleSeeFanDetailsButtons.length)
-      // if (visibleSeeFanDetailsButtons.length > 0) {
-      //   for (i = 0; i < visibleSeeFanDetailsButtons.length; i++ ) {
-      //     visibleSeeFanDetailsButtons[i].remove()
-      //   }
-      // }
+      html.addEventListener("data-changed", function() {
+        console.log("FJEIOZJFIOZEJFIOJEZOIFJIZEOJFIOZEJFOI")
+      })
+
+      const visibleSeeFanDetailsButtons = document.querySelectorAll(".btn-see-details-recll")
+      console.log(visibleSeeFanDetailsButtons)
+      console.log(visibleSeeFanDetailsButtons.length)
+      if (visibleSeeFanDetailsButtons.length > 0) {
+        for (i = 0; i < visibleSeeFanDetailsButtons.length; i++ ) {
+          visibleSeeFanDetailsButtons[i].remove()
+        }
+      }
 
     } else {
       // OK// fetch(`${BASE_URL}/api/v1/fans?query=${fanPictureUrl}`)
@@ -63,7 +68,7 @@ setTimeout(function() {
             // récupérer l'id youtube la page actuelle (après potentielle navigation)
             const newUserChannelId = document.querySelector('#owner-name a').getAttribute("href").match(/\/channel\/(.*)/)[1];
             if (newUserChannelId !== currentUserYoutubeId) {
-              videoCommentAuthor.querySelector('.btn-see-details-recll').remove();
+              // videoCommentAuthor.querySelector('.btn-see-details-recll').remove();
             }
           } else {
             videoCommentAuthor.insertAdjacentHTML("beforeend", '<a class="btn-see-details-recll">See fan details</a>');
@@ -106,6 +111,7 @@ setTimeout(function() {
                       <div class="button-memo">
                         <a href="https://www.recll.xyz/fans/${fanId}" target="_blank" class="button-centered-memo">Add a memo</a>
                       </div>`
+
                     } else {
                       memoContent = `Memo: ${data[0]["memo"]["memo_details"]["content"]}`
                     }
@@ -135,36 +141,40 @@ setTimeout(function() {
                     const videoImage = chrome.extension.getURL('video-viewed.png');
                     const lastCommentDate = chrome.extension.getURL('last-comment-date.png');
                     commentMainDiv.insertAdjacentHTML("beforebegin",
-                      ` <div class="fan-info-recll">
-                          <div class="extension-header">
-                            <img src="${profilPictureUrl}" alt="" id="fan-picture"/>
-                            <h3>${userName}</h3>
-                          </div>
-                          <a id="more-details" target=”_blank” href=https://www.recll.xyz/fans/${fanId}> See more details</a>
-                          <div class="stats-section">
-                            <div class="comments-section">
-                              <p id="commentNumber">${commentsNumber}</p>
-                              <img src="${commentImage}" alt="" id="comments-image"/>
+                        `  <div class="fan-info-recll">
+                             <div class="extension-header">
+                              <div class="header-left-section">
+                                <img src="${profilPictureUrl}" alt="" id="fan-picture"/>
+                                <h3>${userName}</h3>
+                              </div>
+                              <a id="more-details" target=”_blank” href=https://www.recll.xyz/fans/${fanId}> See more details</a>
                             </div>
-                            <div class="videos-section">
-                              <p id="nb-of-video-commented">${numberOfCommentedVideos.length}</p>
-                              <img src="${videoImage}" alt="" id="comments-image"/>
+
+
+                            <div class="stats-section">
+                              <div class="comments-section">
+                                <p id="commentNumber">${commentsNumber}</p>
+                                <img src="${commentImage}" alt="" id="comments-image"/>
+                              </div>
+                              <div class="videos-section">
+                                <p id="nb-of-video-commented">${numberOfCommentedVideos.length}</p>
+                                <img src="${videoImage}" alt="" id="comments-image"/>
+                              </div>
+                              <div class="latest-comment-section">
+                                <p id="last-comment-date">${lastcommentDate}</p>
+                                <img src="${lastCommentDate}" alt="" id="comments-image"/>
+                              </div>
                             </div>
-                            <div class="latest-comment-section">
-                              <p id="last-comment-date">${lastcommentDate}</p>
-                              <img src="${lastCommentDate}" alt="" id="comments-image"/>
+
+
+                            <div id="memo">
+                              ${memoContent}
                             </div>
-                          </div>
-                          <div></div>
-                          <div id="memo">
-                            ${memoContent}
-                          </div>
-                        </div>`)
+                          </div>`)
                     resolve("ok to launch transition");
                   });
                 }).then((data) => {
                   console.log(data);
-                  // document.querySelector(".fan-info-recll").classList.add("fan-info-recll-opened");
                   setTimeout(() => {
                     commentMainDiv.parentElement.querySelector(".fan-info-recll").style.opacity = "1";
                     commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "150px";
@@ -175,14 +185,16 @@ setTimeout(function() {
           }
         })
       }, 50);
-
-      document.addEventListener('yt-navigate', function() {
+      document.addEventListener('yt-navigate-finish', function() {
+        //
         clearInterval(interval);
+        allScript();
       });
     }
   })
-}, 8000);
+}
 
+allScript();
 
 
 
@@ -220,9 +232,4 @@ setTimeout(function() {
 //     }
 //   })
 // })
-
-
-
-
-
 

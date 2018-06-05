@@ -33,35 +33,63 @@
 
 
 .fan-info-recll-opened {
-  height: 150px;
+  height: 180px;
 }
 
 
-/* ------------------------ Fan details components -------------------------- */
+/* --------------------------- Header section ------------------------------- */
+
+
+.extension-header {
+  height: 40px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.header-left-section {
+  height: 40px;
+  width: 175px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
 
 .fan-info-recll h3 {
-  position: absolute;
-  top: 6px;
+  /*position: absolute;*/
+  /*top: 6px;*/
+  /*left: 50px;*/
   font-weight: lighter;
-  left: 50px;
 }
 
 .fan-info-recll #fan-picture {
-  position: absolute;
+/*  position: absolute;
   top: 10px;
-  left: 10px;
+  left: 10px;*/
 }
 
 
-/* ----------------------------- Stats section ------------------------------- */
+
+
+#more-details {
+  /*position: absolute;
+  right: 10px;
+  top: 15px;*/
+  text-decoration: none;
+  color: black;
+  /*margin: 5px 0;*/
+}
+
+
+
+/* ---------------------------- Stats section ------------------------------- */
 
 .stats-section {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: space-around;
-  margin-top: 30px;
-  height: 50px;
-  width: 94%;
 }
 
 .stats-section  img {
@@ -93,22 +121,13 @@
 
 /* ----------------------------- Memo section ------------------------------- */
 
-#more-details {
-  position: absolute;
-  right: 10px;
-  top: 15px;
-  text-decoration: none;
-  color: black;
-  margin: 5px 0;
-}
-
 
 .button-memo {
   height: 100%;
   display: flex;
   align-items: center;
   justify-content: center;
-  min-height: 44px;
+  min-height: 70px;
 }
 
 .button-memo a {
