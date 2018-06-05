@@ -17,6 +17,6 @@
   },
 
   "browser_action": {
-    "default_icon": "DataIcons-Recall.png"
+    "default_icon": "recll-logo.png"
   }
 }

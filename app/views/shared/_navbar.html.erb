@@ -12,14 +12,14 @@
       <% if params[:controller] == "fans" %>
         <div class="navbar-searchbar">
           <%= form_tag fans_path, method: :get do %>
-          <%= text_field_tag :query,
-          params[:query],
-          class: "form-control",
-          placeholder: "Search a fan"%>
+            <%= text_field_tag :query, params[:query], class: "form-control", placeholder: "Search a fan"%>
           <% end %>
         </div>
+        <%= link_to "Chrome Extension", "https://chrome.google.com/webstore/category/extensions?hl=fr", class: "navbar-wagon-item navbar-wagon-link", target: "_blank" %>
       <% else %>
+
         <!-- Links when logged in -->
+
         <%= link_to "Dashboard", fans_path, class: "navbar-wagon-item navbar-wagon-link" %>
         <%= link_to "Chrome Extension", "https://chrome.google.com/webstore/category/extensions?hl=fr", class: "navbar-wagon-item navbar-wagon-link", target: "_blank" %>
       <% end %>
