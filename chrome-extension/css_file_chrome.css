@@ -19,8 +19,9 @@
   overflow: auto;
   position: relative;
   width: 60%;
-  min-height: 150px;
-
+  height: 0px;
+  transition: all 0.3s ease-in-out;
+  opacity: 0;
   margin: 10px 0 20px 0;
   padding: 10px 20px;
   border-radius: 5px;
@@ -28,6 +29,11 @@
 
   font-size: 10px;
   font-weight: lighter;
+}
+
+
+.fan-info-recll-opened {
+  height: 150px;
 }
 
 
@@ -80,7 +86,7 @@
 #memo {
     background-color: rgba(93, 93, 93, 0.1);
     width: 91%;
-    min-height: 54px;
+    min-height: 44px;
     margin: 10px auto;
     padding: 8px;
     top: 90px;
@@ -95,4 +101,6 @@
   text-decoration: none;
   color: black;
 }
+
+
 

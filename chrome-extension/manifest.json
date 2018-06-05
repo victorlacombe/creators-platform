@@ -6,7 +6,9 @@
     {
       "matches": ["https://www.youtube.com/*"],
       "js": ["content.js"],
-      "css": ["css_file_chrome.css"]
+      "css": ["css_file_chrome.css"],
+      "run_at": "document_end"
+
     }
   ],
 

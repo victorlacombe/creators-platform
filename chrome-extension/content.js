@@ -24,96 +24,145 @@ dashboardCommentAuthors.forEach(function(dashboardCommentAuthor) {
 // Do not use the 'NodeInserted' event, since Youtube seems to load a lot of new
 // nodes even after page DOM is Loaded
 
-setInterval(function() {
-  // select the main div that contains the comment block and the profil picture
-  const commentMainDivs = document.querySelectorAll("#body")
-  commentMainDivs.forEach(function(commentMainDiv) {
-    // select the header-author (the header of the comment div)
-    const videoCommentAuthor = commentMainDiv.querySelector("#header-author");
-    if (videoCommentAuthor.querySelector('.btn-see-details-recll')) {
-      // do nothing, the "see fan details" button is already present
+//-------------   Identify if the user is on a video of his own --------------
+
+
+let interval;
+
+setTimeout(function() {
+
+  const userChannelId = document.querySelector('#owner-name a').getAttribute("href").match(/\/channel\/(.*)/)[1]
+  console.log(userChannelId)
+
+  fetch(`${BASE_URL}/api/v1/users/verif?query=${userChannelId}`)
+  .then(response => {
+    if (response.status == 500) {
+
+      // Remove "See fan details" button from the former page
+
+      // const visibleSeeFanDetailsButtons = document.querySelectorAll(".btn-see-details-recll")
+      // console.log(visibleSeeFanDetailsButtons)
+      // console.log(visibleSeeFanDetailsButtons.length)
+      // if (visibleSeeFanDetailsButtons.length > 0) {
+      //   for (i = 0; i < visibleSeeFanDetailsButtons.length; i++ ) {
+      //     visibleSeeFanDetailsButtons[i].remove()
+      //   }
+      // }
+
     } else {
-
-      videoCommentAuthor.insertAdjacentHTML("beforeend", '<a class="btn-see-details-recll">See fan details</a>');
-
-      let insertedLink = videoCommentAuthor.querySelector('.btn-see-details-recll')
-      // Then implement the next block to reconciliate data between YouTube and our App
-      if (insertedLink) {
-        insertedLink.addEventListener('click', function(event) {
-
-//---------- 1.  Remove former opened popup when openning a new one ------------
-
-
-          const visibleInfoWindow = document.querySelector(".fan-info-recll")
-          if (visibleInfoWindow) {
-            visibleInfoWindow.remove()
-          }
-
-//-------------------- 2.  retrieve the fan's fanPictureUrl --------------------
-
-          const fanPicture = commentMainDiv.querySelector("#author-thumbnail #img")
-          const fanPictureUrl = fanPicture.getAttribute("src").match(/(.*)\/s\d+/)[1]
-          console.log(fanPictureUrl)
-
-//---------------- 3. Request the DB to get the fan information ----------------
-
-          fetch(`${BASE_URL}/api/v1/fans?query=${fanPictureUrl}`)
-          .then(response => response.json())
-          .then((data) => {
-            // console.log(data)
-            // Retrieving the fan id
-            const fanId = data[0].id
-            // Retrieving the fan username
-            const userName = data[0].youtube_username
-            // Retrieving the fan comment number
-            const commentsNumber = data[0]["comments"].length
-            // Retrieving the memo
-            if (data[0]["memo"]["memo_details"]["content"].length === 0) {
-              memoContent = `<a href="https://www.recll.xyz/fans/${fanId}" target="_blank" class="href">Add a memo</a>`
-            } else {
-              memoContent = `Memo: ${data[0]["memo"]["memo_details"]["content"]}`
+      // OK// fetch(`${BASE_URL}/api/v1/fans?query=${fanPictureUrl}`)
+      const currentUserYoutubeId = userChannelId;
+      interval = setInterval(function() {
+        // select the main div that contains the comment block and the profil picture
+        const commentMainDivs = document.querySelectorAll("#body")
+        commentMainDivs.forEach(function(commentMainDiv) {
+          // select the header-author (the header of the comment div)
+          const videoCommentAuthor = commentMainDiv.querySelector("#header-author");
+          if (videoCommentAuthor.querySelector('.btn-see-details-recll')) {
+            // do nothing, the "see fan details" button is already present
+            // récupérer l'id youtube la page actuelle (après potentielle navigation)
+            const newUserChannelId = document.querySelector('#owner-name a').getAttribute("href").match(/\/channel\/(.*)/)[1];
+            if (newUserChannelId !== currentUserYoutubeId) {
+              videoCommentAuthor.querySelector('.btn-see-details-recll').remove();
             }
+          } else {
+            videoCommentAuthor.insertAdjacentHTML("beforeend", '<a class="btn-see-details-recll">See fan details</a>');
 
-            // Retrieving the fan's profil picture
-            const profilPictureUrl = data[0].profile_picture_url
-            // Retrieving the fan's number of video commented
-            let videoIds = []
-            for (i = 0; i < data[0]["comments"].length; i++) {
-              videoIds.push(data[0]["comments"][i].video_id)
-              numberOfCommentedVideos = videoIds.filter(function(item, pos, self) {
-                return self.indexOf(item) == pos;
+            let insertedLink = videoCommentAuthor.querySelector('.btn-see-details-recll')
+            // Then implement the next block to reconciliate data between YouTube and our App
+            if (insertedLink) {
+              insertedLink.addEventListener('click', function(event) {
+
+      //---------- 1.  Remove former opened popup when openning a new one ------------
+
+
+                const visibleInfoWindow = document.querySelector(".fan-info-recll")
+                if (visibleInfoWindow) {
+                  visibleInfoWindow.remove()
+                }
+
+      //-------------------- 2.  retrieve the fan's fanPictureUrl --------------------
+
+                const fanPicture = commentMainDiv.querySelector("#author-thumbnail #img")
+                const fanPictureUrl = fanPicture.getAttribute("src").match(/(.*)\/s\d+/)[1]
+                console.log(fanPictureUrl)
+
+      //---------------- 3. Request the DB to get the fan information ----------------
+
+                fetch(`${BASE_URL}/api/v1/fans?query=${fanPictureUrl}`)
+                .then(response => response.json())
+                .then((data) => {
+                  return new Promise((resolve) => {
+                    // console.log(data)
+                    // Retrieving the fan id
+                    const fanId = data[0].id
+                    // Retrieving the fan username
+                    const userName = data[0].youtube_username
+                    // Retrieving the fan comment number
+                    const commentsNumber = data[0]["comments"].length
+                    // Retrieving the memo
+                    if (data[0]["memo"]["memo_details"]["content"].length === 0) {
+                      memoContent = `<a href="https://www.recll.xyz/fans/${fanId}" target="_blank" class="href">Add a memo</a>`
+                    } else {
+                      memoContent = `Memo: ${data[0]["memo"]["memo_details"]["content"]}`
+                    }
+
+                    // Retrieving the fan's profil picture
+                    const profilPictureUrl = data[0].profile_picture_url
+                    // Retrieving the fan's number of video commented
+                    let videoIds = []
+                    for (i = 0; i < data[0]["comments"].length; i++) {
+                      videoIds.push(data[0]["comments"][i].video_id)
+                      numberOfCommentedVideos = videoIds.filter(function(item, pos, self) {
+                        return self.indexOf(item) == pos;
+                      })
+                    }
+                    // Retrieving the fan's last comment date
+                    let commentsDates = []
+                    for (i = 0; i < data[0]["comments"].length; i++) {
+                      console.log(commentsDates)
+                      commentsDates.push(data[0]["comments"][i].published_at)
+                      lastcommentDate = new Date(commentsDates.sort()[commentsDates.length - 1]).toLocaleDateString('en-GB')
+                      console.log(lastcommentDate)
+                      }
+                    // Retrieving the fan's first activity date
+
+        //------------------- 4. Inject the retrived data in the DOM -------------------
+
+                    commentMainDiv.insertAdjacentHTML("beforebegin",
+                      `<div class="fan-info-recll">
+                        <img src="${profilPictureUrl}" alt="" />
+                        <h3>${userName}</h3>
+                        <a id="more-details" target=”_blank” href=https://www.recll.xyz/fans/${fanId}> See more details</a>
+                        <p id="commentNumber">Commented ${commentsNumber} time(s) on your videos</p>
+                        <p id="nb-of-video-commented">Total video commented: ${numberOfCommentedVideos.length}</p>
+                        <p id="last-comment-date">Latest comment: ${lastcommentDate}</p>
+                        <div id="memo">
+                          ${memoContent}
+                        </div>
+                      </div>`)
+                    resolve("ok to launch transition");
+                  });
+                }).then((data) => {
+                  console.log(data);
+                  // document.querySelector(".fan-info-recll").classList.add("fan-info-recll-opened");
+                  setTimeout(() => {
+                    commentMainDiv.parentElement.querySelector(".fan-info-recll").style.opacity = "1";
+                    commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "150px";
+                  }, 50)
+                })
               })
             }
-            // Retrieving the fan's last comment date
-            let commentsDates = []
-            for (i = 0; i < data[0]["comments"].length; i++) {
-              console.log(commentsDates)
-              commentsDates.push(data[0]["comments"][i].published_at)
-              lastcommentDate = commentsDates.sort()[commentsDates.length - 1]
-              }
-
-
-//------------------- 4. Inject the retrived data in the DOM -------------------
-
-            commentMainDiv.insertAdjacentHTML("beforebegin",
-              `<div class="fan-info-recll">
-                <img src="${profilPictureUrl}" alt="" />
-                <h3>${userName}</h3>
-                <a id="more-details" target=”_blank” href=https://www.recll.xyz/fans/${fanId}> See more details</a>
-                <p id="commentNumber">Commented ${commentsNumber} time(s) on your videos</p>
-                <p id="nb-of-video-commented">Total video commented: ${numberOfCommentedVideos.length}</p>
-                <p id="last-comment-date">Last comment: ${lastcommentDate}</p>
-                <div id="memo">
-                  ${memoContent}
-                </div>
-
-              </div>`)
-          })
+          }
         })
-      }
+      }, 50);
+
+      document.addEventListener('yt-navigate', function() {
+        clearInterval(interval);
+      });
     }
   })
-}, 100);
+}, 8000);
 
 
 
