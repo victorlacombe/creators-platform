@@ -41,9 +41,21 @@
         <!-- ---------------------------------------------------------------------------- -->
         <!-- ----------------This is the video thumbnail left of the comments------------ -->
         <!-- ---------------------------------------------------------------------------- -->
+
+        <!-- For mobile -->
+        <div class="video-card-mobile hidden-md hidden-lg hidden-xl">
+          <%= link_to "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' do %>
+            <%= image_tag  video.thumbnail.gsub(/default/, 'mqdefault') %>
+          <% end %>
+          <div class='btn-tab'>
+            <%= link_to video.title, "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' %>
+          </div>
+        </div>
+
         <div class="video-comment-card">
 
-          <div class="video-card">
+          <!-- For large screens -->
+          <div class="video-card hidden-xs hidden-sm">
             <%= link_to "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' do %>
               <%= image_tag  video.thumbnail%>
             <% end %>
@@ -51,6 +63,8 @@
               <%= link_to video.title, "http://youtube.com/watch?v=" + video.video_id_youtube, target: '_blank' %>
             </div>
           </div>
+
+
 
         <!-- --------------------------------------------------------- -->
         <!-- ---------------- This is the comments section------------ -->

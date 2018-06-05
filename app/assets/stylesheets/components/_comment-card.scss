@@ -78,12 +78,27 @@ h3 {
 }
 
 .video-card {
-  margin-right: 20px;
+  margin-right: 40px;
   img {
     width: 180px;
   }
   .btn-tab, a {
     max-width: 160px;
+    text-align: center;
+    margin-top: 10px;
+    font-size: 14px;
+    font-weight: bolder;
+    color: #283149;
+    border-bottom: none;
+  }
+}
+
+.video-card-mobile {
+  img {
+    width: 100%;
+    margin-top: 40px;
+  }
+  .btn-tab, a {
     text-align: center;
     margin-top: 10px;
     font-size: 14px;
