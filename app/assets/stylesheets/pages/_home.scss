@@ -57,10 +57,12 @@
 
 .text-left {
   flex: 0 0 50%;
-  padding: 25px;
+  padding: 35px;
 }
 
 .img-right {
   flex: 0 0 50%;
   height: calc(100vh - 90px);
+  background-repeat: no-repeat;
+  background-size: cover;
 }
