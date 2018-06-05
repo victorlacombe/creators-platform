@@ -28,18 +28,12 @@
 .wrapper-join {
   font-size: 2em;
   text-align: center;
-  background-color: $purple;
   background-image: linear-gradient(to right, #0241ba, #0062cf, #0080dd, #009be5, #1eb6ea);
   height: 45vh;
   color: white;
   display: flex;
   align-items: center;
-    .banner-join {
-      font-weight: 300;
-        p {
-        font-weight: 300;
-        }
-    }
+  opacity: 1;
 }
 
 .wrapper-testimonials {
