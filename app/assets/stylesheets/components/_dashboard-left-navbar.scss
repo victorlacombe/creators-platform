@@ -1,7 +1,7 @@
 /*---------------------------- Navbar  container -----------------------------*/
 
 .dashboard-left-navbar {
-  height: calc(100vh - 80px);
+  height: 100vh;
   flex-shrink: 0; // avoid shrinking
   flex-basis: 100px; // min width
   background: white;
