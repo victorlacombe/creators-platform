@@ -1,0 +1,44 @@
+.stats-card {
+  background: white;
+  display: flex;
+  flex-flow: column;
+  margin: 20px 5px;
+  box-shadow: 1px 1px 20px #ddd;
+  height: 300px;
+  align-items: center;
+  justify-content: center;
+}
+.stats-label {
+  position: absolute;
+  color: #aaa;
+  font-size: 16px;
+  top: 30px;
+  left: 30px;
+}
+.stats-content {
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  background-color: rgb(250, 250, 250);
+  border-radius: 50%;
+  width: 230px;
+  height: 230px;
+  .stats-number {
+    font-size: 34px;
+    font-weight: bolder;
+  }
+  .stats-numberlabel {
+    font-size: 16px;
+    font-weight: bolder;
+  }
+  .stats-numbersublabel {
+    padding-top: 10px;
+    font-size: 12px;
+    font-weight: lighter;
+    color: #aaa;
+    width: 50%
+  }
+}
+

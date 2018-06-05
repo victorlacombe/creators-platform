@@ -1,32 +1,26 @@
-<% fans.each do |fan| %>
-  <div class="col-xs-12 col-sm-6 col-md-4">
-    <div class="fard">
-      <div class="fard-top">
-        <div class="fard-top-left">
-          <%= image_tag fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-medium" %>
-          <div class="atxt">
-            <span><%= link_to fan.youtube_username.capitalize, fan_path(fan)%>
+<div class="fan-cards">
+    <% fans.each do |fan| %>
+        <%#= link_to fan_path(fan) do%>
+        <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+          <div class="fan-card ">
+            <div class="fan-card-infos">
+              <div class ="fan-name"><%= fan.youtube_username.capitalize %></div>
+              <% comment_first = fan.comments.order(published_at: :asc).first %>
+              <div class="fan-since">Fan since <% c_first = comment_first.published_at %><%= time_ago_in_words(c_first) %></div>
+            </div>
+            <div class="fan-card-avatar">
+              <%= image_tag fan.profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-large" %>
+            </div>
+            <div class="fan-card-channel">
+              <%= link_to "Fan Channel", "https://www.youtube.com/channel/#{fan.channel_id_youtube}", target: "_blank"%>
+            </div>
+            <div class="fan-card-activity">
+              <div class="fan-card-activity-left">Active <%= time_ago_in_words(fan.comments.last.published_at) %> ago</div>
+              <div class="fan-card-activity-right"><i class="far fa-comments"></i> <%= fan.comments.count %></div>
+            </div>
           </div>
         </div>
-        <div class="fard-top-right">
-        </div>
-      </div>
-      <div class="fard-bottom">
-        <div class="fard-bottom-left">
-          <ul>
-            <li>
-              <i class="fas fa-comments"></i>
-              <span><%= fan.comments.count %></span>
-            </li>
-            <li>
-              <span>Active <%= time_ago_in_words(fan.comments.last.published_at) %> ago</span>
-            </li>
-          </ul>
-        </div>
-        <div class="fard-bottom-right">
-          <%= link_to "fan channel", "https://www.youtube.com/channel/#{fan.channel_id_youtube}", target: "_blank"%>
-        </div>
-      </div>
-    </div>
+      <%# end %>
+    <% end %>
   </div>
-<% end %>
+</div>
