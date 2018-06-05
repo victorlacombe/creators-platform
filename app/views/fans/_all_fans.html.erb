@@ -5,6 +5,7 @@
           <div class="fan-card ">
             <div class="fan-card-infos">
               <div class ="fan-name"><%= fan.youtube_username.capitalize %></div>
+              <%= link_to "", fan_path(fan), class: "fan-card-link" %>
               <% comment_first = fan.comments.order(published_at: :asc).first %>
               <div class="fan-since">Fan since <% c_first = comment_first.published_at %><%= time_ago_in_words(c_first) %></div>
             </div>
