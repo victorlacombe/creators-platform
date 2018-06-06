@@ -1,3 +1,7 @@
+<!-- For mobile view -->
+<%= render 'shared/dashboard-left-navbar-on-top' %>
+<!-- For mobile view -->
+
 <div class="dashboard-content">
   <!-- DASHBOARD LEFT NAVBAR BEGINS HERE -->
   <%= render 'shared/dashboard-left-navbar' %>
@@ -6,6 +10,19 @@
   <div class="dashboard-right-content">
     <h1 class="text-center">Hello <%= current_user.first_name.nil? ? current_user.channel_name : current_user.first_name.capitalize  %> !</h1>
     <div class="container">
+
+      <!-- Search bar Mobile -->
+      <% if params[:controller] == "fans" %>
+        <div class="navbar-searchbar hidden-md hidden-lg hidden-xl">
+          <%= form_tag fans_path, method: :get do %>
+          <%= text_field_tag :query,
+          params[:query],
+          class: "form-control",
+          placeholder: "Search a fan"%>
+          <% end %>
+        </div>
+      <% end %>
+
       <% if params[:query] == "" || params[:query].nil? %>
         <div class="row">
           <div class="col-xs-12 col-sm-12 col-md-4">

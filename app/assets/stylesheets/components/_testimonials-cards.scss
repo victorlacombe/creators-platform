@@ -1,14 +1,13 @@
-.flex-container, .testimonials {
-    justify-content: space-around;
+.testimonials {
+    // justify-content: space-around;
     margin-top: 70px;
     margin-bottom: 50px;
 }
 
-.review {
+.testimonial-review {
   background-color: white;
   border-radius: 3px;
   height: 270px;
-  width: 256px;
   margin-bottom: 55px;
   text-align: center;
   padding: 30px;
