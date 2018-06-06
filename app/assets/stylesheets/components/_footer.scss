@@ -7,6 +7,18 @@
   padding: 0px 50px;
   color: rgba(0,0,0,0.3);
 }
+
+.footer-mobile {
+  background: #FFFFFF;
+  display: flex;
+  flex-flow: column;
+  align-items: center;
+  justify-content: space-around;
+  height: 100px;
+  padding: 0px 50px;
+  color: rgba(0,0,0,0.3);
+}
+
 .footer-links {
   display: flex;
   align-items: center;
