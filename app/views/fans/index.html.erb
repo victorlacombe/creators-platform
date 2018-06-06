@@ -60,9 +60,11 @@
         <div id="all-fans"> <!-- Used for kaminari infinite scrolling -->
           <%= render "fans/all_fans", fans: @fans %>
         </div>
+        <div class="pagination-container">
+          <%= render "fans/pagination", fans: @fans %>
+        </div>
       </div>
 
-      <%= paginate @fans, remote: true %>
     </div>
   </div>
 </div>

@@ -10,21 +10,22 @@ class FansController < ApplicationController
       # .page is from Kaminari gem
       @fans = User.includes(fans: :comments).find(current_user.id).fans.where.not(channel_id_youtube: current_user.channel_id_youtube).page(params[:page]).per(4*3)
     end
-    @all_time_fans = User.includes(fans: :comments).find(current_user.id).fans.where.not(channel_id_youtube: current_user.channel_id_youtube)
-    @last_month_new_fans = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user.id, Date.today - 1.month).group(:fan).count.reject { |k, v| v > 1 }
-
-    fans_with_one_to_three_comment_before_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at < ?", current_user.id, Date.today - 1.month).having("count(comments.id) < 4").group(:fan).count.keys
-    fans_with_at_least_one_comments_during_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user.id, Date.today - 1.month).having("count(comments.id) > 0").group(:fan).count.keys
-    @last_month_new_loyal_fans = fans_with_one_to_three_comment_before_last_month & fans_with_at_least_one_comments_during_last_month
-
-    all_time_fans = Comment.joins(fan: :comments, video: :user).where("users.id = ?", current_user).having("count(comments.id) > 0").group(:fan).count.keys
-    fans_who_commented_during_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user, Date.today - 2.month).having("count(comments.id) > 0").group(:fan).count.keys
-    @churning_fans = all_time_fans - fans_who_commented_during_last_month
-
-    @top_fans = all_time_fans - @churning_fans
 
     respond_to do |format|
-      format.html
+      format.html do
+        @all_time_fans = User.includes(fans: :comments).find(current_user.id).fans.where.not(channel_id_youtube: current_user.channel_id_youtube)
+        @last_month_new_fans = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user.id, Date.today - 1.month).group(:fan).count.reject { |k, v| v > 1 }
+
+        fans_with_one_to_three_comment_before_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at < ?", current_user.id, Date.today - 1.month).having("count(comments.id) < 4").group(:fan).count.keys
+        fans_with_at_least_one_comments_during_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user.id, Date.today - 1.month).having("count(comments.id) > 0").group(:fan).count.keys
+        @last_month_new_loyal_fans = fans_with_one_to_three_comment_before_last_month & fans_with_at_least_one_comments_during_last_month
+
+        all_time_fans = Comment.joins(fan: :comments, video: :user).where("users.id = ?", current_user).having("count(comments.id) > 0").group(:fan).count.keys
+        fans_who_commented_during_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user, Date.today - 2.month).having("count(comments.id) > 0").group(:fan).count.keys
+        @churning_fans = all_time_fans - fans_who_commented_during_last_month
+
+        @top_fans = all_time_fans - @churning_fans
+      end
       format.js
     end
   end
