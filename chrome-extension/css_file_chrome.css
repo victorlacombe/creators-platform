@@ -5,18 +5,23 @@
   cursor: pointer;
   font-size: 10px;
   color: white;
-  background-color: red;
-  font-weight: bolder;
+  background-color: rgba(255, 0, 0, 1);
+  font-weight: lighter;
   border: 1px solid red;
   border-radius: 20px;
   margin-left: 20px;
   padding: 5px 10px
 }
 
+.btn-see-details-recll:hover {
+
+}
+
+
 /* ----------------------- Fan details main section ------------------------- */
 
 .fan-info-recll {
-  overflow: auto;
+  /*overflow: auto;*/
   width: 60%;
   height: 0px;
   transition: all 0.3s ease-in-out;
