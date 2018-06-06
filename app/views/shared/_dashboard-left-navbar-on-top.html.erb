@@ -2,7 +2,8 @@
   <div class="dashboard-left-navbar-components-mobile">
       <div>
         <span>
-        <%= link_to fans_path do %>
+        <% class_name = (params[:controller] == "fans" && params[:action] == "index" ? "active" : "") %>
+        <%= link_to fans_path, class: class_name do %>
           <i class="fas fa-users"></i>
           <br>All
         <% end -%>
@@ -10,7 +11,8 @@
       </div>
       <div>
         <span>
-        <%= link_to top_fans_fans_path do %>
+        <% class_name = (params[:controller] == "fans" && params[:action] == "top_fans" ? "active" : "") %>
+        <%= link_to top_fans_fans_path, class: class_name do %>
           <i class="fas fa-crown"></i>
           <br>Top fans
         <% end -%>
@@ -18,7 +20,8 @@
       </div>
       <div>
         <span>
-        <%= link_to new_fans_fans_path do %>
+        <% class_name = (params[:controller] == "fans" && params[:action] == "new_fans" ? "active" : "") %>
+        <%= link_to new_fans_fans_path, class: class_name do %>
           <i class="fas fa-child"></i>
           <br>New fans
         <% end -%>
@@ -26,7 +29,8 @@
       </div>
       <div>
         <span>
-        <%= link_to new_loyal_fans_fans_path do %>
+        <% class_name = (params[:controller] == "fans" && params[:action] == "new_loyal_fans" ? "active" : "") %>
+        <%= link_to new_loyal_fans_fans_path, class: class_name do %>
           <i class="fas fa-star"></i>
           <br>New loyal<br>fans
         <% end -%>
@@ -34,7 +38,8 @@
       </div>
       <div>
         <span>
-        <%= link_to sleeping_fans_path do %>
+        <% class_name = (params[:controller] == "fans" && params[:action] == "sleeping" ? "active" : "") %>
+        <%= link_to sleeping_fans_path, class: class_name do %>
           <i class="fa fa-bed"></i>
           <br>Sleeping<br>fans
         <% end -%>
