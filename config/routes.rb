@@ -7,6 +7,9 @@ Rails.application.routes.draw do
 
   # the callback routes are defined for omniauth
   devise_for :users, controllers: { omniauth_callbacks: 'users/omniauth_callbacks' }
+  authenticated :user do
+    root 'fans#index', as: :authenticated_root
+  end
   root to: 'pages#home'
   get 'confidentiality', to: 'pages#confidentiality', as: :confidentiality
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
