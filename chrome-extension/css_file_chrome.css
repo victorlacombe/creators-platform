@@ -67,6 +67,8 @@
   padding: 6px;
   background: lightblue;
   color: white;
+  width: 100px;
+  text-align: center;
 }
 
 #more-details:hover {
@@ -170,7 +172,7 @@
 
 .button-memo a {
   color: white;
-  margin-top: 20px;
+  /*margin-top: 20px;*/
   padding: 10px 15px;
   border-radius: 4px;
   background-color: rgba(0, 184, 244, 1);
