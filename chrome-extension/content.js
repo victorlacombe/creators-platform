@@ -1,4 +1,4 @@
-DEV = true;
+DEV = false;
 
 BASE_URL = DEV ? "http://localhost:3000" : "https://www.recll.xyz";
 
@@ -113,7 +113,8 @@ const allScript = function() {
                       </div>`
 
                     } else {
-                      memoContent = `<p id="memo">${data[0]["memo"]["memo_details"]["content"]}</p>`
+                      memoContent = `<p id="memo">${data[0]["memo"]["memo_details"]["content"]}</p>
+                      <p id="expand-memo">Show more</p>`
                     }
 
                     // Retrieving the fan's profil picture
@@ -176,9 +177,22 @@ const allScript = function() {
                   console.log(data);
                   setTimeout(() => {
                     commentMainDiv.parentElement.querySelector(".fan-info-recll").style.opacity = "1";
-                    commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "185px";
+                    commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "210px";
+                    const showMore = document.querySelector("#expand-memo")
+                    showMore.addEventListener("click", function () {
+                      console.log(`I'M IN !!!!!!!!!!!!`)
+                      if (showMore.innerText === "Show more") {
+                        commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "initial";
+                        showMore.innerText = "Show less"
+                      }
+                      else {
+                        showMore.innerText = "Show more"
+                        commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "210px";
+                      }
+                    })
                   }, 50)
                 })
+
               })
             }
           }
@@ -192,7 +206,6 @@ const allScript = function() {
     }
   })
 }
-
 allScript();
 
 
