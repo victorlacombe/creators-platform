@@ -114,7 +114,7 @@ const allScript = function() {
 
                     } else {
                       memoContent = `<p id="memo">${data[0]["memo"]["memo_details"]["content"]}</p>
-                      <p id="expand-memo">Show more</p>`
+                      <p id="resize-memo">show more</p>`
                     }
 
                     // Retrieving the fan's profil picture
@@ -132,7 +132,8 @@ const allScript = function() {
                     for (i = 0; i < data[0]["comments"].length; i++) {
                       console.log(commentsDates)
                       commentsDates.push(data[0]["comments"][i].published_at)
-                      lastcommentDate = new Date(commentsDates.sort()[commentsDates.length - 1]).toLocaleDateString('fr-FR')
+                      var options = { year: 'numeric', month: 'short', day: 'numeric' };
+                      lastcommentDate = new Date(commentsDates.sort()[commentsDates.length - 1]).toLocaleDateString('en-GB', options)
                       console.log(lastcommentDate)
                       }
                     // Retrieving the fan's first activity date
@@ -150,7 +151,6 @@ const allScript = function() {
                               </div>
                               <a id="more-details" target=”_blank” href=https://www.recll.xyz/fans/${fanId}> See more details</a>
                             </div>
-
 
                             <div class="stats-section">
                               <div class="comments-section">
@@ -178,21 +178,26 @@ const allScript = function() {
                   setTimeout(() => {
                     commentMainDiv.parentElement.querySelector(".fan-info-recll").style.opacity = "1";
                     commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "210px";
-                    const showMore = document.querySelector("#expand-memo")
-                    showMore.addEventListener("click", function () {
-                      console.log(`I'M IN !!!!!!!!!!!!`)
-                      if (showMore.innerText === "Show more") {
-                        commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "initial";
-                        showMore.innerText = "Show less"
-                      }
-                      else {
-                        showMore.innerText = "Show more"
-                        commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "210px";
-                      }
-                    })
+                    const showMore = document.querySelector("#resize-memo")
+                    if (commentMainDiv.parentElement.querySelector(".memo-section").offsetHeight < 65) {
+                      console.log('div:', commentMainDiv.parentElement.querySelector(".memo-section"))
+                      showMore.remove()
+                    }
+                    else {
+                      showMore.addEventListener("click", function () {
+                        console.log(`I'M IN !!!!!!!!!!!!`)
+                        if (showMore.innerText === "show more") {
+                          commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "initial";
+                          showMore.innerText = "Show less"
+                        }
+                        else {
+                          showMore.innerText = "show more"
+                          commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "220px";
+                        }
+                      })
+                    }
                   }, 50)
                 })
-
               })
             }
           }
@@ -206,6 +211,7 @@ const allScript = function() {
     }
   })
 }
+
 allScript();
 
 
