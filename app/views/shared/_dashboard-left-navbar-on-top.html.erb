@@ -1,0 +1,44 @@
+<div class="dashboard-left-navbar-on-top hidden-sm hidden-md hidden-lg hidden-xl">
+  <div class="dashboard-left-navbar-components-mobile">
+      <div>
+        <span>
+        <%= link_to fans_path do %>
+          <i class="fas fa-users"></i>
+          <br>All
+        <% end -%>
+        </span>
+      </div>
+      <div>
+        <span>
+        <%= link_to top_fans_fans_path do %>
+          <i class="fas fa-crown"></i>
+          <br>Top fans
+        <% end -%>
+        </span>
+      </div>
+      <div>
+        <span>
+        <%= link_to new_fans_fans_path do %>
+          <i class="fas fa-child"></i>
+          <br>New fans
+        <% end -%>
+        </span>
+      </div>
+      <div>
+        <span>
+        <%= link_to new_loyal_fans_fans_path do %>
+          <i class="fas fa-star"></i>
+          <br>New loyal<br>fans
+        <% end -%>
+        </span>
+      </div>
+      <div>
+        <span>
+        <%= link_to sleeping_fans_path do %>
+          <i class="fa fa-bed"></i>
+          <br>Sleeping<br>fans
+        <% end -%>
+        </span>
+      </div>
+  </div>
+</div>

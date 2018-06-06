@@ -1,9 +1,9 @@
 // Specific CSS for your home-page
-.flex-container {
-  display: flex;
-  justify-content: space-around;
-  align-items: stretch;
-}
+// .flex-container {
+//   display: flex;
+//   justify-content: space-around;
+//   align-items: stretch;
+// }
 
 .arguments-elements {
   margin-top: 80px;
@@ -12,28 +12,43 @@
 }
 
 .wrapper-why {
-  font-size: 3em;
+  font-size: 2.5em;
   text-align: center;
   background-color: $purple;
   background-image: linear-gradient(to right, #0241ba, #0062cf, #0080dd, #009be5, #1eb6ea);
-  height: 40vh;
   color: white;
-  display: flex;
-  align-items: center;
+  // display: flex;
+  // align-items: center;
     .banner-why {
       font-weight: 300;
     }
+}
+
+.flex-why {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  padding: 10vh 0px;
 }
 
 .wrapper-join {
   font-size: 2em;
   text-align: center;
   background-image: linear-gradient(to right, #0241ba, #0062cf, #0080dd, #009be5, #1eb6ea);
-  height: 45vh;
+  // height: 45vh;
   color: white;
+  // display: flex;
+  // align-items: center;
+  opacity: 1;
+}
+
+.flex-join {
   display: flex;
   align-items: center;
-  opacity: 1;
+  justify-content: center;
+  height: 100%;
+  padding: 10vh 0px;
 }
 
 .wrapper-testimonials {
