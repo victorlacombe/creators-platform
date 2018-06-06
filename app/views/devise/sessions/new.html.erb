@@ -1,27 +1,28 @@
-<div class="container">
-  <div class="row">
-    <div class="col-xs-12 col-sm-4 col-sm-offset-4">
-      <div class="form-login">
-        <h2>Login</h2>
-        <%- if devise_mapping.omniauthable? %>
-          <%- resource_class.omniauth_providers.each do |provider| %>
-            <%= link_to omniauth_authorize_path(resource_name, provider), class: "btn btn-danger " do %>
-              <i class="fab fa-youtube"></i> Log in with YouTube
+<div class="wrapper-log" style="background-image: linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url('<%= image_url "log_background.png"%>')">
+  <div class="container">
+    <div class="row">
+      <div class="col-xs-12 col-sm-4 col-sm-offset-4">
+        <div class="form-login">
+          <h2>Login</h2>
+          <%- if devise_mapping.omniauthable? %>
+            <%- resource_class.omniauth_providers.each do |provider| %>
+              <%= link_to omniauth_authorize_path(resource_name, provider), class: "btn btn-danger " do %>
+                <i class="fab fa-youtube"></i> Login with YouTube
+              <% end -%>
             <% end -%>
           <% end -%>
-        <% end -%>
-<!--         <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
-          <div class="form-inputs">
-            <%= f.input :email, required: false, autofocus: true, placeholder: "elon@tesla.com" %>
-            <%= f.input :password, required: false, placeholder: "••••••" %>
-            <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
-          </div>
-          <div class="form-actions">
-            <%= f.button :submit, "Log in", class: "btn btn-danger" %>
-          </div>
-        <% end %> -->
-
-        <%= render "devise/shared/links" %>
+  <!--         <%= simple_form_for(resource, as: resource_name, url: session_path(resource_name)) do |f| %>
+            <div class="form-inputs">
+              <%= f.input :email, required: false, autofocus: true, placeholder: "elon@tesla.com" %>
+              <%= f.input :password, required: false, placeholder: "••••••" %>
+              <%= f.input :remember_me, as: :boolean if devise_mapping.rememberable? %>
+            </div>
+            <div class="form-actions">
+              <%= f.button :submit, "Log in", class: "btn btn-danger" %>
+            </div>
+          <% end %> -->
+          <%= render "devise/shared/links" %>
+        </div>
       </div>
     </div>
   </div>

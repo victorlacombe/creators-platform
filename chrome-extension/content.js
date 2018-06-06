@@ -1,4 +1,4 @@
-DEV = false;
+DEV = true;
 
 BASE_URL = DEV ? "http://localhost:3000" : "https://www.recll.xyz";
 

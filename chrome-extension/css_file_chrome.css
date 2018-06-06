@@ -129,19 +129,19 @@
 
 
 #memo {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  min-width: 100%;
-  min-height: 44px;
-  padding: 10px;
+display: flex;
+align-items: center;
+justify-content: center;
+min-width: 100%;
+min-height: 44px;
+padding: 10px;
 
-  border-radius: 5px;
-  background-color: rgba(220, 220, 220, 0.08);
+border-radius: 5px;
+background-color: rgba(220, 220, 220, 0.08);
 
-  text-align: justify;
-  line-height: 20px;
-  font-size: 12px;
+text-align: justify;
+line-height: 20px;
+font-size: 12px;
 }
 
 .button-memo {

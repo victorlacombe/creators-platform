@@ -1,18 +1,13 @@
 <%= content_for(:navbar_class, "navbar-home") %>
 
-<!-- <div class="banner">
-  <div class="banner-content text-center">
-    <h1>Build a one-to-one relationship with your fans!</h1>
-    <p>Take care of your fans : Improve your social media experience</p>
-    <%= link_to "GET STARTED", fans_path, class: "btn btn-lg btn-danger"  %>
-  </div>
-</div> -->
-
 <div class="background">
   <div class="text-left">
     <h1>Build a one-to-one relationship with your fans!</h1>
     <p>Take care of your fans : Improve your social media experience</p>
-    <%= link_to "GET STARTED", fans_path, class: "btn btn-lg btn-danger"  %>
+    <%= link_to fans_path, class: "btn btn-danger " do %>
+      <i class="fab fa-youtube"></i> Get Started
+    <% end -%>
+
   </div>
   <div class="img-right hidden-xs" style="background-image: url('<%= image_url "img-right.png" %>')">
   </div>
@@ -24,18 +19,21 @@
       <div class="row">
         <div class="col-xs-12 col-md-4">
           <p><%= image_tag "icons/contact.png", alt: "One tool", width: 200 %> </p>
-          <p>Access <strong>easily</strong> to your fans informations</p>
+          <p><strong>Easily access</strong> information </p>
+          <p>from your subscribers</p>
         </div>
     <div class="argument">
       <div class="col-xs-12 col-md-4">
         <p><%= image_tag "icons/phone-new-message.png", alt: "One tool", width: 200 %> </p>
-        <p><strong>Taylor-made</strong> your replies &  make <strong>meaningful</strong> conversations</p>
+        <p><strong>Tailor answers</strong> and</p>
+        <p><strong>meaningful</strong> conversations</p>
       </div>
     </div>
     <div class="argument">
       <div class="col-xs-12 col-md-4">
         <p><%= image_tag "icons/monitor-window.png", alt: "One tool", width: 200 %> </p>
-        <p><strong>One tool</strong> for your all your media accounts & channels</p>
+        <p><strong>One tool</strong> for your YouTube channels</p>
+        <p>and social network accounts</p>
           </div>
         </div>
       </div>
@@ -46,7 +44,7 @@
     <div class="container">
       <div class="banner-why">
       <p>See why <strong>50,000+ creators</strong> </p>
-      <p>use CreatorPlatform daily</p>
+      <p>use recll daily</p>
       </div>
     </div>
   </div>
@@ -109,8 +107,10 @@
   <div class="wrapper-join">
     <div class="container">
       <div class="banner-join">
-      <p>Signing up is fast, easy and completely free</p>
-      <%= link_to "GET STARTED", fans_path, class: "btn btn-lg btn-danger"  %>
+        <p>Signing up is fast, easy and completely free</p>
+        <%= link_to fans_path, class: "yt-button" do %>
+        <i class="fab fa-youtube"></i> Get Started
+        <% end -%>
       </div>
     </div>
   </div>
