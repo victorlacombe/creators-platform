@@ -134,6 +134,7 @@
 
 
 #memo {
+
   display: flex;
   align-items: center;
   justify-content: center;
@@ -169,13 +170,25 @@
 }
 
 .button-memo a:hover {
-  background-color: red;
+  background-color: rgb(70, 154, 224);
+  color: white;
+  width: 91%;
+  min-height: 44px;
+  margin: 10px auto;
+  padding: 8px;
+  top: 90px;
+  left: 10px;
+  border-radius: 5px;
+  position: absolute;
+  line-height: 1.5em;
 }
 
 
 #memo a {
   padding: 5px;
   font-size: 12px;
+  text-decoration: none;
+  color: white;
 }
 
 

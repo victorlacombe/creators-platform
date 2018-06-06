@@ -1,0 +1,49 @@
+<div class="dashboard-content">
+  <!-- DASHBOARD LEFT NAVBAR BEGINS HERE -->
+  <%= render 'shared/dashboard-left-navbar' %>
+  <!-- DASHBOARD LEFT NAVBAR ENDS HERE -->
+
+  <div class="dashboard-right-content">
+    <h1 class="text-center">Your <%= pluralize @last_month_new_fans.size, "new fan" %></h1>
+    <p class="text-center">It's the first time they are writing you a comment</p>
+    <div class="container">
+
+      <div class="row">
+        <div id="all-fans"> <!-- Used for kaminari infinite scrolling -->
+          <div class="fan-cards">
+              <% @last_month_new_fans.each do |fan| %>
+              <% unless fan[0].channel_id_youtube == current_user.channel_id_youtube %>
+                  <%#= link_to fan_path(fan) do%>
+                  <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
+                    <div class="fan-card ">
+                      <div class="fan-card-infos">
+                        <div class ="fan-name"><%= fan[0].youtube_username.capitalize %></div>
+                        <%= link_to "", fan_path(fan), class: "fan-card-link" %>
+                        <% comments = fan[0].comments.sort_by(&:published_at) %> <!-- We use sort by (ruby) to avoid making activerecord request with order -->
+                        <% comment_first = comments[0] %> <!-- We use [0] to avoid making activerecord request! (ex .first) -->
+                        <div class="fan-since">Fan since <% c_first = comment_first.published_at %><%= time_ago_in_words(c_first) %></div>
+                      </div>
+                      <div class="fan-card-avatar">
+                        <%= image_tag fan[0].profile_picture_url.gsub(/\/s28-/, '/s300-'), class: "avatar-large" %>
+                      </div>
+                      <div class="fan-card-channel">
+                        <%= link_to "Fan Channel", "https://www.youtube.com/channel/#{fan[0].channel_id_youtube}", target: "_blank"%>
+                      </div>
+                      <div class="fan-card-activity">
+                        <div class="fan-card-activity-left">Active <%= time_ago_in_words(fan[0].comments[-1].published_at) %> ago</div>
+                        <div class="fan-card-activity-right"><i class="far fa-comments"></i> <%= fan[0].comments.size %></div>
+                      </div>
+                    </div>
+                  </div>
+                <%# end %>
+                <% end %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <%#= paginate @last_month_new_loyal_fans, remote: true %>
+    </div>
+  </div>
+</div>

@@ -1,4 +1,4 @@
-/*ccs.form-login {
+.form-login {
   background: white;
   padding: 10px 20px;
   margin-top: 50px;
@@ -16,6 +16,15 @@
     width: 100%;
     margin-bottom: 20px
   }
+
+  a {
+  }
+}
+
+.wrapper-log {
+  height: 70vh;
+  background-size: cover;
+  background-repeat: no-repeat;
 }
 
 .wrapper-search {
@@ -40,4 +49,3 @@
     }
   }
 }
-*/

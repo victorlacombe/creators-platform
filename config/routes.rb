@@ -10,7 +10,12 @@ Rails.application.routes.draw do
   root to: 'pages#home'
   get 'confidentiality', to: 'pages#confidentiality', as: :confidentiality
   # For details on the DSL available within this file, see http://guides.rubyonrails.org/routing.html
-  resources :fans, only: [:index, :show, :new, :create, :update]
+  resources :fans, only: [:index, :show, :new, :create, :update] do
+    get :top_fans, on: :collection
+    get :new_fans, on: :collection
+    get :sleeping, on: :collection
+    get :new_loyal_fans, on: :collection
+  end
 
   #MEMOS: no need for a memo view, will be displayed in the fans view.
   resources :memos, only: [:create, :edit, :update]
@@ -28,6 +33,8 @@ Rails.application.routes.draw do
       resources :fans, only: [:index]
       resources :users, only: [:index]
       get 'users/verif'
+      resources :videos, only: []
+      get 'videos/find_video_owner'
     end
   end
 end
