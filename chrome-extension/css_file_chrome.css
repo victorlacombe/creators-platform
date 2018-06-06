@@ -95,16 +95,17 @@
 }
 
 .stats-section div {
-  width: 50px;
+  width: 70px;
   display: flex;
   flex-direction: row;
   align-items: center;
-  justify-content: space-between;
+  justify-content: center;
 }
 
 
 #comments-image {
-  height: 26px
+  border-right: 6px;
+  height: 26px;
 }
 
 
@@ -136,6 +137,10 @@
 }
 
 
+#linear-effect {
+  background: linear-gradient(to top, white, transparent);
+}
+
 #resize-memo {
   position: absolute;
   background: white;
@@ -143,8 +148,17 @@
   width: 100%;
   text-align: center;
   font-size: 15px;
-  font-weight: lighter;
+  font-weight: 500;
   height: 20px;
+  cursor: pointer;
+  opacity: 0.93;
+  padding: 3px;
+}
+
+
+
+#resize-memo:hover {
+ opacity: 0.7;
 }
 
 .button-memo {

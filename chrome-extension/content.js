@@ -132,7 +132,8 @@ const allScript = function() {
                     for (i = 0; i < data[0]["comments"].length; i++) {
                       console.log(commentsDates)
                       commentsDates.push(data[0]["comments"][i].published_at)
-                      lastcommentDate = new Date(commentsDates.sort()[commentsDates.length - 1]).toLocaleDateString('fr-FR')
+                      var options = { year: 'numeric', month: 'short', day: 'numeric' };
+                      lastcommentDate = new Date(commentsDates.sort()[commentsDates.length - 1]).toLocaleDateString('en-GB', options)
                       console.log(lastcommentDate)
                       }
                     // Retrieving the fan's first activity date
@@ -191,7 +192,7 @@ const allScript = function() {
                         }
                         else {
                           showMore.innerText = "show more"
-                          commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "210px";
+                          commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "220px";
                         }
                       })
                     }
