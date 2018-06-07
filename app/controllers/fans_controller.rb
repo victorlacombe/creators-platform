@@ -20,7 +20,15 @@ class FansController < ApplicationController
         @all_time_fans = User.includes(fans: :comments).find(current_user.id).fans.where.not(channel_id_youtube: current_user.channel_id_youtube)
 
         #Hash {fan => comment_count}
-        @last_month_new_fans = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ? AND NOT comments.published_at < ?", current_user.id, Date.today - 1.month, Date.today - 1.month).group(:fan).count
+        # @last_month_new_fans = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ? AND NOT comments.published_at < ?", current_user.id, Date.today - 1.month, Date.today - 1.month).group(:fan).count
+        @last_month_new_fans = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user.id, Date.today - 1.month).group(:fan).count
+        @last_month_new_fans = @last_month_new_fans.reject { |fan, count|
+          fan.comments.where("published_at < ?", Date.today - 1.month).count > 0
+        }.sort_by  { |fan, count|
+          -fan.comments[-1].published_at.to_i
+        }
+        @last_month_new_fans.delete(creator_in_fans_table)
+
 
         #Arrays
         fans_with_one_to_three_comment_before_last_month = Comment.joins(fan: :comments, video: :user)
@@ -71,7 +79,14 @@ class FansController < ApplicationController
 
   def top_fans
     creator_in_fans_table = Fan.find_by_channel_id_youtube(current_user.channel_id_youtube)
-    all_time_fans = Comment.joins(fan: :comments, video: :user).where("users.id = ?", current_user).having("count(comments.id) > 0").group(:fan).count.keys
+    all_time_fans = Comment.joins(fan: :comments, video: :user)
+                    .where("users.id = ?", current_user)
+                    .having("count(comments.id) > 0")
+                    .group(:fan)
+                    .count
+                    .keys
+                    .sort_by  { |fan, count| -fan.comments.size }
+
     fans_who_commented_during_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user, Date.today - 2.month).having("count(comments.id) > 0").group(:fan).count.keys
     churning_fans = all_time_fans - fans_who_commented_during_last_month
     @top_fans = all_time_fans - churning_fans
@@ -101,6 +116,9 @@ class FansController < ApplicationController
     fans_who_commented_during_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user, Date.today - 2.month).having("count(comments.id) > 0").group(:fan).count.keys
     @churning_fans = all_time_fans - fans_who_commented_during_last_month
     @churning_fans.delete(creator_in_fans_table)
+    @churning_fans = @churning_fans.sort_by  { |fan, count|
+      -fan.comments.size
+    }
     skip_authorization
   end
 
@@ -110,6 +128,9 @@ class FansController < ApplicationController
     fans_with_at_least_one_comments_during_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user.id, Date.today - 1.month).having("count(comments.id) > 0").group(:fan).count.keys
     @last_month_new_loyal_fans = fans_with_one_to_three_comment_before_last_month & fans_with_at_least_one_comments_during_last_month
     @last_month_new_loyal_fans.delete(creator_in_fans_table)
+    @last_month_new_loyal_fans = @last_month_new_loyal_fans.sort_by  { |fan, count|
+      -fan.comments[-1].published_at.to_i
+    }
     skip_authorization
   end
 
