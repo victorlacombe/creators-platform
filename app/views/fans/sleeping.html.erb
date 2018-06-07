@@ -46,8 +46,8 @@
                         <%= link_to "Fan Channel", "https://www.youtube.com/channel/#{fan.channel_id_youtube}", target: "_blank"%>
                       </div>
                       <div class="fan-card-activity">
-                        <div class="fan-card-activity-left">Active <%= time_ago_in_words(fan.comments[-1].published_at) %> ago</div>
-                        <div class="fan-card-activity-right"><i class="far fa-comments"></i> <%= fan.comments.size %></div>
+                        <div class="fan-card-activity-left">Active <%= time_ago_in_words(comments[-1].published_at) %> ago</div>
+                        <div class="fan-card-activity-right"><i class="far fa-comments"></i> <%= comments.size %></div>
                       </div>
                     </div>
                   </div>
