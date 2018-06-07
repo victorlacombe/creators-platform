@@ -7,13 +7,20 @@
   height: 300px;
   align-items: center;
   justify-content: center;
+
+  position: relative; // for the a link, to take the whole spac eof the card
+  transition: border .3s;
+  border-bottom: 3px solid rgba(250,0, 0, 0); //To avoid div resizing we put a transparent border
+  &:hover {
+    border-bottom: 3px solid rgba(250,0, 0, 0.6);
+  }
 }
 .stats-label {
   position: absolute;
   color: #aaa;
   font-size: 16px;
-  top: 30px;
-  left: 30px;
+  top: 15px;
+  left: 15px;
 }
 .stats-content {
   display: flex;
@@ -42,3 +49,13 @@
   }
 }
 
+.stats-card-link {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 100%;
+  z-index: 2;
+  background: black;
+  opacity: 0;
+}
