@@ -9,10 +9,12 @@
   display: flex;
   flex-flow: column;
   margin: 20px 5px;
-  transition: transform .2s;
   box-shadow: 1px 1px 20px #ddd;
   min-width: 250px;
   height: 100%;
+
+  position: relative; // For the a link, so it can take the whole space of the card
+  transition: transform .2s;
   &:hover {
     transform: scale(1.02);
   }
@@ -80,6 +82,7 @@
     font-size: 16px;
     text-align: center;
     font-weight: bolder;
+    width: 32%;
   }
 }
 

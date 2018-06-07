@@ -127,7 +127,7 @@ hr {
 }
 
 .comment-card-i i {
-  color: #333;
+  color: $red;
   transition: transform .2s;
   &:hover {
     transform: scale(1.2);
@@ -149,14 +149,19 @@ hr {
   .name {
     flex-grow: 1;
     font-weight: bolder;
+  }
+  .pin {
+    text-align: center;
+    margin: 0px 10px;
     i {
-      color: #333;
+      color: $red;
       transition: transform .2s;
         &:hover {
           transform: scale(1.2);
         }
     }
   }
+
   .date {
     font-size: 13px;
     a {

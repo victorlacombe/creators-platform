@@ -64,7 +64,7 @@
             </div>
           </div>
 
-          <h2>Pinned Comments</h2>
+          <h2>Favorite Comments</h2>
           <div id="pinned-comments"> <!-- USED IN AJAXIFICATION -->
             <% favorite_comments = comments.to_a.select{ |comment| comment.is_pinned == true }.sort_by{ |comment| -(comment.published_at.to_i) } %>
             <% unless favorite_comments.empty? %>
