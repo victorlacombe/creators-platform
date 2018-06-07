@@ -40,8 +40,8 @@
         <span>
         <% class_name = (params[:controller] == "fans" && params[:action] == "sleeping" ? "active" : "") %>
         <%= link_to sleeping_fans_path, class: class_name do %>
-          <i class="fa fa-bed"></i>
-          Sleeping<br>fans
+          <i class="fa fa-comment-slash"></i>
+          Inactive<br>fans
         <% end -%>
         </span>
       </div>
