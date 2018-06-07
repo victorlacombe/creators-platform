@@ -14,6 +14,25 @@
     }
 }
 
+.btn-permissions {
+  color: white;
+  padding: 15px 50px;
+  border-radius: 4px;
+  background: $blue;
+  opacity: 0.85;
+  transition: background 0.2s ease;
+  border: none;
+  margin-bottom: 0px !important;
+
+    &:hover {
+      color: white;
+      opacity: 1;
+      text-decoration: none;
+    }
+}
+
+
+
 .btn-xl {
   padding: 20px 30px;
 }
