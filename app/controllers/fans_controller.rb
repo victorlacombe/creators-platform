@@ -57,7 +57,7 @@ class FansController < ApplicationController
   def show
     @fan = Fan.find(params[:id])
     authorize @fan
-    @memo = @fan.memo
+    @memo = Memo.find_by(user_id: current_user, fan_id: @fan)
 
     # Retrieving the creator's fan_id for later use
     @creator_fan_id = current_user.fans.find_by(channel_id_youtube: current_user.channel_id_youtube).id
@@ -67,7 +67,7 @@ class FansController < ApplicationController
   def update
     @fan = Fan.find(params[:id])
     authorize @fan
-    @memo = @fan.memo
+    @memo = Memo.find_by(user_id: current_user, fan_id: @fan)
     @memo.update(memo_params)
     redirect_to fan_path(@fan)
   end

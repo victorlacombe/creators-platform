@@ -197,7 +197,7 @@ class YoutubeRefreshDataService
   def create_update_fan(fan_id, fan_avatar, fan_name)
     db_fan = Fan.find_by(channel_id_youtube: fan_id)
     db_fan = Fan.new if db_fan.nil?
-    db_fan.memo = create_memo if db_fan.memo.nil?
+    create_memo(db_fan, @user) # create a memo if needed
     db_fan.channel_id_youtube = fan_id
     db_fan.profile_picture_url = fan_avatar
     db_fan.youtube_username = fan_name
@@ -205,10 +205,14 @@ class YoutubeRefreshDataService
     return db_fan
   end
 
-  def create_memo
-    db_memo = Memo.new
-    db_memo.user = @user
-    db_memo.save
+  def create_memo(fan, user)
+    db_memo = Memo.find_by(fan_id: fan, user_id: user)
+    if db_memo.nil? # if memo between user and fan is non-existant yet
+      db_memo = Memo.new
+      db_memo.user = user
+      db_memo.fan = fan
+      db_memo.save
+    end
     return db_memo
   end
 

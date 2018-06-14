@@ -39,4 +39,5 @@ group :development, :test do
   gem 'listen', '~> 3.0.5'
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
+  gem 'bullet' # used for N+1 activeRecord request, it will report them in the console | See Le Wagon tutorial on N+1
 end

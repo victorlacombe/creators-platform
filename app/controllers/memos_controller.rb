@@ -4,12 +4,12 @@ class MemosController < ApplicationController
     authorize @memo
   end
 
-  def edit
-  # this method will have to be deleted since we will display the form directly
-  # inside of the fans view
-    @memo = Memo.find(params[:id])
-    authorize @memo
-  end
+  # def edit
+  # # this method will have to be deleted since we will display the form directly
+  # # inside of the fans view
+  #   @memo = Memo.find(params[:id])
+  #   authorize @memo
+  # end
 
   def update
     @memo = Memo.find(params[:id])

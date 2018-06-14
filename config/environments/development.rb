@@ -70,4 +70,10 @@ Rails.application.configure do
   Yt.configuration.client_id = ENV['GOOGLE_CLIENT_ID']
   Yt.configuration.client_secret = ENV['GOOGLE_CLIENT_SECRET']
 
+
+  # Bullet Gem for N+1 Active Record request | See le wagon tutorial on N+1
+  config.after_initialize do
+    Bullet.enable = true
+    Bullet.rails_logger = true
+  end
 end
