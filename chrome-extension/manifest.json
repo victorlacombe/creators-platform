@@ -4,7 +4,9 @@
   "version": "1.0",
   "content_scripts": [
     {
-      "matches": ["https://www.youtube.com/*"],
+      "matches": ["https://www.youtube.com/*",
+        "http://www.youtube.com/*"
+      ],
       "js": ["content.js"],
       "css": ["css_file_chrome.css"],
       "run_at": "document_end"

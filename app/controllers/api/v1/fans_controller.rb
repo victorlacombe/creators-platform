@@ -1,5 +1,6 @@
 class Api::V1::FansController < Api::V1::BaseController
   def index
+
     # select only the beginning of the URL of the image.
     # we can't reconciliate URL with "https://yt3.ggpht.com/-4s0E7QxVNGw/AAAAAAAAAAI/AAAAAAAAAAA/aLmGgWQbOFA/s48-c-k-no-mo-rj-c0xffffff/photo.jpg"
     # we can alony do it with "https://yt3.ggpht.com/-4s0E7QxVNGw/AAAAAAAAAAI/AAAAAAAAAAA/aLmGgWQbOFA/"

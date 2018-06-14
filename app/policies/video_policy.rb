@@ -6,6 +6,6 @@ class VideoPolicy < ApplicationPolicy
   end
 
   def find_video_owner?
-    true
+    record.user == user
   end
 end
