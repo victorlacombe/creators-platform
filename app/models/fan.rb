@@ -4,8 +4,8 @@ class Fan < ApplicationRecord
   # The moment a fan comments on a video, the fan needs to be saved in our database
 
   has_many :comments, dependent: :destroy
-  belongs_to :memo
-  has_many :users, through: :memo
+  has_many :memos
+  has_many :users, through: :memos
 
   # validate :is_not_the_creator
 

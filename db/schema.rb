@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2018_06_01_121807) do
+ActiveRecord::Schema.define(version: 2018_06_14_140756) do
 
   # These are extensions that must be enabled in order to support this database
   enable_extension "plpgsql"
@@ -33,10 +33,8 @@ ActiveRecord::Schema.define(version: 2018_06_01_121807) do
     t.string "youtube_username"
     t.string "channel_id_youtube"
     t.string "profile_picture_url"
-    t.bigint "memo_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.index ["memo_id"], name: "index_fans_on_memo_id"
   end
 
   create_table "memos", force: :cascade do |t|
@@ -44,6 +42,8 @@ ActiveRecord::Schema.define(version: 2018_06_01_121807) do
     t.bigint "user_id"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.bigint "fan_id"
+    t.index ["fan_id"], name: "index_memos_on_fan_id"
     t.index ["user_id"], name: "index_memos_on_user_id"
   end
 
@@ -99,7 +99,7 @@ ActiveRecord::Schema.define(version: 2018_06_01_121807) do
 
   add_foreign_key "comments", "fans"
   add_foreign_key "comments", "videos"
-  add_foreign_key "fans", "memos"
+  add_foreign_key "memos", "fans"
   add_foreign_key "memos", "users"
   add_foreign_key "subscribers", "users"
   add_foreign_key "videos", "users"
