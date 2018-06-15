@@ -16,8 +16,8 @@ Rails.application.routes.draw do
   resources :fans, only: [:index, :show, :new, :create, :update] do
     get :top_fans, on: :collection
     get :new_fans, on: :collection
-    get :sleeping, on: :collection
-    get :new_loyal_fans, on: :collection
+    get :inactive_fans, on: :collection
+    get :returning_fans, on: :collection
   end
 
   #MEMOS: no need for a memo view, will be displayed in the fans view.

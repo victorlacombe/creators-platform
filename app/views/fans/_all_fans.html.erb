@@ -2,7 +2,6 @@
     <% fans.each do |fan| %>
         <%#= link_to fan_path(fan) do%>
         <div class="col-xs-12 col-sm-6 col-md-4 col-lg-3 col-xl-2">
-
             <div class="fan-card">
               <%= link_to "", fan_path(fan), class: "fan-card-link" %>
               <div class="fan-card-infos">
@@ -19,13 +18,11 @@
               </div>
               <div class="fan-card-activity">
                 <div class="fan-card-activity-left">Active <%= time_ago_in_words(comments[-1].published_at) %> ago</div>
-                <div class="fan-card-activity-right"><i class="far fa-comments"></i> <%= fan.comments.size %></div>
+                <div class="fan-card-activity-right"><i class="far fa-comments"></i> <%= comments.size %></div>
               </div>
             </div>
-
           </div>
       <%# end %>
     <% end %>
   </div>
 </div>
-

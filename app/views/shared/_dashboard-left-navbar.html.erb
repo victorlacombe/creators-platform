@@ -29,8 +29,8 @@
       </div>
       <div>
         <span>
-        <% class_name = (params[:controller] == "fans" && params[:action] == "new_loyal_fans" ? "active" : "") %>
-        <%= link_to new_loyal_fans_fans_path, class: class_name do %>
+        <% class_name = (params[:controller] == "fans" && params[:action] == "returning_fans" ? "active" : "") %>
+        <%= link_to returning_fans_fans_path, class: class_name do %>
           <i class="fas fa-star"></i>
           Returning<br>fans
         <% end -%>
@@ -38,8 +38,8 @@
       </div>
       <div>
         <span>
-        <% class_name = (params[:controller] == "fans" && params[:action] == "sleeping" ? "active" : "") %>
-        <%= link_to sleeping_fans_path, class: class_name do %>
+        <% class_name = (params[:controller] == "fans" && params[:action] == "inactive_fans" ? "active" : "") %>
+        <%= link_to inactive_fans_fans_path, class: class_name do %>
           <i class="fa fa-comment-slash"></i>
           Inactive<br>fans
         <% end -%>

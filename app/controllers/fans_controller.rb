@@ -3,51 +3,26 @@ class FansController < ApplicationController
 
   def index
     flash[:notice] = "Wait for it... Your fans are coming soon!" if current_user.sign_in_count == 1
+
+    #@all_fans = User.includes(fans: :comments).find(current_user.id).fans.where.not(channel_id_youtube: current_user.channel_id_youtube)
+    @all_fans = current_user.fans.where('fans.channel_id_youtube != ?', current_user.channel_id_youtube)
+
     if params[:query].present?
       sql_query = "youtube_username ILIKE :query"
-      @fans = User.includes(fans: :comments).find(current_user.id).fans.where(sql_query, query: "%#{params[:query]}%").where.not(channel_id_youtube: current_user.channel_id_youtube).page(params[:page]).per(4*3)
+      @fans_list = @all_fans.where(sql_query, query: "%#{params[:query]}%").page(params[:page]).per(4*3)
+      @fans = @fans_list.includes(:comments) # not sure if it will only loads comments for the fans_list or for all fans... to be checked!
     else
       # .page is from Kaminari gem
-      @fans = User.includes(fans: :comments).find(current_user.id).fans.where.not(channel_id_youtube: current_user.channel_id_youtube).page(params[:page]).per(4*3)
-
+      @fans_list = @all_fans.page(params[:page]).per(4*3)
+      @fans = @fans_list.includes(:comments)
       respond_to do |format|
         format.html do
           # For excluding creator in stats
-          creator_in_fans_table = Fan.find_by_channel_id_youtube(current_user.channel_id_youtube)
+          # creator_in_fans_table = Fan.find_by_channel_id_youtube(current_user.channel_id_youtube)
 
-          #Fan ::ActiveRecord_AssociationRelation || We already exclude the creator in request
-          @all_time_fans = User.includes(fans: :comments).find(current_user.id).fans.where.not(channel_id_youtube: current_user.channel_id_youtube)
-
-          #Hash {fan => comment_count}
-          # @last_month_new_fans = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ? AND NOT comments.published_at < ?", current_user.id, Date.today - 1.month, Date.today - 1.month).group(:fan).count
-          new_fans
-          top_fans
-          new_loyal_fans
-
-          # #Arrays
-          # fans_with_one_to_three_comment_before_last_month = Comment.joins(fan: :comments, video: :user)
-          #                                                     .where("users.id = ? AND comments.published_at < ?", current_user.id, Date.today - 1.month)
-          #                                                     .having("count(comments.id) < 4")
-          #                                                     .group(:fan)
-          #                                                     .count
-          #                                                     .keys
-
-          # fans_with_at_least_one_comments_during_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user.id, Date.today - 1.month).having("count(comments.id) > 0").group(:fan).count.keys
-          # @last_month_new_loyal_fans = fans_with_one_to_three_comment_before_last_month & fans_with_at_least_one_comments_during_last_month
-
-          # #Array
-          # all_time_fans = Comment.joins(fan: :comments, video: :user).where("users.id = ?", current_user).having("count(comments.id) > 0").group(:fan).count.keys
-          # fans_who_commented_during_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user, Date.today - 2.month).having("count(comments.id) > 0").group(:fan).count.keys
-          # @churning_fans = all_time_fans - fans_who_commented_during_last_month
-
-          # #Array
-          # @top_fans = all_time_fans - @churning_fans
-
-          # #Delete the creator from stats
-          # @last_month_new_fans.delete(creator_in_fans_table)
-          # @last_month_new_loyal_fans.delete(creator_in_fans_table)
-          # @churning_fans.delete(creator_in_fans_table)
-          # @top_fans.delete(creator_in_fans_table)
+          @top_fans_list = top_fans_list # We don't need to call the full function top_fans, as we don't want to load the memory. This is just to get the stat number.
+          @new_fans_list = new_fans_list
+          @returning_fans_list = returning_fans_list
         end
         format.js
       end
@@ -73,58 +48,181 @@ class FansController < ApplicationController
   end
 
   def top_fans
-    creator_in_fans_table = Fan.find_by_channel_id_youtube(current_user.channel_id_youtube)
-    all_time_fans = Comment.joins(fan: :comments, video: :user)
-                    .where("users.id = ?", current_user)
-                    .having("count(comments.id) > 0")
-                    .order("COUNT(comments.id) DESC")
-                    .group(:fan)
-                    .count
-                    .keys
-
-    fans_who_commented_during_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user, Date.today - 2.month).having("count(comments.id) > 0").group(:fan).count.keys
-    churning_fans = all_time_fans - fans_who_commented_during_last_month
-    @top_fans = all_time_fans - churning_fans
-    @top_fans.delete(creator_in_fans_table)
     skip_authorization
+    @fan_type_name = "top fan"
+    @definition_header = "They are loyal to you and are still active in the last 2 months"
+    # We find all fans but don't load any comments in memory (we use joins).
+    #Loading it direclty in memory is not useful as comments are being filtered here and we wouldn't get all comments.
+    @top_fans_list = top_fans_list
+
+    # Load all comments in memory for each of the top fans found above.
+    @top_fans_with_all_comments = current_user.fans
+                                              .eager_load(:comments)
+                                              .where(id: @top_fans_list.to_a)
+                                              .group('fans.id', 'comments.id')
+                                              #.order('count(comments.id) DESC') # Can't make this order works..
+
+    @top_fans_with_all_comments = @top_fans_with_all_comments.sort_by { |fan| -fan.comments.length } # Order using ruby sort_by
   end
 
   def new_fans
-    # fans_with_zero_comment_before_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at < ?", current_user.id, Date.today - 1.month).having("count(comments.id) = 0").group(:fan).count.keys
-    # fans_with_at_least_one_comment_this_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user.id, Date.today - 1.month).group(:fan).count.reject { |k, v| v < 1 }
-
-    @old_fans = Fan.joins(:comments, memo: :user).where("users.id = ? AND comments.published_at < ?", current_user.id, Date.today - 1.month).pluck(:id)
-    @last_month_new_fans = Fan.joins(:comments).where.not(id: @old_fans).order("comments.published_at DESC").select("fans.*, comments.published_at, count(comments.id) as comments_count").group("fans.id, comments.published_at").uniq
-
-    @last_month_new_fans.reject! { |fan| fan.channel_id_youtube == current_user.channel_id_youtube }
     skip_authorization
+    @fan_type_name = "new fan"
+    @definition_header = "They wrote their first comment(s) this month"
+
+    # Same logic as top_fans
+    @new_fans_list = new_fans_list
+    @new_fans_with_all_comments = current_user.fans
+                                              .eager_load(:comments)
+                                              .where(id: @new_fans_list.to_a)
+                                              .group('fans.id', 'comments.id')
+                                              #.order('count(comments.id) DESC') # Can't make this order works..
+    @new_fans_with_all_comments = @new_fans_with_all_comments.sort_by { |fan| -fan.comments.length }
   end
 
-  def sleeping
-    creator_in_fans_table = Fan.find_by_channel_id_youtube(current_user.channel_id_youtube)
-
-    all_time_fans = Comment.joins(fan: :comments, video: :user).where("users.id = ?", current_user).having("count(comments.id) > 0").order("COUNT(comments.id) DESC").group(:fan).count.keys
-    fans_who_commented_during_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user, Date.today - 2.month).having("count(comments.id) > 0").group(:fan).count.keys
-
-    @churning_fans = all_time_fans - fans_who_commented_during_last_month
-    @churning_fans.delete(creator_in_fans_table)
-
+  def returning_fans
     skip_authorization
+    @fan_type_name = "returning fan"
+    @definition_header = "They are new fans (or were loyal) and have just returned to your channel this month"
+    # Same logic as top_fans
+    @returning_fans_list = returning_fans_list
+    @returning_fans_with_all_comments = current_user.fans
+                                              .eager_load(:comments)
+                                              .where(id: @returning_fans_list.to_a)
+                                              .group('fans.id', 'comments.id')
+                                              #.order('count(comments.id) DESC') # Can't make this order works..
+    @returning_fans_with_all_comments = @returning_fans_with_all_comments.sort_by { |fan| -fan.comments.length }
   end
 
-  def new_loyal_fans
-    creator_in_fans_table = Fan.find_by_channel_id_youtube(current_user.channel_id_youtube)
-    fans_with_one_to_three_comment_before_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at < ?", current_user.id, Date.today - 1.month).having("count(comments.id) < 4").group(:fan).count.keys
-    fans_with_at_least_one_comments_during_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user.id, Date.today - 1.month).having("count(comments.id) > 0").group(:fan).count.keys
-    @last_month_new_loyal_fans = fans_with_one_to_three_comment_before_last_month & fans_with_at_least_one_comments_during_last_month
-    @last_month_new_loyal_fans.delete(creator_in_fans_table)
-    @last_month_new_loyal_fans = @last_month_new_loyal_fans.sort_by  { |fan, count|
-      -fan.comments[-1].published_at.to_i
-    }
+  def inactive_fans
     skip_authorization
+    @fan_type_name = "inactive fan"
+    @definition_header = "They haven't participated in the last 2 months"
+    # Same logic as top_fans
+    @inactive_fans_list = inactive_fans_list
+    @inactive_fans_with_all_comments = current_user.fans
+                                              .eager_load(:comments)
+                                              .where(id: @inactive_fans_list.to_a)
+                                              .group('fans.id', 'comments.id')
+                                              #.order('count(comments.id) DESC') # Can't make this order works..
+    @inactive_fans_with_all_comments = @inactive_fans_with_all_comments.sort_by { |fan| -fan.comments.length }
   end
 
   private
+
+  def top_fans_list
+    min_last_activity_date = 2.month
+    min_comment = 0
+    # People who have commented in the last x.month
+    # We find all fans but don't load any comments in memory (we use joins).
+    #Loading it direclty in memory is not useful as comments are being filtered here and we wouldn't get all comments.
+
+    # ==========================================
+    # HAVE TO ADD EXPLICITLY THAT THE COMMENTS BELONG TO THE CURRENT_USER ALSO...? or is it included in current_user? TO BE CHECKED
+    # ==========================================
+
+    return current_user.fans # Select all fans from current user
+                        .joins(:comments)
+                        .where('comments.published_at > ? AND fans.channel_id_youtube != ?', Date.today - min_last_activity_date, current_user.channel_id_youtube)
+                        .having('count(comments.published_at) > ?', min_comment)
+                        .group("fans.id")
+                        .distinct # to return unque object
+  end
+
+  def new_fans_list
+    min_last_activity_date = 1.month
+    arrived_x_month_ago = 1.month
+    min_comment = 0
+
+    return current_user.fans # People who have commented this month
+                        .joins(:comments)
+                        .where('comments.published_at > ? AND fans.channel_id_youtube != ?', Date.today - min_last_activity_date, current_user.channel_id_youtube)
+                        .having('count(comments.published_at) > ?', min_comment)
+                        .group("fans.id")
+                        .distinct -
+           current_user.fans # but never before this month!
+                       .joins(:comments)
+                       .where('comments.published_at < ? AND fans.channel_id_youtube != ?', Date.today - arrived_x_month_ago, current_user.channel_id_youtube)
+                       .having('count(comments.published_at) > ?', 0)
+                       .group("fans.id")
+                       .distinct
+
+  end
+
+  def inactive_fans_list
+    min_last_activity_date = 2.month
+    min_comment = 0
+
+    return current_user.fans.where('fans.channel_id_youtube != ?', current_user.channel_id_youtube) - # Everyone
+           current_user.fans # but those who haven't commented for the last 2 months
+                      .joins(:comments)
+                      .where('comments.published_at > ? AND fans.channel_id_youtube != ?', Date.today - min_last_activity_date, current_user.channel_id_youtube)
+                      .having('count(comments.published_at) > ?', min_comment)
+                      .group("fans.id")
+                      .distinct
+  end
+
+  def returning_fans_list
+    min_last_activity_date = 1.month
+    min_last_sleepy_date = 3.month #slept at least between 3.month and 1.month ago (for 2 months)
+    arrived_x_month_ago = 2.month
+    min_comment = 0
+    min_comments_several = 1
+
+                      # -- People who were loyal, slept for 2 months, and are back!
+    return (current_user.fans # People who have commented this month
+                        .joins(:comments)
+                        .where('comments.published_at > ? AND fans.channel_id_youtube != ?', Date.today - min_last_activity_date, current_user.channel_id_youtube)
+                        .having('count(comments.published_at) > ?', min_comment)
+                        .group("fans.id")
+                        .distinct -
+           current_user.fans # and who didn't commented last month
+                        .joins(:comments)
+                        .where('comments.published_at < ? AND comments.published_at > ? AND fans.channel_id_youtube != ?', Date.today - min_last_activity_date, Date.today - min_last_sleepy_date, current_user.channel_id_youtube)
+                        .having('count(comments.published_at) > ?', min_comment)
+                        .group("fans.id")
+                        .distinct &
+           current_user.fans # and yet commented months before
+                        .joins(:comments)
+                        .where('comments.published_at < ? AND fans.channel_id_youtube != ?', Date.today - min_last_sleepy_date, current_user.channel_id_youtube)
+                        .having('count(comments.published_at) > ?', min_comment)
+                        .group("fans.id")
+                        .distinct) +
+
+                        # -- We also add to this list newly arrived fans who commented several times this month
+          (current_user.fans # People who have commented this month
+                        .joins(:comments)
+                        .where('comments.published_at > ? AND fans.channel_id_youtube != ?', Date.today - min_last_activity_date, current_user.channel_id_youtube)
+                        .having('count(comments.published_at) > ?', min_comments_several)
+                        .group("fans.id") -
+           current_user.fans # but never before this month!
+                       .joins(:comments)
+                       .where('comments.published_at < ? AND fans.channel_id_youtube != ?', Date.today - min_last_activity_date, current_user.channel_id_youtube)
+                       .having('count(comments.published_at) > ?', 0)
+                       .group("fans.id")
+                       .distinct) +
+
+                        # -- We also add to this list newly arrived fans who started commented last month, and came back
+          ((current_user.fans # People who have commented this month
+                        .joins(:comments)
+                        .where('comments.published_at > ? AND fans.channel_id_youtube != ?', Date.today - min_last_activity_date, current_user.channel_id_youtube)
+                        .having('count(comments.published_at) > ?', min_comment)
+                        .group("fans.id")
+                        .distinct &
+          current_user.fans # and have also commented last month
+                        .joins(:comments)
+                        .where('comments.published_at < ? AND comments.published_at > ? AND fans.channel_id_youtube != ?', Date.today - min_last_activity_date, Date.today - arrived_x_month_ago, current_user.channel_id_youtube)
+                        .having('count(comments.published_at) > ?', min_comment)
+                        .group("fans.id")
+                        .distinct) -
+           current_user.fans # but never before 2 month/arrival date!
+                       .joins(:comments)
+                       .where('comments.published_at < ? AND fans.channel_id_youtube != ?', Date.today - arrived_x_month_ago, current_user.channel_id_youtube)
+                       .having('count(comments.published_at) > ?', 0)
+                       .group("fans.id")
+                       .distinct)
+
+  end
 
   def get_comments_by_video_for_a_fan
     # All comments of a @fan and ordered from last published
@@ -158,3 +256,56 @@ class FansController < ApplicationController
 end
 
 
+# Edward stuffs
+# fans_with_one_to_three_comment_before_last_month = Comment.joins(fan: :comments, video: :user)
+#                                                     .where("users.id = ? AND comments.published_at < ?", current_user.id, Date.today - 1.month)
+#                                                     .having("count(comments.id) < 4")
+#                                                     .group(:fan)
+#                                                     .count
+#                                                     .keys
+
+# fans_with_at_least_one_comments_during_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user.id, Date.today - 1.month).having("count(comments.id) > 0").group(:fan).count.keys
+# all_time_fans = Comment.joins(fan: :comments, video: :user).where("users.id = ?", current_user).having("count(comments.id) > 0").group(:fan).count.keys
+# fans_who_commented_during_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user, Date.today - 2.month).having("count(comments.id) > 0").group(:fan).count.keys
+
+
+#Hash {fan => comment_count}
+# @last_month_new_fans = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ? AND NOT comments.published_at < ?", current_user.id, Date.today - 1.month, Date.today - 1.month).group(:fan).count
+
+
+# Old top fans stuffs
+# Old - Gab Attempt (buggy)
+# creator_in_fans_table = Fan.find_by_channel_id_youtube(current_user.channel_id_youtube)
+# all_time_fans = Comment.joins(fan: :comments, video: :user)
+#                 .where("users.id = ?", current_user)
+#                 .having("count(comments.id) > 0")
+#                 .order("COUNT(comments.id) DESC")
+#                 .group(:fan)
+#                 .count
+#                 .keys
+# fans_who_commented_during_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user, Date.today - 2.month).having("count(comments.id) > 0").group(:fan).count.keys
+# churning_fans = all_time_fans - fans_who_commented_during_last_month
+# @top_fans = all_time_fans - churning_fans
+# @top_fans.delete(creator_in_fans_table)
+
+# Retrying Active record # Attemp 1 Julien (buggy can't get all comments)
+# @top_fans = current_user.fans # Select all fans from current user
+#             .includes(:comments) # Includes comments, so that it can be saved in memory and avoid N+1 queries
+#             .select('fans.youtube_username', 'fans.profile_picture_url', 'fans.channel_id_youtube', 'comments.published_at') # Select only data we need
+#             .references(:comments) # Join comments so that we can do .where on it | works in parallel with .includes
+#             .where('comments.published_at > ? AND fans.channel_id_youtube != ?', Date.today - min_last_activity_date, current_user.channel_id_youtube)
+#             .having('count(comments.published_at) > ?', min_comment)
+#             .group('fans.id', 'fans.youtube_username', 'fans.profile_picture_url', 'fans.channel_id_youtube', 'comments.id', 'comments.published_at')
+#             .distinct # be sure that all results are unique
+
+
+
+
+# Old new fans stuffs
+ # fans_with_zero_comment_before_last_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at < ?", current_user.id, Date.today - 1.month).having("count(comments.id) = 0").group(:fan).count.keys
+    # fans_with_at_least_one_comment_this_month = Comment.joins(fan: :comments, video: :user).where("users.id = ? AND comments.published_at > ?", current_user.id, Date.today - 1.month).group(:fan).count.reject { |k, v| v < 1 }
+
+    # @old_fans = Fan.joins(:comments, memo: :user).where("users.id = ? AND comments.published_at < ?", current_user.id, Date.today - 1.month).pluck(:id)
+    # @last_month_new_fans = Fan.joins(:comments).where.not(id: @old_fans).order("comments.published_at DESC").select("fans.*, comments.published_at, count(comments.id) as comments_count").group("fans.id, comments.published_at").uniq
+
+    # @last_month_new_fans.reject! { |fan| fan.channel_id_youtube == current_user.channel_id_youtube }

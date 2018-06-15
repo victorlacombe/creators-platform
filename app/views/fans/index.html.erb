@@ -33,7 +33,7 @@
               </div>
               <div class="stats-content">
                 <div class="stats-number">
-                  <strong><%= @all_time_fans.size %></strong>
+                  <strong><%= @all_fans.size %></strong>
                 </div>
                 <div class="stats-numberlabel">FANS</div>
                 <div class="stats-numbersublabel">A fan is someone who commented on your video</div>
@@ -48,7 +48,7 @@
               </div>
               <div class="stats-content">
                 <div class="stats-number">
-                  <strong><%= @last_month_new_fans.size %></strong>
+                  <strong><%= @new_fans_list.size %></strong>
                 </div>
                 <div class="stats-numberlabel">NEW FANS</div>
                 <div class="stats-numbersublabel">First comment from a fan during the last month</div>
@@ -57,14 +57,14 @@
           </div>
           <div class="col-xs-12 col-sm-12 col-md-4">
             <div class="stats-card">
-              <%= link_to "", new_loyal_fans_fans_path, class: "stats-card-link" %>
+              <%= link_to "", returning_fans_fans_path, class: "stats-card-link" %>
               <div class="stats-label">
                 LAST MONTH
               </div>
               <div class="stats-content">
                 <div class="stats-number">
                   <strong>
-                    <%= @last_month_new_loyal_fans.size %>
+                    <%= @returning_fans_list.size %>
                   </strong>
                 </div>
                 <div class="stats-numberlabel">RETURNING FANS</div>

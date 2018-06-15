@@ -1,0 +1,39 @@
+<!-- For mobile view -->
+<%= render 'shared/dashboard-left-navbar-on-top' %>
+<!-- For mobile view -->
+
+<div class="dashboard-content">
+  <!-- DASHBOARD LEFT NAVBAR BEGINS HERE -->
+  <%= render 'shared/dashboard-left-navbar' %>
+  <!-- DASHBOARD LEFT NAVBAR ENDS HERE -->
+
+  <div class="dashboard-right-content">
+    <h1 class="text-center">Your <%= pluralize fans.length, fan_type_name %></h1>
+    <p class="text-center"><%= definition_header %></p>
+    <div class="container">
+
+      <!-- Search bar Mobile -->
+      <% if params[:controller] == "fans" %>
+        <div class="navbar-searchbar hidden-md hidden-lg hidden-xl">
+          <%= form_tag fans_path, method: :get do %>
+          <%= text_field_tag :query,
+          params[:query],
+          class: "form-control",
+          placeholder: "Search a fan"%>
+          <% end %>
+        </div>
+      <% end %>
+
+      <div class="row">
+        <div id="all-fans"> <!-- Used for kaminari infinite scrolling -->
+          <%= render "fans/all_fans", fans: fans %>
+        </div>
+        <div class="pagination-container">
+          <%#= render "fans/pagination", fans: fans %>
+        </div>
+      </div>
+
+      <%#= paginate @last_month_returning_fans, remote: true %>
+    </div>
+  </div>
+</div>

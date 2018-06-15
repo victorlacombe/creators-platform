@@ -40,4 +40,6 @@ group :development, :test do
   gem 'spring'
   gem 'spring-watcher-listen', '~> 2.0.0'
   gem 'bullet' # used for N+1 activeRecord request, it will report them in the console | See Le Wagon tutorial on N+1
+  gem 'rack-mini-profiler' # used to check activerecord perf in browser directly
+  gem 'memory_profiler' # pp=profile-memory to the end of your URL. This will show you things like total bytes allocated, which you can use for comparison purposes.
 end
