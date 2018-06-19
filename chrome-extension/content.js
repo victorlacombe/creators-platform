@@ -1,62 +1,86 @@
-DEV = false;
+// Bugs to correct
 
+// 1. initializePage does not work every time. (find the right eventlistener to get
+// use : getEventListener(window) to display all events. Best attemps = yt-navigate-finish )
+
+
+// 2. Warning with setInterval, et intervalTimeout (not used here). Try to identify an eventListner
+// responsible for loading new comments / replies
+
+
+// 3. The extension first load is triggered only when hard refresh on a video owned by the logged in user
+// Find a way to run the script at any page change or page start.
+// If start page is youtube video dashboard and if user clicks on one of his videos, the script won't load.
+// If start page is a video owned by the user, script will load.
+
+// 4. Are the promises the good solution ?
+
+
+
+
+// --------------------------------------------------------------------------------------------
+// -------------------------------- Setting up the environment --------------------------------
+// --------------------------------------------------------------------------------------------
+
+DEV = true;
 BASE_URL = DEV ? "http://localhost:3000" : "https://www.recll.xyz";
 
-// // ----------------   Defining remove duplicates function     ------------------
-
-// function onlyUnique(value, index, self) {
-//     return self.indexOf(value) === index;
-// }
 
 
-console.log("Content Script is working")
-// -------   FUNCTION TO ADD A LINK IN A COMMUNITY'S YouTube Page     ----------
+// --------------------------------------------------------------------------------------------
+// ------- Initializing the page to remove former inserted elements from the previous page ----
+// ------- when changing page and elements zlready inserted in another page                ----
+// --------------------------------------------------------------------------------------------
+
+const initializingPage = function() {
+  // 1. Remove the 'See fan details' buttons when loading a new page
+  const visibleSeeFanDetailsButtons = document.querySelectorAll(".btn-see-details-recll")
+  if (visibleSeeFanDetailsButtons.length > 0) {
+    for (i = 0; i < visibleSeeFanDetailsButtons.length; i++ ) {
+      visibleSeeFanDetailsButtons[i].remove();
+    }
+  }
+  // 2. Remove the Fan Info Card when loading a new page
+  const visibleFanInfoCards = document.querySelectorAll(".fan-info-recll")
+  if (visibleFanInfoCards.length > 0) {
+    for (i = 0; i < visibleFanInfoCards.length; i++ ) {
+      visibleFanInfoCards[i].remove();
+    }
+  }
+}
+
+// --------------------------------------------------------------------------------------------
+// ------------------------ Recover the vidio Id from the current page ------------------------
+// --------------------------------------------------------------------------------------------
+
+let videoId = window.location.search.split('v=')[1];
+let ampersandPosition = videoId.indexOf('&');
+if(ampersandPosition != -1) {
+  videoId = videoId.substring(0, ampersandPosition);
+}
+
+// --------------------------------------------------------------------------------------------
+// ----------------------------------- Main script runs here ----------------------------------
+// --------------------------------------------------------------------------------------------
 
 const allScript = function() {
 
-  const dashboardCommentAuthors = document.querySelectorAll(".comment-header");
-  dashboardCommentAuthors.forEach(function(dashboardCommentAuthor) {
-    dashboardCommentAuthor.insertAdjacentHTML("beforeend", '<a class=".btn-see-details">See fan details</a>' )
-  })
+console.log(' ------------- all script starts ------------- ')
+console.log(' --------------------------------------------- ')
 
-  // ----------- FUNCTION TO ADD A LINK IN A VIDEO'S COMMENT FLOW  ---------------
-  //                           (update every 900ms)
-  // Do not use 'scroll' event, since it would overload the page each time there is
-  // a scroll on each window pixel
-  // Do not use the 'NodeInserted' event, since Youtube seems to load a lot of new
-  // nodes even after page DOM is Loaded
-
-  //-------------   Identify if the user is on a video of his own --------------
-
+  initializingPage();
 
   let interval;
 
-  const userChannelId = window.location.search.match(/\?v=(.*)/)[1]
-  console.log(userChannelId)
+  // Get the information related to the video displayed on Youtube
+  fetch(`${BASE_URL}/api/v1/videos/find_video_owner?query=${videoId}`, {
+    credentials: 'include' // works with videos_controller (the api controller)
+  })
+  .then(response => response.json())
+  .then((data) => {
+    // the api call will display an error if the user is not authorized to get the API info
+    // i.e : if the user connected Recll dashboard is not the one seeing the video, api request aborted
 
-  fetch(`${BASE_URL}/api/v1/videos/find_video_owner?query=${userChannelId}`)
-  .then(response => {
-    console.log(response)
-    if (response.status == 500) {
-      console.log("MOFO", userChannelId)
-      // Remove "See fan details" button from the former page
-
-      html.addEventListener("data-changed", function() {
-        console.log("FJEIOZJFIOZEJFIOJEZOIFJIZEOJFIOZEJFOI")
-      })
-
-      const visibleSeeFanDetailsButtons = document.querySelectorAll(".btn-see-details-recll")
-      console.log(visibleSeeFanDetailsButtons)
-      console.log(visibleSeeFanDetailsButtons.length)
-      if (visibleSeeFanDetailsButtons.length > 0) {
-        for (i = 0; i < visibleSeeFanDetailsButtons.length; i++ ) {
-          visibleSeeFanDetailsButtons[i].remove()
-        }
-      }
-
-    } else {
-      // OK// fetch(`${BASE_URL}/api/v1/fans?query=${fanPictureUrl}`)
-      const currentUserYoutubeId = userChannelId;
       interval = setInterval(function() {
         // select the main div that contains the comment block and the profil picture
         const commentMainDivs = document.querySelectorAll("#body")
@@ -65,11 +89,6 @@ const allScript = function() {
           const videoCommentAuthor = commentMainDiv.querySelector("#header-author");
           if (videoCommentAuthor.querySelector('.btn-see-details-recll')) {
             // do nothing, the "see fan details" button is already present
-            // récupérer l'id youtube la page actuelle (après potentielle navigation)
-            const newUserChannelId = document.querySelector('#owner-name a').getAttribute("href").match(/\/channel\/(.*)/)[1];
-            if (newUserChannelId !== currentUserYoutubeId) {
-              // videoCommentAuthor.querySelector('.btn-see-details-recll').remove();
-            }
           } else {
             videoCommentAuthor.insertAdjacentHTML("beforeend", '<a class="btn-see-details-recll">See fan details</a>');
 
@@ -78,51 +97,49 @@ const allScript = function() {
             if (insertedLink) {
               insertedLink.addEventListener('click', function(event) {
 
-      //---------- 1.  Remove former opened popup when openning a new one ------------
-
+                //---------- 1.  Remove former opened popup when openning a new one ------------
 
                 const visibleInfoWindow = document.querySelector(".fan-info-recll")
                 if (visibleInfoWindow) {
-                  visibleInfoWindow.remove()
+                  visibleInfoWindow.remove();
                 }
 
-      //-------------------- 2.  retrieve the fan's fanPictureUrl --------------------
+                //-------------------- 2.  retrieve the fan's fanPictureUrl --------------------
 
                 const fanPicture = commentMainDiv.querySelector("#author-thumbnail #img")
                 const fanPictureUrl = fanPicture.getAttribute("src").match(/(.*)\/s\d+/)[1]
-                console.log(fanPictureUrl)
 
-      //---------------- 3. Request the DB to get the fan information ----------------
+                //---------------- 3. Request the DB to get the fan information ----------------
 
                 fetch(`${BASE_URL}/api/v1/fans?query=${fanPictureUrl}`)
                 .then(response => response.json())
                 .then((data) => {
                   return new Promise((resolve) => {
-                    // console.log(data)
                     // Retrieving the fan id
                     const fanId = data[0].id
                     // Retrieving the fan username
                     const userName = data[0].youtube_username
                     // Retrieving the fan comment number
                     const commentsNumber = data[0]["comments"].length
-                    // Retrieving the memo
-                    if (data[0]["memo"]["memo_details"]["content"].length === 0) {
+                    // Retrieving the memo, if there is no memo, add a button "add memo", if there is a memo, display the memo
+                    const fanMemo = data[0]["memo"]["memo_details"]["content"]
+                    if (fanMemo.length === 0) {
                       memoContent = `
                       <div class="button-memo">
-                        <a href="https://www.recll.xyz/fans/${fanId}" target="_blank" class="button-centered-memo">Add a memo</a>
+                        <a href="${BASE_URL}/fans/${fanId}" target="_blank" class="button-centered-memo">Add a memo</a>
                       </div>`
 
                     } else {
-                      memoContent = `<p id="memo">${data[0]["memo"]["memo_details"]["content"]}</p>
+                      memoContent = `<p id="memo">${fanMemo}</p>
                       <p id="resize-memo">show more</p>`
                     }
-
                     // Retrieving the fan's profil picture
                     const profilPictureUrl = data[0].profile_picture_url
                     // Retrieving the fan's number of video commented
                     let videoIds = []
                     for (i = 0; i < data[0]["comments"].length; i++) {
                       videoIds.push(data[0]["comments"][i].video_id)
+                      // filter unique values from array
                       numberOfCommentedVideos = videoIds.filter(function(item, pos, self) {
                         return self.indexOf(item) == pos;
                       })
@@ -130,18 +147,19 @@ const allScript = function() {
                     // Retrieving the fan's last comment date
                     let commentsDates = []
                     for (i = 0; i < data[0]["comments"].length; i++) {
-                      console.log(commentsDates)
                       commentsDates.push(data[0]["comments"][i].published_at)
                       var options = { year: 'numeric', month: 'short', day: 'numeric' };
                       lastcommentDate = new Date(commentsDates.sort()[commentsDates.length - 1]).toLocaleDateString('en-GB', options)
-                      console.log(lastcommentDate)
-                      }
-                    // Retrieving the fan's first activity date
 
-        //------------------- 4. Inject the retrived data in the DOM -------------------
+                      }
+
+                    //------------------- 4. Inject the retrieved data in the DOM -------------------
+
+                    // See manifest.json
                     const commentImage = chrome.extension.getURL('chat-46.png');
                     const videoImage = chrome.extension.getURL('video-viewed.png');
                     const lastCommentDate = chrome.extension.getURL('last-comment-date.png');
+
                     commentMainDiv.insertAdjacentHTML("beforebegin",
                         ` <div class="fan-info-recll">
                             <div class="extension-header">
@@ -149,7 +167,7 @@ const allScript = function() {
                                 <img src="${profilPictureUrl}" alt="" id="fan-picture"/>
                                 <h3>${userName}</h3>
                               </div>
-                              <a id="more-details" target=”_blank” href=https://www.recll.xyz/fans/${fanId}> See more details</a>
+                              <a id="more-details" target=”_blank” href=${BASE_URL}/fans/${fanId}> See more details</a>
                             </div>
 
                             <div class="stats-section">
@@ -171,83 +189,65 @@ const allScript = function() {
                                 ${memoContent}
                             </div>
                           </div>`)
-                    resolve("ok to launch transition");
+                    resolve();
                   });
                 }).then((data) => {
-                  console.log(data);
                   setTimeout(() => {
                     commentMainDiv.parentElement.querySelector(".fan-info-recll").style.opacity = "1";
-                    commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "210px";
+                    commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "220px";
+
                     const showMore = document.querySelector("#resize-memo")
-                    if (commentMainDiv.parentElement.querySelector(".memo-section").offsetHeight < 65) {
-                      console.log('div:', commentMainDiv.parentElement.querySelector(".memo-section"))
+                    if (commentMainDiv.parentElement.querySelector(".memo-section").offsetHeight < 90) {
                       showMore.remove()
                     }
                     else {
                       showMore.addEventListener("click", function () {
-                        console.log(`I'M IN !!!!!!!!!!!!`)
                         if (showMore.innerText === "show more") {
                           commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "initial";
-                          showMore.innerText = "Show less"
+                          showMore.innerText = "show less"
                         }
                         else {
                           showMore.innerText = "show more"
                           commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "220px";
                         }
-                      })
+                      });
                     }
-                  }, 50)
-                })
-              })
+                  }, 50);
+                });
+              });
             }
           }
-        })
+        });
       }, 50);
-      document.addEventListener('yt-navigate-finish', function() {
-        //
-        clearInterval(interval);
-        allScript();
-      });
-    }
-  })
-}
+
+    // Reload allScript when the user clicks back or forward (page history)
+    // window.addEventListener('popstate', function() {
+    //   console.log("popstate event triggered")
+    //   clearInterval(interval);
+    //   allScript();
+    // });
+
+    // // Reload allScript when the user navigates on Youtube
+    document.addEventListener('yt-navigate-finish', function() {
+      console.log("yt-navigate-finish event triggered")
+      clearInterval(interval);
+      allScript();
+    });
+  });
+
+
+console.log(' --------------------------------------------- ')
+console.log(' ------------- all script ends ------------- ')
+};
+
+console.log(' ///////////// First load starts ///////////// ')
 
 allScript();
 
+console.log(' ///////////// First load ends ///////////// ')
 
 
 
-// -----------------------------------------------------------------------------
-//   ***********   THIS PART IS FORM FORMER IRRELEVANT ATTEMPTS   ***********
-// -----------------------------------------------------------------------------
 
 
-
-// setTimeout(function() {
-//   console.log('Waited 5000ms');
-//   document.addEventListener("DOMNodeInserted", function(event) {
-//     const relatedNode = event.relatedNode;
-//     if (relatedNode.querySelector('#header-author')) {
-//       console.log(event.relatedNode.querySelector('#header-author').innerText);
-//     }
-//   });
-// }, 5000);
-
-
-// const contentsSection = document.querySelector("#contents")
-// console.log('passed the #contents div selection')
-
-// contentsSection.addEventListener("DOMNodeInserted", function(event) {
-//   console.log('inside the DOMNodeInserted event listener')
-//   console.log(event)
-//   const videoCommentAuthors = contentsSection.querySelectorAll("#header-author");
-//   videoCommentAuthors.forEach(function(videoCommentAuthor) {
-//     if (videoCommentAuthor.querySelector('.details')) {
-//       console.log('already there')
-//     } else {
-
-//       videoCommentAuthor.insertAdjacentHTML("beforeend", '<a class="details" href="https://www.youtube.com/comments">See fan details</a>' )
-//     }
-//   })
-// })
 
