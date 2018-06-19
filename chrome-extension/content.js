@@ -1,3 +1,23 @@
+// Bugs to correct
+
+// 1. initializePage does not work every time. (find the right eventlistener to get
+// use : getEventListener(window) to display all events. Best attemps = yt-navigate-finish )
+
+
+// 2. Warning with setInterval, et intervalTimeout (not used here). Try to identify an eventListner
+// responsible for loading new comments / replies
+
+
+// 3. The extension first load is triggered only when hard refresh on a video owned by the logged in user
+// Find a way to run the script at any page change or page start.
+// If start page is youtube video dashboard and if user clicks on one of his videos, the script won't load.
+// If start page is a video owned by the user, script will load.
+
+// 4. Are the promises the good solution ?
+
+
+
+
 // --------------------------------------------------------------------------------------------
 // -------------------------------- Setting up the environment --------------------------------
 // --------------------------------------------------------------------------------------------
@@ -9,6 +29,7 @@ BASE_URL = DEV ? "http://localhost:3000" : "https://www.recll.xyz";
 
 // --------------------------------------------------------------------------------------------
 // ------- Initializing the page to remove former inserted elements from the previous page ----
+// ------- when changing page and elements zlready inserted in another page                ----
 // --------------------------------------------------------------------------------------------
 
 const initializingPage = function() {
@@ -53,12 +74,12 @@ console.log(' --------------------------------------------- ')
 
   // Get the information related to the video displayed on Youtube
   fetch(`${BASE_URL}/api/v1/videos/find_video_owner?query=${videoId}`, {
-    credentials: 'include'
+    credentials: 'include' // works with videos_controller (the api controller)
   })
   .then(response => response.json())
   .then((data) => {
     // the api call will display an error if the user is not authorized to get the API info
-    // i.e : if the user connected Recll dashboard is not the one seeing the video
+    // i.e : if the user connected Recll dashboard is not the one seeing the video, api request aborted
 
       interval = setInterval(function() {
         // select the main div that contains the comment block and the profil picture
@@ -100,15 +121,16 @@ console.log(' --------------------------------------------- ')
                     const userName = data[0].youtube_username
                     // Retrieving the fan comment number
                     const commentsNumber = data[0]["comments"].length
-                    // Retrieving the memo, if there is no memo, add a button, if there is a memo, add the memo
-                    if (data[0]["memo"]["memo_details"]["content"].length === 0) {
+                    // Retrieving the memo, if there is no memo, add a button "add memo", if there is a memo, display the memo
+                    const fanMemo = data[0]["memo"]["memo_details"]["content"]
+                    if (fanMemo.length === 0) {
                       memoContent = `
                       <div class="button-memo">
                         <a href="${BASE_URL}/fans/${fanId}" target="_blank" class="button-centered-memo">Add a memo</a>
                       </div>`
 
                     } else {
-                      memoContent = `<p id="memo">${data[0]["memo"]["memo_details"]["content"]}</p>
+                      memoContent = `<p id="memo">${fanMemo}</p>
                       <p id="resize-memo">show more</p>`
                     }
                     // Retrieving the fan's profil picture
@@ -117,6 +139,7 @@ console.log(' --------------------------------------------- ')
                     let videoIds = []
                     for (i = 0; i < data[0]["comments"].length; i++) {
                       videoIds.push(data[0]["comments"][i].video_id)
+                      // filter unique values from array
                       numberOfCommentedVideos = videoIds.filter(function(item, pos, self) {
                         return self.indexOf(item) == pos;
                       })
@@ -131,9 +154,12 @@ console.log(' --------------------------------------------- ')
                       }
 
                     //------------------- 4. Inject the retrieved data in the DOM -------------------
+
+                    // See manifest.json
                     const commentImage = chrome.extension.getURL('chat-46.png');
                     const videoImage = chrome.extension.getURL('video-viewed.png');
                     const lastCommentDate = chrome.extension.getURL('last-comment-date.png');
+
                     commentMainDiv.insertAdjacentHTML("beforebegin",
                         ` <div class="fan-info-recll">
                             <div class="extension-header">
@@ -169,6 +195,7 @@ console.log(' --------------------------------------------- ')
                   setTimeout(() => {
                     commentMainDiv.parentElement.querySelector(".fan-info-recll").style.opacity = "1";
                     commentMainDiv.parentElement.querySelector(".fan-info-recll").style.height = "220px";
+
                     const showMore = document.querySelector("#resize-memo")
                     if (commentMainDiv.parentElement.querySelector(".memo-section").offsetHeight < 90) {
                       showMore.remove()
@@ -194,15 +221,15 @@ console.log(' --------------------------------------------- ')
       }, 50);
 
     // Reload allScript when the user clicks back or forward (page history)
-    window.addEventListener('popstate', function() {
-      console.log("popstate event triggered")
-      clearInterval(interval);
-      allScript();
-    });
+    // window.addEventListener('popstate', function() {
+    //   console.log("popstate event triggered")
+    //   clearInterval(interval);
+    //   allScript();
+    // });
 
     // // Reload allScript when the user navigates on Youtube
-    document.addEventListener('yt-navigate-start', function() {
-      console.log("yt-navigate-start event triggered")
+    document.addEventListener('yt-navigate-finish', function() {
+      console.log("yt-navigate-finish event triggered")
       clearInterval(interval);
       allScript();
     });
