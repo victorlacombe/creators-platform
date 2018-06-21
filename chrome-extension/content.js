@@ -86,6 +86,7 @@ console.log(' --------------------------------------------- ')
         const commentMainDivs = document.querySelectorAll("#body")
         commentMainDivs.forEach(function(commentMainDiv) {
           // select the header-author (the header of the comment div)
+          addButton(commentMainDiv)
           const videoCommentAuthor = commentMainDiv.querySelector("#header-author");
           if (videoCommentAuthor.querySelector('.btn-see-details-recll')) {
             // do nothing, the "see fan details" button is already present
@@ -154,7 +155,6 @@ console.log(' --------------------------------------------- ')
                       }
 
                     //------------------- 4. Inject the retrieved data in the DOM -------------------
-
                     // See manifest.json
                     const commentImage = chrome.extension.getURL('chat-46.png');
                     const videoImage = chrome.extension.getURL('video-viewed.png');
@@ -247,7 +247,9 @@ allScript();
 console.log(' ///////////// First load ends ///////////// ')
 
 
+function addButton(div) {
 
+}
 
 
 
