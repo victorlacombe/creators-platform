@@ -8,7 +8,7 @@
   <!-- DASHBOARD LEFT NAVBAR ENDS HERE -->
 
   <div class="dashboard-right-content">
-    <h1 class="text-center">Your <%= pluralize fans.length, fan_type_name %></h1>
+    <h1 class="text-center">Your <%= pluralize fan_size, fan_type_name %></h1>
     <p class="text-center"><%= definition_header %></p>
     <div class="container">
 
@@ -29,11 +29,9 @@
           <%= render "fans/all_fans", fans: fans %>
         </div>
         <div class="pagination-container">
-          <%#= render "fans/pagination", fans: fans %>
+          <%= render "fans/pagination", fans: fans %>
         </div>
       </div>
-
-      <%#= paginate @last_month_returning_fans, remote: true %>
     </div>
   </div>
 </div>

@@ -14,8 +14,8 @@ function infinite_loader() {
       var offset = d.scrollTop + window.innerHeight;
       var height = d.offsetHeight;
 
-      if (height - offset - 450 < 0 && (new Date() - date) > 1000) {
-        // console.log(height - offset - 250);
+      if (height - offset - 600 < 0 && (new Date() - date) > 200) {
+        console.log("request");
         document.querySelector("[rel=next]").click();
         date = new Date();
       }

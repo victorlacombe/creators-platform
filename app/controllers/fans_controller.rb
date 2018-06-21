@@ -63,6 +63,9 @@ class FansController < ApplicationController
                                               #.order('count(comments.id) DESC') # Can't make this order works..
 
     @top_fans_with_all_comments = @top_fans_with_all_comments.sort_by { |fan| -fan.comments.length } # Order using ruby sort_by
+    @size = @top_fans_with_all_comments.length
+    @fans = Kaminari.paginate_array(@top_fans_with_all_comments).page(params[:page]).per(4*3)
+    ajax_infinite_scroll
   end
 
   def new_fans
@@ -75,9 +78,12 @@ class FansController < ApplicationController
     @new_fans_with_all_comments = current_user.fans
                                               .eager_load(:comments)
                                               .where(id: @new_fans_list.to_a)
-                                              .group('fans.id', 'comments.id')
+                                              #.group('fans.id', 'comments.id')
                                               #.order('count(comments.id) DESC') # Can't make this order works..
     @new_fans_with_all_comments = @new_fans_with_all_comments.sort_by { |fan| -fan.comments.length }
+    @size = @new_fans_with_all_comments.length
+    @fans = Kaminari.paginate_array(@new_fans_with_all_comments).page(params[:page]).per(4*3)
+    ajax_infinite_scroll
   end
 
   def returning_fans
@@ -92,23 +98,42 @@ class FansController < ApplicationController
                                               .group('fans.id', 'comments.id')
                                               #.order('count(comments.id) DESC') # Can't make this order works..
     @returning_fans_with_all_comments = @returning_fans_with_all_comments.sort_by { |fan| -fan.comments.length }
+    @size = @returning_fans_with_all_comments.length
+    @fans = Kaminari.paginate_array(@returning_fans_with_all_comments).page(params[:page]).per(4*3)
+    ajax_infinite_scroll
   end
 
   def inactive_fans
     skip_authorization
-    @fan_type_name = "inactive fan"
-    @definition_header = "They haven't participated in the last 2 months"
-    # Same logic as top_fans
-    @inactive_fans_list = inactive_fans_list
-    @inactive_fans_with_all_comments = current_user.fans
-                                              .eager_load(:comments)
-                                              .where(id: @inactive_fans_list.to_a)
-                                              .group('fans.id', 'comments.id')
-                                              #.order('count(comments.id) DESC') # Can't make this order works..
-    @inactive_fans_with_all_comments = @inactive_fans_with_all_comments.sort_by { |fan| -fan.comments.length }
+
+    cache_key = "test"
+    # Test caching
+    Rails.cache.fetch("#{cache_key}", expires_in: 10.minutes) do
+      @fan_type_name = "inactive fan"
+      @definition_header = "They haven't participated in the last 2 months"
+      # Same logic as top_fans
+      @inactive_fans_list = inactive_fans_list
+      @inactive_fans_with_all_comments = current_user.fans
+                                                .eager_load(:comments)
+                                                .where(id: @inactive_fans_list.to_a)
+                                                .group('fans.id', 'comments.id')
+                                                #.order('count(comments.id) DESC') # Can't make this order works..
+      @inactive_fans_with_all_comments = @inactive_fans_with_all_comments.sort_by { |fan| -fan.comments.length }
+      @size = @inactive_fans_with_all_comments.length
+      @fans = Kaminari.paginate_array(@inactive_fans_with_all_comments).page(params[:page]).per(4*3)
+    end
+
+    ajax_infinite_scroll
   end
 
   private
+
+  def ajax_infinite_scroll
+    respond_to do |format|
+      format.html
+      format.js { render 'index.js.erb'}
+    end
+  end
 
   def top_fans_list
     min_last_activity_date = 2.month
